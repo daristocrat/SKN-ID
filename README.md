@@ -12,24 +12,18 @@ Base44 prototype. Open `index.html` in a browser — no build step.
 - 5-step SKN profile: skin type, sensitivities, goals, values,
   environment. Edits update the dashboard and report instantly.
 - Dashboard with a SKN ID card and quick actions.
-- Yumi: chat that tailors answers to the saved profile (rule-based
-  guidance in this clone, not a live LLM).
-- Scanner: sample products scored against the saved profile, plus a
-  custom ingredient checker.
-- Community feed: sample posts plus your own posts and likes, saved
-  locally.
 - SKN Report: generated from the profile, downloadable as .txt.
+- Removed 2026-10-31 at Prince's request: Yumi, Scanner and
+  Community. They are no longer in the header, dashboard or code.
 - About / Contact, using the prototype's contacts:
   hello@sknid.app, instagram.com/sknid, twitter.com/sknid.
 
 ## What is not yet the real Base44 backend
 
-- Accounts, profiles, posts and messages save in the browser
+- Accounts and profiles save in the browser
   (localStorage) only, not on a server and not across devices.
 - Google sign-in is simulated. Real Google/email auth needs
   Supabase Auth.
-- Yumi is not a live AI model, and the scanner uses a small sample
-  product list, not a live product/ingredient database.
 - No pricing was shown on the prototype, so none is included.
 
 The Base44 source exploration is now complete (no ZIP export — it is
@@ -43,8 +37,10 @@ working version for now.
 A Supabase project "SKN ID" already exists (West EU, host
 blyfnptcpbsqjfvlxyzh.supabase.co) with tables waitlist,
 skn_profiles, contact_messages and community_posts, each with
-public-insert-only Row Level Security. `index.html` already wires
-profile saves and community posts to Supabase when
+public-insert-only Row Level Security (the community_posts table
+remains in the database but is unused since Community was
+removed). `index.html` already wires
+profile saves to Supabase when
 `window.SKN_SUPABASE_ANON_KEY` is set (via secure environment
 variables, never in chat or code), and falls back to localStorage
 until then. Keep the service_role key out of browser code — use

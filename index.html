@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SKN ID — Working Clone</title>
-<meta name="description" content="Working clone of the SKN ID app: build your evolving skin identity, chat with Yumi, scan products, read your SKN Report and join the community.">
+<meta name="description" content="Working clone of the SKN ID app: build your evolving skin identity and read your SKN Report.">
 <style>
 :root{--ink:#141414;--mut:#3d3d3d;--paper:#fffaf0;--card:#ffffff;--lime:#d7f651;--lime-dark:#a8c400;--peach:#ffd9b8;--rose:#ffb3c7;--line:#e7ddc8;--r:22px}
 *{box-sizing:border-box}
@@ -92,9 +92,6 @@ body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important
 <nav class="tabs" id="appTabs">
 <button class="tab" data-v="dashboard" onclick="show('dashboard')">Dashboard</button>
 <button class="tab" data-v="profile" onclick="show('profile')">My profile</button>
-<button class="tab" data-v="yumi" onclick="show('yumi')">Yumi</button>
-<button class="tab" data-v="scanner" onclick="show('scanner')">Scanner</button>
-<button class="tab" data-v="community" onclick="show('community')">Community</button>
 <button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
 <button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
 </nav><button class="btn btn-lime" id="themeBtn" onclick="toggleTheme()">Dark mode</button><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
@@ -114,32 +111,18 @@ body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important
 <p class="small" id="authNote">Tick the required consent box to enable sign-in, just like the prototype.</p>
 <div id="authForm" class="hidden"><label>Your name</label><input id="authName" placeholder="e.g. Prince"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:12px" onclick="doSignIn()">Create / open my SKN ID</button><p class="small">Working clone: this creates a local account in this browser. Connect Supabase to make accounts real across devices.</p></div>
 </div></div>
-<div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations, scans and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
+<div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
 <!-- DASHBOARD -->
 <div id="view-dashboard" class="hidden"><section><h2>Welcome back<span id="dashName"></span></h2><p class="sub">Your SKN ID, at a glance. Edit it any time — it grows with you.</p>
 <div class="grid2" style="margin-top:16px"><div class="idcard" id="dashCard"></div>
 <div class="card"><b>Quick actions</b><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
-<button class="btn btn-lime" onclick="show('yumi')">Ask Yumi</button><button class="btn btn-dark" onclick="show('scanner')">Scan a product</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="show('profile')">Edit profile</button></div>
+<button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="show('profile')">Edit profile</button></div>
 <p class="small" style="margin-top:14px" id="dashTip"></p></div></div></section></div>
 
 <!-- PROFILE / ONBOARDING -->
 <div id="view-profile" class="hidden"><section><h2>Build / edit your SKN ID</h2><p class="sub">Five inputs, one identity. Changes save instantly in this browser.</p>
 <div class="card"><div id="onb"></div><button class="btn btn-dark" style="margin-top:14px" onclick="saveProfile()">Save my SKN ID</button><p class="small" id="saveMsg"></p></div></section></div>
-
-<!-- YUMI -->
-<div id="view-yumi" class="hidden"><section><h2>Yumi — your AI skin guide</h2><p class="sub">Yumi refines your profile, answers questions and helps discover routines tailored to you. In this clone Yumi uses your saved profile and rule-based guidance — a live AI connection would need an API key kept server-side.</p>
-<div class="card"><div class="chat" id="chat"><div class="msg bot">Hi, I'm Yumi. Ask me about a goal, a product, or a routine — I'll tailor it to your SKN profile.</div></div>
-<div style="display:flex;gap:8px;margin-top:12px"><input id="chatInput" placeholder="e.g. help me with breakouts"><button class="btn btn-dark" onclick="askYumi()">Ask</button></div></div></section></div>
-
-<!-- SCANNER -->
-<div id="view-scanner" class="hidden"><section><h2>Product compatibility scanner</h2><p class="sub">Search a sample product, or paste ingredients to check them against your profile. Scores are a preview based on your sensitivities, skin type and goals — not medical advice.</p>
-<div class="card"><label>Search products</label><input id="scanSearch" placeholder="e.g. cleanser, vitamin C, cream" oninput="renderScanner()"><div id="scanList" style="margin-top:14px"></div>
-<hr><label>Or check your own ingredients (comma-separated)</label><textarea id="customIng" placeholder="e.g. fragrance, alcohol denat, hyaluronic acid"></textarea><button class="btn btn-dark" style="margin-top:10px" onclick="checkCustom()">Check ingredients</button><div id="customResult" style="margin-top:12px"></div></div></section></div>
-
-<!-- COMMUNITY -->
-<div id="view-community" class="hidden"><section><h2>Community feed</h2><p class="sub">Discover routines and ask questions. Sample posts below are placeholders until a shared backend is connected — your own posts save in this browser and appear at the top.</p>
-<div class="card"><label>Share something</label><textarea id="postText" placeholder="What worked for you? Ask a question…"></textarea><button class="btn btn-dark" style="margin-top:10px" onclick="addPost()">Post to community</button><div id="feed" style="margin-top:16px"></div></div></section></div>
 
 <!-- REPORT -->
 <div id="view-report" class="hidden"><section><h2>Your SKN Report</h2><p class="sub">Personalised from your profile. Update your profile and this report updates too.</p><div class="card" id="reportBody"></div><button class="btn btn-ghost" style="margin-top:12px" onclick="downloadReport()">Download report (.txt)</button></section></div>
@@ -151,7 +134,7 @@ body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important
 <form onsubmit="event.preventDefault();this.reset();document.getElementById('cMsg').textContent='Thanks — saved locally in this preview. Connect Supabase to save messages on a server.'"><label>Your name</label><input required><label>Your email</label><input required type="email"><label>Your message</label><textarea required></textarea><button class="btn btn-dark" style="margin-top:10px">Send message</button><p class="small" id="cMsg"></p></form></div></div></section></div>
 
 </main>
-<footer class="wrap" style="border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut)"><p><b style="color:#111">SKN ID</b> · Universal skin identity for the modern age · Working clone built from the public Base44 prototype. Data in this clone saves in your browser (localStorage) until Supabase is connected. Scanner and Yumi guidance are general skincare information, not medical advice.</p></footer>
+<footer class="wrap" style="border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut)"><p><b style="color:#111">SKN ID</b> · Universal skin identity for the modern age · Working clone built from the public Base44 prototype. Data in this clone saves in your browser (localStorage) until Supabase is connected. Report guidance is general skincare information, not medical advice.</p></footer>
 <script>
 const $=id=>document.getElementById(id);
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
@@ -168,17 +151,6 @@ async function supaInsert(table,row){
   if(!SUPABASE_ANON_KEY) return false;
   try{ const r=await fetch(SUPABASE_URL+'/rest/v1/'+table,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)}); return r.ok; }catch(e){ return false; }
 }
-let posts=load('skn_clone_posts',[
- {a:'Community · Combination skin',t:'Sample post: I switched to a fragrance-free cleanser and a simple ceramide moisturiser, and my skin finally calmed down. Less really was more for me.',l:12},
- {a:'Community · Dry skin',t:'Sample post: Hyaluronic acid on damp skin, then a rich cream on top, changed winter for me. What is your winter routine?',l:8},
- {a:'Community · Oily skin',t:'Sample post: A gel moisturiser + SPF in the morning stopped the midday shine without drying me out.',l:9}]);
-const PRODUCTS=[
- {n:'Gentle Foaming Cleanser',t:'Cleanser',ing:['glycerin','ceramide','fragrance-free'],fr:false,goal:['Clearer skin','Barrier repair']},
- {n:'Brightening Vitamin C Serum',t:'Serum',ing:['vitamin c','fragrance'],fr:true,goal:['Even tone','Glow']},
- {n:'Rich Barrier Repair Cream',t:'Moisturiser',ing:['ceramide','squalane','fragrance-free'],fr:false,goal:['Barrier repair','Hydration']},
- {n:'Hydrating Hyaluronic Serum',t:'Serum',ing:['hyaluronic acid','glycerin','fragrance-free'],fr:false,goal:['Hydration']},
- {n:'Clarifying Salicylic Gel',t:'Treatment',ing:['salicylic acid','alcohol denat'],fr:false,goal:['Clearer skin']},
- {n:'Daily Mineral SPF 50',t:'SPF',ing:['zinc oxide','fragrance-free'],fr:false,goal:['Even tone','Barrier repair']}];
 const FIELDS=[
  ['skin_type','Skin type',['Oily','Dry','Combination','Sensitive','Normal'],false],
  ['sensitivities','Sensitivities (pick any)',['Fragrance-sensitive','Redness-prone','Breakout-prone','Alcohol-sensitive','None'],true],
@@ -190,7 +162,7 @@ function show(v){
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='dashboard') renderDash(); if(v==='profile') renderOnb(); if(v==='scanner') renderScanner(); if(v==='community') renderFeed(); if(v==='report') renderReport();
+ if(v==='dashboard') renderDash(); if(v==='profile') renderOnb(); if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
@@ -198,46 +170,6 @@ function renderOnb(){
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
 async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); const ok=await supaInsert('skn_profiles',{email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}); $('saveMsg').textContent=ok?'Saved to Supabase! Your SKN ID, dashboard and report are updated.':'Saved locally. Add the Supabase anon key to also save it to Supabase.'; }
-function score(p){
- let s=90,notes=[];
- if(p.fr && (profile?.sensitivities||[]).includes('Fragrance-sensitive')){s-=35;notes.push('Contains fragrance, and you are fragrance-sensitive.')}
- if(p.ing.includes('alcohol denat') && (profile?.skin_type==='Dry'||profile?.skin_type==='Sensitive')){s-=20;notes.push('Alcohol denat can dry sensitive/dry skin.')}
- if(profile?.goals?.some(g=>p.goal.includes(g))){s+=5;notes.push('Matches one of your goals.')}
- if(!notes.length) notes.push('No major conflict with your saved profile in this preview.');
- return {s:Math.max(5,Math.min(100,s)),notes,verdict:s>=80?'Good match':s>=55?'Use with care':'Avoid for now',cls:s>=80?'good':s>=55?'warn':'bad'};
-}
-function renderScanner(){
- const q=($('scanSearch').value||'').toLowerCase();
- $('scanList').innerHTML=PRODUCTS.filter(p=>(p.n+' '+p.t).toLowerCase().includes(q)).map(p=>{const r=score(p);return `<div style="border-top:1px solid var(--line);padding:12px 0"><b>${p.n}</b> · ${p.t} <span class="score ${r.cls}">${r.s}/100 — ${r.verdict}</span><p class="small">${p.ing.join(', ')}<br>${r.notes.join(' ')}</p></div>`}).join('')||'<p>No matches. Try cleanser, serum or SPF.</p>';
-}
-function checkCustom(){
- const ing=$('customIng').value.toLowerCase(); let flags=[];
- if(ing.includes('fragrance') && (profile?.sensitivities||[]).includes('Fragrance-sensitive')) flags.push('Fragrance flagged for fragrance-sensitive skin.');
- if(ing.includes('alcohol denat')) flags.push('Alcohol denat noted — can be drying.');
- if(!flags.length) flags.push('No major flags found in this preview check.');
- $('customResult').innerHTML=`<div class="card"><b>Ingredient check</b><p>${flags.join(' ')}</p></div>`;
-}
-function say(t,c){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;$('chat').appendChild(d);$('chat').scrollTop=10000}
-function askYumi(){
- const v=$('chatInput').value.trim(); if(!v)return; say(v,'you'); $('chatInput').value='';
- let a=`Based on your profile — ${profile?.skin_type||'skin type not set yet'} skin, goals: ${(profile?.goals||[]).join(', ')||'not set yet'} — start with one change at a time, keep it gentle, and give it 3–4 weeks before judging it.`;
- const l=v.toLowerCase();
- if(l.includes('breakout')||l.includes('acne')) a='For breakouts, Yumi would prioritise a gentle cleanser, a targeted treatment like salicylic acid a few nights a week, and a non-comedogenic moisturiser — and check your scanner for fragrance or heavy oils if you are sensitive.';
- else if(l.includes('dry')||l.includes('hydrat')) a='For dryness, Yumi would suggest hyaluronic acid on damp skin, then a ceramide-rich cream to seal it in, and avoiding alcohol denat products.';
- else if(l.includes('tone')||l.includes('dark')||l.includes('pigment')) a='For even tone, Yumi would suggest vitamin C in the morning plus daily SPF — SPF is the step that protects any brightening progress.';
- else if(l.includes('routine')) a=`A simple starter for you: morning — gentle cleanser, moisturiser, SPF. Evening — cleanser, treatment for your goal (${(profile?.goals||['hydration'])[0]}), moisturiser. Add one product at a time.`;
- setTimeout(()=>say(a+' (Guidance from your profile in this clone — not medical advice.)','bot'),350);
-}
-function renderFeed(){
- $('feed').innerHTML=posts.map((p,i)=>`<div class="post"><b>${p.a}</b><p>${p.t}</p><button class="btn btn-ghost" onclick="like(${i})">♥ ${p.l}</button></div>`).join('');
-}
-function like(i){posts[i].l++; save('skn_clone_posts',posts); renderFeed();}
-async function addPost(){
- const t=$('postText').value.trim(); if(!t)return;
- const author=(user?.name||'You')+' · '+(profile?.skin_type||'SKN member');
- posts.unshift({a:author,t,l:0}); save('skn_clone_posts',posts); $('postText').value=''; renderFeed();
- await supaInsert('community_posts',{author,text:t,likes:0});
-}
 function reportText(){
  if(!profile) return '<p>Build your profile first, then your report will appear here.</p>';
  const fav=profile.goals.includes('Hydration')?'hyaluronic acid, glycerin, ceramides':profile.goals.includes('Even tone')?'vitamin C, niacinamide, SPF':profile.goals.includes('Clearer skin')?'salicylic acid, niacinamide, gentle cleansing':'ceramides, squalane, gentle cleansing';
@@ -254,9 +186,9 @@ function downloadReport(){
 function renderDash(){
  if(!user){show('landing');return}
  $('dashName').textContent=', '+(user.name||'');
- if(!profile){$('dashCard').innerHTML=`<h3>Your SKN ID is ready to build</h3><p>Complete the 5-step profile to unlock Yumi, the scanner and your report.</p><button class="btn btn-lime" onclick="show('profile')">Build my profile →</button>`; $('dashTip').textContent='Tip: start with skin type and one goal — you can add the rest later.'; return}
+ if(!profile){$('dashCard').innerHTML=`<h3>Your SKN ID is ready to build</h3><p>Complete the 5-step profile to unlock your report.</p><button class="btn btn-lime" onclick="show('profile')">Build my profile →</button>`; $('dashTip').textContent='Tip: start with skin type and one goal — you can add the rest later.'; return}
  $('dashCard').innerHTML=`<span style="background:var(--lime);color:#111;border-radius:999px;padding:5px 10px;font-weight:800;font-size:13px">SKN ID</span><h3 style="margin:12px 0 4px">${user.name||'Your SKN ID'}</h3><p>${profile.skin_type} skin · Updated ${profile.updated||''}</p><div style="margin-top:12px">${profile.goals.map(g=>`<span class="chip">${g}</span>`).join('')}${profile.sensitivities.map(s=>`<span class="chip">${s}</span>`).join('')}</div>`;
- $('dashTip').textContent=`Based on your profile: focus on ${(profile.goals[0]||'healthy skin').toLowerCase()} first, and scan new products before you buy.`;
+ $('dashTip').textContent=`Based on your profile: focus on ${(profile.goals[0]||'healthy skin').toLowerCase()} first, and revisit your report as your skin changes.`;
 }
 function signOutOrIn(){ if(user){localStorage.removeItem('skn_clone_user');user=null;$('authBtn').textContent='Sign in';show('landing')} else show('landing'); }
 function doSignIn(){
@@ -267,7 +199,6 @@ function doSignIn(){
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
 $('googleBtn').onclick=()=>{$('authForm').classList.remove('hidden');$('authNote').textContent='Google sign-in is simulated in this clone — add your name and email to continue. Real Google sign-in needs Supabase Auth.'};
 $('emailBtn').onclick=()=>{$('authForm').classList.remove('hidden')};
-$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')askYumi()});
 
 function applyTheme(dark){
   document.body.classList.toggle('dark', dark);
@@ -281,5 +212,5 @@ function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
   applyTheme(saved ? saved==='dark' : prefersDark);
 })();
 
-if(user){$('authBtn').textContent='Sign out'; show(profile?'dashboard':'profile')} else {renderOnb(); renderScanner(); renderFeed();}
+if(user){$('authBtn').textContent='Sign out'; show(profile?'dashboard':'profile')} else {renderOnb();}
 </script></body></html>
