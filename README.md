@@ -1,4 +1,4 @@
-# SKN ID — Working Clone (website)
+# SKN ID — (website)
 
 A working, single-file clone of the SKN ID app, built from its public
 Base44 prototype. Open `index.html` in a browser — no build step.
