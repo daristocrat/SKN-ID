@@ -10,11 +10,20 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   Email, gated by the required email-consent checkbox.
 - Account creation (local, in this browser) and sign-out.
 - 5-step SKN profile: skin type, sensitivities, goals, values,
-  environment. Edits update the dashboard and report instantly.
-- Dashboard with a SKN ID card and quick actions.
+  environment. Selected options turn lime (fixed 2026-10-31:
+  multi-select options previously never showed as selected).
+  Clicking "Create skin profile" redirects to your profile page.
+- Profile page (no Dashboard tab any more — sign-in is the entry
+  point): a unique SKN ID code in SKN A123B format, generated
+  deterministically from your email, plus a copy button, a
+  completion bar, and interactive detail cards for skin type,
+  environment, sensitivities, goals and values, with Edit profile
+  and View SKN Report actions. Edits update the profile and
+  report instantly.
 - SKN Report: generated from the profile, downloadable as .txt.
 - Removed 2026-10-31 at Prince's request: Yumi, Scanner and
-  Community. They are no longer in the header, dashboard or code.
+  Community, and later the Dashboard tab. They are no longer in
+  the header or code.
 - About / Contact, using the prototype's contacts:
   hello@sknid.app, instagram.com/sknid, twitter.com/sknid.
 
@@ -46,7 +55,8 @@ variables, never in chat or code), and falls back to localStorage
 until then. Keep the service_role key out of browser code — use
 only the anon key.
 
-## Deploy to Vercel (after GitHub)
+## Live site
 
-Push this folder to GitHub, then in Vercel: New Project -> Import
-repo -> Deploy. Static site, no build command needed.
+GitHub Pages is on for daristocrat/SKN-ID (main branch, root):
+https://daristocrat.github.io/SKN-ID/ — every push to main
+redeploys it automatically. Static site, no build command needed.

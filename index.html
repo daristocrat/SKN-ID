@@ -33,7 +33,7 @@ textarea{min-height:100px}
 .opt.sel{background:#d7f651;border-color:#141414;font-weight:800}
 .idcard{background:linear-gradient(135deg,#141414,#3a2b3f);color:#fff;border:2px solid #141414;border-radius:26px;padding:24px;box-shadow:6px 6px 0 rgba(20,20,20,.2)}
 .idcard *{color:#fff}.idcard .pill,.idcard span[style*="background:var"]{color:#141414 !important}
-.idcard p{color:#e8e8e8}.chip{border:2px solid #141414;border-radius:999px;padding:6px 11px;font-size:13px;display:inline-block;margin:0 6px 6px 0;color:#141414;background:#fff}.darkcard .chip,.idcard .chip{border-color:#fff;color:#fff;background:transparent}
+.idcard p{color:#e8e8e8}.idcard .btn-lime,.idcard .btn-ghost{color:#141414}.idcard .btn-ghost{background:#fff}.chip{border:2px solid #141414;border-radius:999px;padding:6px 11px;font-size:13px;display:inline-block;margin:0 6px 6px 0;color:#141414;background:#fff}.darkcard .chip,.idcard .chip{border-color:#fff;color:#fff;background:transparent}
 .darkcard{background:#141414;color:#fff;border:2px solid #141414;border-radius:22px;padding:22px;box-shadow:5px 5px 0 rgba(20,20,20,.2)}
 .darkcard *{color:#fff}.darkcard p{color:#e8e8e8}
 .chat{height:260px;overflow:auto;background:#fff8e6;border:2px solid #141414;border-radius:16px;padding:14px}
@@ -87,10 +87,14 @@ body.dark .logo{color:#fff !important;-webkit-text-fill-color:#fff !important}
 body.dark h1 em{color:#141414 !important;-webkit-text-fill-color:#141414 !important}
 body.dark footer,body.dark footer p{color:#ddd !important;-webkit-text-fill-color:#ddd !important}
 body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important}
+.bar{height:14px;border:2px solid #141414;border-radius:999px;background:#fff;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#d7f651,#ffd9b8)}
+.bigcode{font-size:clamp(34px,6vw,52px);letter-spacing:.06em;font-weight:900;margin:8px 0;line-height:1.1}
+.stat{font-size:34px;font-weight:900;margin:0}
+body.dark .bar{background:#222 !important;border-color:#d7f651}
 </style></head><body>
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')"><span class="mark">◉</span> SKN&nbsp;ID</a>
 <nav class="tabs" id="appTabs">
-<button class="tab" data-v="dashboard" onclick="show('dashboard')">Dashboard</button>
 <button class="tab" data-v="profile" onclick="show('profile')">My profile</button>
 <button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
 <button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
@@ -113,16 +117,14 @@ body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important
 </div></div>
 <div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
-<!-- DASHBOARD -->
-<div id="view-dashboard" class="hidden"><section><h2>Welcome back<span id="dashName"></span></h2><p class="sub">Your SKN ID, at a glance. Edit it any time — it grows with you.</p>
-<div class="grid2" style="margin-top:16px"><div class="idcard" id="dashCard"></div>
-<div class="card"><b>Quick actions</b><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
-<button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="show('profile')">Edit profile</button></div>
-<p class="small" style="margin-top:14px" id="dashTip"></p></div></div></section></div>
-
-<!-- PROFILE / ONBOARDING -->
-<div id="view-profile" class="hidden"><section><h2>Build / edit your SKN ID</h2><p class="sub">Five inputs, one identity. Changes save instantly in this browser.</p>
-<div class="card"><div id="onb"></div><button class="btn btn-dark" style="margin-top:14px" onclick="saveProfile()">Save my SKN ID</button><p class="small" id="saveMsg"></p></div></section></div>
+<!-- PROFILE: display page + builder (builder shows first time / on Edit) -->
+<div id="view-profile" class="hidden"><section>
+<div id="profileDisplay" class="hidden"></div>
+<div id="profileBuilder">
+<h2 id="profileTitle">Create your SKN ID</h2><p class="sub">Five inputs, one identity. Pick every option that fits you — selected options turn lime, so you can see at a glance what you have chosen.</p>
+<div class="card"><div id="onb"></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-dark" id="saveBtn" onclick="saveProfile()">Create skin profile</button><button class="btn btn-ghost hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button></div><p class="small" id="saveMsg"></p></div>
+</div>
+</section></div>
 
 <!-- REPORT -->
 <div id="view-report" class="hidden"><section><h2>Your SKN Report</h2><p class="sub">Personalised from your profile. Update your profile and this report updates too.</p><div class="card" id="reportBody"></div><button class="btn btn-ghost" style="margin-top:12px" onclick="downloadReport()">Download report (.txt)</button></section></div>
@@ -158,18 +160,68 @@ const FIELDS=[
  ['values','Values (pick any)',['Vegan','Cruelty-free','Fragrance-free','Budget-friendly','Clean ingredients'],true],
  ['environment','Environment',['Humid','Dry climate','High sun','Polluted city','Variable / travel a lot'],false]];
 let draft=profile?{...profile}:{skin_type:'',sensitivities:[],goals:[],values:[],environment:''};
+let editing=false, justSaved=false;
+function sknCode(){
+  const seed=(user?.email||user?.name||'skn').toLowerCase();
+  let h=7; for(let i=0;i<seed.length;i++){ h=(h*31 + seed.charCodeAt(i))>>>0; }
+  const l1=String.fromCharCode(65+(h%26)), num=100+((h>>>5)%900), l2=String.fromCharCode(65+((h>>>13)%26));
+  return 'SKN '+l1+num+l2;
+}
+function completion(){
+  if(!profile) return 0;
+  let n=0; if(profile.skin_type) n++; if((profile.sensitivities||[]).length) n++; if((profile.goals||[]).length) n++; if((profile.values||[]).length) n++; if(profile.environment) n++;
+  return n*20;
+}
+function chips(arr){ return (arr||[]).length ? (arr||[]).map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="small">Not set yet</span>'; }
+function renderProfile(){
+  if(!user){ show('landing'); return; }
+  const disp=$('profileDisplay'), bld=$('profileBuilder');
+  if(!profile || editing){
+    disp.classList.add('hidden'); bld.classList.remove('hidden');
+    $('profileTitle').textContent = editing ? 'Edit your SKN ID' : 'Create your SKN ID';
+    $('saveBtn').textContent = editing ? 'Save changes' : 'Create skin profile';
+    $('cancelEditBtn').classList.toggle('hidden', !(editing && profile));
+    renderOnb(); return;
+  }
+  bld.classList.add('hidden'); disp.classList.remove('hidden');
+  const code=profile.skn_code||sknCode(), pct=completion(), done=pct/20;
+  disp.innerHTML = `
+  ${justSaved?'<div class="card" style="background:#d9f5c2;margin-bottom:18px"><b>✓ Your SKN profile is ready!</b><p class="small" style="margin:4px 0 0">Your unique SKN ID is below. Share it, or edit it any time.</p></div>':''}
+  <h2>Hi ${user.name||''} — this is your SKN ID</h2><p class="sub">Your unique skin identity, built from your profile. It grows with you — edit it whenever your skin, routine or environment changes.</p>
+  <div class="idcard" style="margin-top:16px"><span style="background:var(--lime);color:#111;border-radius:999px;padding:5px 10px;font-weight:800;font-size:13px">SKN ID</span>
+  <div class="bigcode">${code}</div>
+  <p>${user.name||''} · ${user.email||''} · Updated ${profile.updated||''}</p>
+  <p class="small" style="color:#e8e8e8">Profile complete: ${pct}% (${done} of 5 sections)</p><div class="bar"><i style="width:${pct}%"></i></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button></div></div>
+  <div class="grid2" style="margin-top:18px">
+  <div class="card"><p class="small" style="margin:0">SKIN TYPE</p><p class="stat">${profile.skin_type||'—'}</p><p class="small">The starting point for everything else in your profile.</p></div>
+  <div class="card"><p class="small" style="margin:0">ENVIRONMENT</p><p class="stat" style="font-size:24px">${profile.environment||'—'}</p><p class="small">Where your skin lives day to day.</p></div>
+  <div class="card"><b>Sensitivities</b><div style="margin-top:10px">${chips(profile.sensitivities)}</div></div>
+  <div class="card"><b>Goals</b><div style="margin-top:10px">${chips(profile.goals)}</div></div>
+  <div class="card"><b>Values</b><div style="margin-top:10px">${chips(profile.values)}</div></div>
+  <div class="card"><b>Your focus first</b><p style="margin-top:8px">Start with <b>${(profile.goals||['healthy skin'])[0]}</b>, keep the routine simple for 3–4 weeks, then check your SKN Report for the full plan.</p><button class="btn btn-dark" style="margin-top:8px" onclick="show('report')">Open my report →</button></div>
+  </div>`;
+  justSaved=false;
+}
+function editProfile(){ editing=true; draft={...profile}; renderProfile(); }
+function cancelEdit(){ editing=false; draft={...profile}; renderProfile(); }
+function copyCode(btn){
+  const code=profile?.skn_code||sknCode();
+  const done=()=>{ if(btn){ btn.textContent='Copied!'; setTimeout(()=>{btn.textContent='Copy SKN ID';},2000); } };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(done); } else done();
+}
 function show(v){
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='dashboard') renderDash(); if(v==='profile') renderOnb(); if(v==='report') renderReport();
+ if(v==='profile') renderProfile(); if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
- $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi?draft[k].includes(o):draft[k]===o?'sel':''}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
+ $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
-async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); const ok=await supaInsert('skn_profiles',{email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}); $('saveMsg').textContent=ok?'Saved to Supabase! Your SKN ID, dashboard and report are updated.':'Saved locally. Add the Supabase anon key to also save it to Supabase.'; }
+async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const ok=await supaInsert('skn_profiles',{email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}); if(!ok){ justSaved=false; } show('profile'); }
 function reportText(){
  if(!profile) return '<p>Build your profile first, then your report will appear here.</p>';
  const fav=profile.goals.includes('Hydration')?'hyaluronic acid, glycerin, ceramides':profile.goals.includes('Even tone')?'vitamin C, niacinamide, SPF':profile.goals.includes('Clearer skin')?'salicylic acid, niacinamide, gentle cleansing':'ceramides, squalane, gentle cleansing';
@@ -183,18 +235,11 @@ function renderReport(){ $('reportBody').innerHTML=reportText(); }
 function downloadReport(){
  const t=$('reportBody').innerText; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'})); a.download='SKN-Report.txt'; a.click();
 }
-function renderDash(){
- if(!user){show('landing');return}
- $('dashName').textContent=', '+(user.name||'');
- if(!profile){$('dashCard').innerHTML=`<h3>Your SKN ID is ready to build</h3><p>Complete the 5-step profile to unlock your report.</p><button class="btn btn-lime" onclick="show('profile')">Build my profile →</button>`; $('dashTip').textContent='Tip: start with skin type and one goal — you can add the rest later.'; return}
- $('dashCard').innerHTML=`<span style="background:var(--lime);color:#111;border-radius:999px;padding:5px 10px;font-weight:800;font-size:13px">SKN ID</span><h3 style="margin:12px 0 4px">${user.name||'Your SKN ID'}</h3><p>${profile.skin_type} skin · Updated ${profile.updated||''}</p><div style="margin-top:12px">${profile.goals.map(g=>`<span class="chip">${g}</span>`).join('')}${profile.sensitivities.map(s=>`<span class="chip">${s}</span>`).join('')}</div>`;
- $('dashTip').textContent=`Based on your profile: focus on ${(profile.goals[0]||'healthy skin').toLowerCase()} first, and revisit your report as your skin changes.`;
-}
 function signOutOrIn(){ if(user){localStorage.removeItem('skn_clone_user');user=null;$('authBtn').textContent='Sign in';show('landing')} else show('landing'); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
  user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='Sign out';
- show(profile?'dashboard':'profile');
+ show('profile');
 }
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
 $('googleBtn').onclick=()=>{$('authForm').classList.remove('hidden');$('authNote').textContent='Google sign-in is simulated in this clone — add your name and email to continue. Real Google sign-in needs Supabase Auth.'};
@@ -212,5 +257,5 @@ function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
   applyTheme(saved ? saved==='dark' : prefersDark);
 })();
 
-if(user){$('authBtn').textContent='Sign out'; show(profile?'dashboard':'profile')} else {renderOnb();}
+if(user){$('authBtn').textContent='Sign out'; show('profile')} else {renderOnb();}
 </script></body></html>
