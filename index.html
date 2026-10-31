@@ -122,16 +122,15 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 <div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
 <!-- DASHBOARD: same SKN profile overview, but WITHOUT Account details and WITHOUT Sign out/Delete -->
-<div id="view-dashboard" class="hidden"><section><div id="dashboardDisplay"></div></section></div>
-
-<!-- PROFILE (My profile): display page + builder (builder shows first time / on Edit) -->
-<div id="view-profile" class="hidden"><section>
-<div id="profileDisplay" class="hidden"></div>
+<div id="view-dashboard" class="hidden"><section><div id="dashboardDisplay" class="hidden"></div>
 <div id="profileBuilder">
 <h2 id="profileTitle">Create your SKN ID</h2><p class="sub">Five inputs, one identity. Pick every option that fits you — selected options turn lime, so you can see at a glance what you have chosen.</p>
 <div class="card"><div id="onb"></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-dark" id="saveBtn" onclick="saveProfile()">Create skin profile</button><button class="btn btn-ghost hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button></div><p class="small" id="saveMsg"></p></div>
 </div>
 </section></div>
+
+<!-- PROFILE (My profile): display page + builder (builder shows first time / on Edit) -->
+<div id="view-profile" class="hidden"><section><div id="accountDisplay"></div></section></div>
 
 <!-- REPORT -->
 <div id="view-report" class="hidden"><section><h2>Your SKN Report</h2><p class="sub">Personalised from your profile. Update your profile and this report updates too.</p><div class="card" id="reportBody"></div><button class="btn btn-ghost" style="margin-top:12px" onclick="downloadReport()">Download report (.txt)</button></section></div>
@@ -207,7 +206,7 @@ async function initAuth(){
       user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
       const remote=await loadProfileFromSupabase(session);
       if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-      show('profile'); return;
+      show('dashboard'); return;
     }
     user=null; show('landing'); return;
   }
@@ -221,7 +220,7 @@ if(supaClient){
         user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
         const remote=await loadProfileFromSupabase(session);
         if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-        show('profile');
+        show('dashboard');
       }
     }
   });
@@ -243,7 +242,7 @@ async function verifyOtp(){
   user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
   const remote=await loadProfileFromSupabase(session);
   if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-  show('profile');
+  show('dashboard');
 }
 async function doSignOut(){
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
@@ -298,9 +297,27 @@ function completion(){
   return n*20;
 }
 function chips(arr){ return (arr||[]).length ? (arr||[]).map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="small">Not set yet</span>'; }
-function renderProfile(){
+function renderAccount(){
+  // My profile is now account-only: no SKN ID card, no profile detail cards.
+  // Those live on Dashboard. Sign out / Delete live only here, in Account details.
   if(!user){ show('landing'); return; }
-  const disp=$('profileDisplay'), bld=$('profileBuilder');
+  const code=profile?.skn_code||sknCode();
+  $('accountDisplay').innerHTML = `
+  <h2>My profile</h2><p class="sub">Your account details. Your SKN ID and skin profile live on Dashboard.</p>
+  <div class="card" style="margin-top:18px"><b>Account details</b>
+  <p style="margin:8px 0 0"><b>Name:</b> ${user.name||''}</p>
+  <p style="margin:4px 0"><b>Login email:</b> ${user.email||''}</p>
+  <p style="margin:4px 0"><b>Date updated:</b> ${profile?.updated||''}</p>
+  <p style="margin:4px 0"><b>SKN ID:</b> ${code}</p>
+  ${user.provider?`<p style="margin:4px 0"><b>Signed in with:</b> ${user.provider}</p>`:''}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-dark" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
+  ${profile ? '' : '<div class="card" style="margin-top:18px"><p>No SKN profile yet.</p><button class="btn btn-dark" onclick="show(\'dashboard\')">Create skin profile</button></div>'}`;
+}
+function renderDashboard(){
+  // Dashboard is now the only place for the SKN ID card, profile details,
+  // and the create/edit builder. No Account details card here.
+  if(!user){ show('landing'); return; }
+  const disp=$('dashboardDisplay'), bld=$('profileBuilder');
   if(!profile || editing){
     disp.classList.add('hidden'); bld.classList.remove('hidden');
     $('profileTitle').textContent = editing ? 'Edit your SKN ID' : 'Create your SKN ID';
@@ -318,13 +335,6 @@ function renderProfile(){
   <p>${user.name||''} · ${user.email||''} · Updated ${profile.updated||''}</p>
   <p class="small" style="color:#e8e8e8">Profile complete: ${pct}% (${done} of 5 sections)</p><div class="bar"><i style="width:${pct}%"></i></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button></div></div>
-  <div class="card" style="margin-top:18px"><b>Account details</b>
-  <p style="margin:8px 0 0"><b>Name:</b> ${user.name||''}</p>
-  <p style="margin:4px 0"><b>Login email:</b> ${user.email||''}</p>
-  <p style="margin:4px 0"><b>Date updated:</b> ${profile.updated||''}</p>
-  <p style="margin:4px 0"><b>SKN ID:</b> ${code}</p>
-  ${user.provider?`<p style="margin:4px 0"><b>Signed in with:</b> ${user.provider}</p>`:''}
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-dark" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
   <div class="grid2" style="margin-top:18px">
   <div class="card"><p class="small" style="margin:0">SKIN TYPE</p><p class="stat">${profile.skin_type||'—'}</p><p class="small">The starting point for everything else in your profile.</p></div>
   <div class="card"><p class="small" style="margin:0">ENVIRONMENT</p><p class="stat" style="font-size:24px">${profile.environment||'—'}</p><p class="small">Where your skin lives day to day.</p></div>
@@ -335,22 +345,8 @@ function renderProfile(){
   </div>`;
   justSaved=false;
 }
-function renderDashboard(){
-  // Dashboard shows the same profile overview, but Account details stays
-  // only in My profile, and Sign out/Delete live only in Account details.
-  // So build the full display (hidden, in My profile) and strip the
-  // Account details card out before putting it on Dashboard.
-  if(!user){ show('landing'); return; }
-  if(!profile){ show('profile'); return; }
-  // Render the display version even if the user is mid-edit in My profile,
-  // without losing the editing state for when they go back to My profile.
-  const wasEditing=editing; editing=false; renderProfile(); editing=wasEditing;
-  const tmp=document.createElement('div'); tmp.innerHTML=$('profileDisplay').innerHTML;
-  tmp.querySelectorAll('.card').forEach(c=>{ if(c.innerHTML.includes('<b>Account details</b>')) c.remove(); });
-  $('dashboardDisplay').innerHTML=tmp.innerHTML;
-}
-function editProfile(){ editing=true; draft={...profile}; show('profile'); }
-function cancelEdit(){ editing=false; draft={...profile}; show('profile'); }
+function editProfile(){ editing=true; draft={...profile}; show('dashboard'); }
+function cancelEdit(){ editing=false; draft={...profile}; show('dashboard'); }
 function copyCode(btn){
   const code=profile?.skn_code||sknCode();
   const done=()=>{ if(btn){ btn.textContent='Copied!'; setTimeout(()=>{btn.textContent='Copy SKN ID';},2000); } };
@@ -360,14 +356,14 @@ function show(v){
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='landing') renderLandingAuth(); if(v==='dashboard') renderDashboard(); if(v==='profile') renderProfile(); if(v==='report') renderReport();
+ if(v==='landing') renderLandingAuth(); if(v==='dashboard') renderDashboard(); if(v==='profile') renderAccount(); if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
  $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
-async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('profile'); }
+async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('dashboard'); }
 function reportText(){
  if(!profile) return '<p>Build your profile first, then your report will appear here.</p>';
  const fav=profile.goals.includes('Hydration')?'hyaluronic acid, glycerin, ceramides':profile.goals.includes('Even tone')?'vitamin C, niacinamide, SPF':profile.goals.includes('Clearer skin')?'salicylic acid, niacinamide, gentle cleansing':'ceramides, squalane, gentle cleansing';
@@ -385,7 +381,7 @@ function signOutOrIn(){ if(user){show('profile')} else show('landing'); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
  user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='My profile';
- show('profile');
+ show('dashboard');
 }
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
 $('googleBtn').onclick=async ()=>{
@@ -412,5 +408,5 @@ function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
   applyTheme(saved ? saved==='dark' : prefersDark);
 })();
 
-if(user){$('authBtn').textContent='My profile'; show('profile')} else {renderOnb();}
+if(user){$('authBtn').textContent='My profile'; show('dashboard')} else {renderOnb();}
 </script></body></html>
