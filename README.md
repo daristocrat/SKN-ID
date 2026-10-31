@@ -20,6 +20,23 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   environment, sensitivities, goals and values, with Edit profile
   and View SKN Report actions. Edits update the profile and
   report instantly.
+- Login page (step 1, 2026-10-31): new visitors are prompted with
+  the sign-in page first. With Supabase Auth connected, sign in
+  via Google OAuth or Email OTP (8-digit code, 1 hour validity),
+  every sign-in is recorded in login_history, and a returning
+  user with a saved session goes straight to their profile.
+  The sign-in page also has Sign out and Delete account: delete
+  requires typing your exact email and DELETE, archives your
+  profile and login history to deleted_accounts, deletes your
+  skn_profiles and login_history rows and all local data, then
+  signs you out. Until the Supabase publishable key is set, the
+  site falls back to a local preview account and the Google/OTP
+  buttons explain that setup is pending. Google provider is not
+  yet enabled in Supabase (no Client ID/Secret on file), so
+  Google login needs that configuration first; Email provider
+  is enabled. Note: deleting the Supabase Auth login record
+  itself needs a server-side (service-role) step, which is not
+  in browser code.
 - SKN Report: generated from the profile, downloadable as .txt.
 - Removed 2026-10-31 at Prince's request: Yumi, Scanner and
   Community, and later the Dashboard tab. They are no longer in

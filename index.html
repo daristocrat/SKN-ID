@@ -113,7 +113,10 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 <button class="btn btn-lime" id="googleBtn" disabled>Continue with Google</button>
 <button class="btn btn-dark" id="emailBtn" disabled>Continue with Email</button></div>
 <p class="small" id="authNote">Tick the required consent box to enable sign-in, just like the prototype.</p>
-<div id="authForm" class="hidden"><label>Your name</label><input id="authName" placeholder="e.g. Prince"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:12px" onclick="doSignIn()">Create / open my SKN ID</button><p class="small">Working clone: this creates a local account in this browser. Connect Supabase to make accounts real across devices.</p></div>
+<div id="authForm" class="hidden"><label>Your name</label><input id="authName" placeholder="e.g. Prince"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:12px" onclick="doSignIn()">Create / open my SKN ID</button><p class="small">Local preview account (used only while Supabase Auth is not connected). With Supabase connected, use Google or Email OTP above instead.</p></div>
+<div id="signedInPanel" class="hidden"><p><b>Signed in as <span id="signedInEmail"></span></b></p><p class="small">Your session is remembered on this device. Go to your profile, sign out, or delete your account below.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="show('profile')">Go to my profile</button><button class="btn btn-ghost" onclick="doSignOut()">Sign out</button><button class="btn btn-ghost" onclick="showDeletePanel()">Delete account</button></div></div>
+<div id="otpSection" class="hidden"><label>Email for OTP</label><input id="otpEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:10px" onclick="sendOtp()">Send OTP code</button><div id="otpStep" class="hidden"><label>Enter the 8-digit code sent to your email</label><input id="otpCode" inputmode="numeric" placeholder="12345678"><button class="btn btn-dark" style="margin-top:10px" onclick="verifyOtp()">Verify and sign in</button></div><p class="small" id="otpMsg"></p></div>
+<div id="deletePanel" class="hidden" style="border:2px solid #c00;border-radius:16px;padding:14px;margin-top:14px"><b>Delete my account — verification required</b><p class="small">This archives your profile and login history to the deleted_accounts table, then deletes your profile, login history and all local SKN data, and signs you out. Type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div>
 </div></div>
 <div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
@@ -137,6 +140,7 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 
 </main>
 <footer class="wrap" style="border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut)"><p><b style="color:#111">SKN ID</b> · Universal skin identity for the modern age · Working clone built from the public Base44 prototype. Data in this clone saves in your browser (localStorage) until Supabase is connected. Report guidance is general skincare information, not medical advice.</p></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=id=>document.getElementById(id);
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
@@ -152,6 +156,117 @@ const SUPABASE_ANON_KEY=(typeof window!=='undefined'&&window.SKN_SUPABASE_ANON_K
 async function supaInsert(table,row){
   if(!SUPABASE_ANON_KEY) return false;
   try{ const r=await fetch(SUPABASE_URL+'/rest/v1/'+table,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)}); return r.ok; }catch(e){ return false; }
+}
+// Supabase Auth client — only created when a publishable (anon) key is set.
+// The anon/publishable key is not a secret key: it is designed for browser
+// use and is protected by Row Level Security. The service_role key must
+// never appear here. Until the key is set, the site falls back to a local
+// preview account, and Google/OTP buttons explain that setup is pending.
+const supaClient = (typeof window!=='undefined' && window.supabase && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const PAGES_URL='https://daristocrat.github.io/SKN-ID/';
+function supaHeaders(session){ return {apikey:SUPABASE_ANON_KEY, Authorization:'Bearer '+session.access_token, 'Content-Type':'application/json'}; }
+async function getSupaSession(){ if(!supaClient) return null; const {data} = await supaClient.auth.getSession(); return data?.session||null; }
+function userFromSession(session){ const email=session.user.email||''; const name=session.user.user_metadata?.full_name || session.user.user_metadata?.name || (email?email.split('@')[0]:'SKN member'); return {name, email, supabase_id: session.user.id, provider: session.user.app_metadata?.provider||'email'}; }
+async function recordLogin(provider, session){ if(!supaClient||!session) return; try{ await fetch(SUPABASE_URL+'/rest/v1/login_history',{method:'POST',headers:supaHeaders(session),body:JSON.stringify({user_id:session.user.id,email:session.user.email||'',provider})}); }catch(e){} }
+async function loadProfileFromSupabase(session){
+  if(!supaClient||!session) return null;
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/skn_profiles?user_id=eq.'+session.user.id+'&order=created_at.desc&limit=1',{headers:supaHeaders(session)});
+    if(!r.ok) return null; const rows=await r.json(); if(!rows.length) return null; const row=rows[0];
+    const split=s=>s?String(s).split(',').map(x=>x.trim()).filter(Boolean):[];
+    return {skin_type:row.skin_type||'',sensitivities:split(row.sensitivities),goals:split(row.goals),values:split(row.values),environment:row.environment||'',updated:row.created_at?new Date(row.created_at).toLocaleDateString():'',skn_code:profile?.skn_code||sknCode()};
+  }catch(e){ return null; }
+}
+async function supaUpsertProfile(session,row){
+  try{
+    const get=await fetch(SUPABASE_URL+'/rest/v1/skn_profiles?user_id=eq.'+session.user.id+'&limit=1',{headers:supaHeaders(session)});
+    if(!get.ok) return false; const rows=await get.json();
+    if(rows.length){ const r=await fetch(SUPABASE_URL+'/rest/v1/skn_profiles?id=eq.'+rows[0].id,{method:'PATCH',headers:supaHeaders(session),body:JSON.stringify(row)}); return r.ok; }
+    const r=await fetch(SUPABASE_URL+'/rest/v1/skn_profiles',{method:'POST',headers:supaHeaders(session),body:JSON.stringify({...row,user_id:session.user.id})}); return r.ok;
+  }catch(e){ return false; }
+}
+function renderLandingAuth(){
+  const signed=!!user;
+  const panel=$('signedInPanel'); if(panel) panel.classList.toggle('hidden', !signed);
+  if(signed && $('signedInEmail')) $('signedInEmail').textContent=user.email||'';
+}
+async function initAuth(){
+  // New users are prompted with the login page first: view-landing is the
+  // default visible view in the HTML, and nothing auto-enters a profile
+  // without a session. Returning users with a Supabase session go to profile.
+  if(supaClient){
+    const session=await getSupaSession();
+    if(session){
+      user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+      const remote=await loadProfileFromSupabase(session);
+      if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
+      show('profile'); return;
+    }
+    user=null; show('landing'); return;
+  }
+  initAuth();
+}
+if(supaClient){
+  supaClient.auth.onAuthStateChange(async (event, session)=>{
+    if(event==='SIGNED_IN' && session){
+      await recordLogin(session.user.app_metadata?.provider||'email', session);
+      if(!user || user.supabase_id!==session.user.id){
+        user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+        const remote=await loadProfileFromSupabase(session);
+        if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
+        show('profile');
+      }
+    }
+  });
+}
+async function sendOtp(){
+  const email=$('otpEmail').value.trim(); if(!email){$('otpMsg').textContent='Enter your email first.';return}
+  if(!supaClient){$('otpMsg').textContent='Email OTP needs Supabase Auth connected (publishable key not set yet).';return}
+  const {error}=await supaClient.auth.signInWithOtp({email, options:{shouldCreateUser:true}});
+  if(error){$('otpMsg').textContent='Could not send code: '+error.message;return}
+  $('otpStep').classList.remove('hidden'); $('otpMsg').textContent='Code sent to '+email+'. Enter the 8-digit code (valid 1 hour).';
+}
+async function verifyOtp(){
+  const email=$('otpEmail').value.trim(), token=$('otpCode').value.trim();
+  if(!email||!token){$('otpMsg').textContent='Enter your email and the code.';return}
+  if(!supaClient){$('otpMsg').textContent='Email OTP needs Supabase Auth connected.';return}
+  const {data,error}=await supaClient.auth.verifyOtp({email,token,type:'email'});
+  if(error){$('otpMsg').textContent='Verification failed: '+error.message;return}
+  const session=data.session; if(!session){$('otpMsg').textContent='No session returned. Try sending a new code.';return}
+  user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+  const remote=await loadProfileFromSupabase(session);
+  if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
+  show('profile');
+}
+async function doSignOut(){
+  if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
+  localStorage.removeItem('skn_clone_user'); user=null; $('authBtn').textContent='Sign in'; show('landing');
+}
+function showDeletePanel(){ $('deletePanel').classList.remove('hidden'); $('delMsg').textContent=''; }
+function hideDeletePanel(){ $('deletePanel').classList.add('hidden'); }
+function goToDelete(){ show('landing'); showDeletePanel(); }
+async function confirmDeleteAccount(){
+  const email=$('delEmail').value.trim(), conf=$('delConfirm').value.trim();
+  if(!user || !user.email){ $('delMsg').textContent='You are not signed in.'; return; }
+  if(email!==user.email || conf!=='DELETE'){ $('delMsg').textContent='Verification failed: email must match your signed-in email exactly, and type DELETE exactly.'; return; }
+  $('delMsg').textContent='Deleting and archiving…';
+  const reason=$('delReason').value.trim()||null;
+  const session=await getSupaSession();
+  if(supaClient && session){
+    let history=[];
+    try{ const r=await fetch(SUPABASE_URL+'/rest/v1/login_history?user_id=eq.'+session.user.id,{headers:supaHeaders(session)}); if(r.ok) history=await r.json(); }catch(e){}
+    const arch=await fetch(SUPABASE_URL+'/rest/v1/deleted_accounts',{method:'POST',headers:supaHeaders(session),body:JSON.stringify({user_id:session.user.id,email:user.email,name:user.name||null,profile_data:profile||null,login_history:history,reason})});
+    if(!arch.ok){ $('delMsg').textContent='Could not archive your account. Nothing was deleted. Please try again.'; return; }
+    await fetch(SUPABASE_URL+'/rest/v1/skn_profiles?user_id=eq.'+session.user.id,{method:'DELETE',headers:supaHeaders(session)});
+    await fetch(SUPABASE_URL+'/rest/v1/login_history?user_id=eq.'+session.user.id,{method:'DELETE',headers:supaHeaders(session)});
+  } else {
+    const archived=load('skn_deleted_accounts',[]); archived.push({email:user.email,name:user.name,profile_data:profile,deleted_at:new Date().toISOString(),reason}); save('skn_deleted_accounts',archived);
+  }
+  ['skn_clone_user','skn_clone_profile'].forEach(k=>localStorage.removeItem(k));
+  user=null; profile=null; draft={skin_type:'',sensitivities:[],goals:[],values:[],environment:''}; editing=false;
+  if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
+  $('authBtn').textContent='Sign in'; hideDeletePanel(); show('landing');
+  $('authNote').textContent='Your account data has been deleted and archived. To fully remove the Supabase Auth login record, delete the user in Supabase Dashboard > Authentication > Users (server-side step).';
 }
 const FIELDS=[
  ['skin_type','Skin type',['Oily','Dry','Combination','Sensitive','Normal'],false],
@@ -192,7 +307,7 @@ function renderProfile(){
   <div class="bigcode">${code}</div>
   <p>${user.name||''} · ${user.email||''} · Updated ${profile.updated||''}</p>
   <p class="small" style="color:#e8e8e8">Profile complete: ${pct}% (${done} of 5 sections)</p><div class="bar"><i style="width:${pct}%"></i></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
   <div class="grid2" style="margin-top:18px">
   <div class="card"><p class="small" style="margin:0">SKIN TYPE</p><p class="stat">${profile.skin_type||'—'}</p><p class="small">The starting point for everything else in your profile.</p></div>
   <div class="card"><p class="small" style="margin:0">ENVIRONMENT</p><p class="stat" style="font-size:24px">${profile.environment||'—'}</p><p class="small">Where your skin lives day to day.</p></div>
@@ -214,14 +329,14 @@ function show(v){
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='profile') renderProfile(); if(v==='report') renderReport();
+ if(v==='landing') renderLandingAuth(); if(v==='profile') renderProfile(); if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
  $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
-async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const ok=await supaInsert('skn_profiles',{email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}); if(!ok){ justSaved=false; } show('profile'); }
+async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('profile'); }
 function reportText(){
  if(!profile) return '<p>Build your profile first, then your report will appear here.</p>';
  const fav=profile.goals.includes('Hydration')?'hyaluronic acid, glycerin, ceramides':profile.goals.includes('Even tone')?'vitamin C, niacinamide, SPF':profile.goals.includes('Clearer skin')?'salicylic acid, niacinamide, gentle cleansing':'ceramides, squalane, gentle cleansing';
@@ -235,15 +350,24 @@ function renderReport(){ $('reportBody').innerHTML=reportText(); }
 function downloadReport(){
  const t=$('reportBody').innerText; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'})); a.download='SKN-Report.txt'; a.click();
 }
-function signOutOrIn(){ if(user){localStorage.removeItem('skn_clone_user');user=null;$('authBtn').textContent='Sign in';show('landing')} else show('landing'); }
+function signOutOrIn(){ if(user){doSignOut()} else show('landing'); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
  user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='Sign out';
  show('profile');
 }
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
-$('googleBtn').onclick=()=>{$('authForm').classList.remove('hidden');$('authNote').textContent='Google sign-in is simulated in this clone — add your name and email to continue. Real Google sign-in needs Supabase Auth.'};
-$('emailBtn').onclick=()=>{$('authForm').classList.remove('hidden')};
+$('googleBtn').onclick=async ()=>{
+  if(!$('consent1').checked){$('authNote').textContent='Tick the required consent box first.';return}
+  if(!supaClient){$('authNote').textContent='Google login is not connected yet: Supabase Auth needs a publishable key and the Google provider enabled in Supabase. Use email below for a local preview account for now.';$('authForm').classList.remove('hidden');return}
+  const {error}=await supaClient.auth.signInWithOAuth({provider:'google', options:{redirectTo:PAGES_URL}});
+  if(error) $('authNote').textContent='Google sign-in failed: '+error.message;
+};
+$('emailBtn').onclick=()=>{
+  if(!$('consent1').checked){$('authNote').textContent='Tick the required consent box first.';return}
+  if(supaClient){$('otpSection').classList.remove('hidden');$('authForm').classList.add('hidden');$('otpMsg').textContent='Enter your email, then check your inbox for an 8-digit code (valid 1 hour).';}
+  else {$('authForm').classList.remove('hidden');$('authNote').textContent='Supabase is not connected yet — this creates a local preview account in this browser. Real email OTP needs the Supabase publishable key.';}
+};
 
 function applyTheme(dark){
   document.body.classList.toggle('dark', dark);
