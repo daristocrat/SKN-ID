@@ -13,13 +13,20 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   environment. Selected options turn lime (fixed 2026-10-31:
   multi-select options previously never showed as selected).
   Clicking "Create skin profile" redirects to your profile page.
-- Profile page (no Dashboard tab any more — sign-in is the entry
-  point): a unique SKN ID code in SKN A123B format, generated
-  deterministically from your email, plus a copy button, a
-  completion bar, and interactive detail cards for skin type,
-  environment, sensitivities, goals and values, with Edit profile
-  and View SKN Report actions. Edits update the profile and
-  report instantly.
+- Dashboard tab: the SKN profile overview — SKN ID card,
+  completion bar, and detail cards for skin type, environment,
+  sensitivities, goals, values and first focus, with Copy,
+  Edit and View SKN Report actions. No Account details card
+  here, and no Sign out / Delete buttons on the profile card.
+- My profile section (header My profile button when signed
+  in): the same profile overview, plus the Account details
+  card (name, login email, date updated, SKN ID, sign-in
+  provider) with Sign out and Delete account — those two
+  actions live only here, not on Dashboard or on the profile
+  card. Edit from Dashboard takes you to My profile to edit.
+  A unique SKN ID code in SKN A123B format is generated
+  deterministically from your email, plus a copy button and a
+  completion bar. Edits update the profile and report instantly.
 - Login page (step 1, 2026-10-31): new visitors are prompted with
   the sign-in page first. With Supabase Auth connected, sign in
   via Google OAuth or Email OTP (8-digit code, 1 hour validity),

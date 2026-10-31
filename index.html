@@ -97,7 +97,7 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 </style></head><body>
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')"><span class="mark">◉</span> SKN&nbsp;ID</a>
 <nav class="tabs" id="appTabs">
-<button class="tab" data-v="profile" onclick="show('profile')">Dashboard</button>
+<button class="tab" data-v="dashboard" onclick="show('dashboard')">Dashboard</button>
 <button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
 <button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
 </nav><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
@@ -121,7 +121,10 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 </div></div>
 <div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
-<!-- PROFILE: display page + builder (builder shows first time / on Edit) -->
+<!-- DASHBOARD: same SKN profile overview, but WITHOUT Account details and WITHOUT Sign out/Delete -->
+<div id="view-dashboard" class="hidden"><section><div id="dashboardDisplay"></div></section></div>
+
+<!-- PROFILE (My profile): display page + builder (builder shows first time / on Edit) -->
 <div id="view-profile" class="hidden"><section>
 <div id="profileDisplay" class="hidden"></div>
 <div id="profileBuilder">
@@ -314,7 +317,7 @@ function renderProfile(){
   <div class="bigcode">${code}</div>
   <p>${user.name||''} · ${user.email||''} · Updated ${profile.updated||''}</p>
   <p class="small" style="color:#e8e8e8">Profile complete: ${pct}% (${done} of 5 sections)</p><div class="bar"><i style="width:${pct}%"></i></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button></div></div>
   <div class="card" style="margin-top:18px"><b>Account details</b>
   <p style="margin:8px 0 0"><b>Name:</b> ${user.name||''}</p>
   <p style="margin:4px 0"><b>Login email:</b> ${user.email||''}</p>
@@ -332,8 +335,22 @@ function renderProfile(){
   </div>`;
   justSaved=false;
 }
-function editProfile(){ editing=true; draft={...profile}; renderProfile(); }
-function cancelEdit(){ editing=false; draft={...profile}; renderProfile(); }
+function renderDashboard(){
+  // Dashboard shows the same profile overview, but Account details stays
+  // only in My profile, and Sign out/Delete live only in Account details.
+  // So build the full display (hidden, in My profile) and strip the
+  // Account details card out before putting it on Dashboard.
+  if(!user){ show('landing'); return; }
+  if(!profile){ show('profile'); return; }
+  // Render the display version even if the user is mid-edit in My profile,
+  // without losing the editing state for when they go back to My profile.
+  const wasEditing=editing; editing=false; renderProfile(); editing=wasEditing;
+  const tmp=document.createElement('div'); tmp.innerHTML=$('profileDisplay').innerHTML;
+  tmp.querySelectorAll('.card').forEach(c=>{ if(c.innerHTML.includes('<b>Account details</b>')) c.remove(); });
+  $('dashboardDisplay').innerHTML=tmp.innerHTML;
+}
+function editProfile(){ editing=true; draft={...profile}; show('profile'); }
+function cancelEdit(){ editing=false; draft={...profile}; show('profile'); }
 function copyCode(btn){
   const code=profile?.skn_code||sknCode();
   const done=()=>{ if(btn){ btn.textContent='Copied!'; setTimeout(()=>{btn.textContent='Copy SKN ID';},2000); } };
@@ -343,7 +360,7 @@ function show(v){
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='landing') renderLandingAuth(); if(v==='profile') renderProfile(); if(v==='report') renderReport();
+ if(v==='landing') renderLandingAuth(); if(v==='dashboard') renderDashboard(); if(v==='profile') renderProfile(); if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
