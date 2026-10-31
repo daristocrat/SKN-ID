@@ -100,7 +100,7 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 <button class="tab" data-v="profile" onclick="show('profile')">Dashboard</button>
 <button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
 <button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
-</nav><button class="btn btn-lime" id="themeBtn" onclick="toggleTheme()">Dark mode</button><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
+</nav><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
 <main class="wrap">
 
 <!-- LANDING / SIGN-IN (matches prototype) -->
@@ -385,7 +385,6 @@ $('emailBtn').onclick=()=>{
 
 function applyTheme(dark){
   document.body.classList.toggle('dark', dark);
-  const b=$('themeBtn'); if(b) b.textContent = dark ? 'Light mode' : 'Dark mode';
   const ab=$('aboutThemeBtn'); if(ab) ab.textContent = dark ? 'Light mode' : 'Dark mode';
   try{ localStorage.setItem('skn_theme', dark ? 'dark' : 'light'); }catch(e){}
 }
