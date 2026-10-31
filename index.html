@@ -87,6 +87,8 @@ body.dark .logo{color:#fff !important;-webkit-text-fill-color:#fff !important}
 body.dark h1 em{color:#141414 !important;-webkit-text-fill-color:#141414 !important}
 body.dark footer,body.dark footer p{color:#ddd !important;-webkit-text-fill-color:#ddd !important}
 body.dark footer b{color:#fff !important;-webkit-text-fill-color:#fff !important}
+.modal{position:fixed;inset:0;background:rgba(20,20,20,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal .card{max-width:520px;width:100%;max-height:90vh;overflow:auto}
 .bar{height:14px;border:2px solid #141414;border-radius:999px;background:#fff;overflow:hidden}
 .bar>i{display:block;height:100%;background:linear-gradient(90deg,#d7f651,#ffd9b8)}
 .bigcode{font-size:clamp(34px,6vw,52px);letter-spacing:.06em;font-weight:900;margin:8px 0;line-height:1.1}
@@ -95,7 +97,7 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 </style></head><body>
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')"><span class="mark">◉</span> SKN&nbsp;ID</a>
 <nav class="tabs" id="appTabs">
-<button class="tab" data-v="profile" onclick="show('profile')">My profile</button>
+<button class="tab" data-v="profile" onclick="show('profile')">Dashboard</button>
 <button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
 <button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
 </nav><button class="btn btn-lime" id="themeBtn" onclick="toggleTheme()">Dark mode</button><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
@@ -114,9 +116,8 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 <button class="btn btn-dark" id="emailBtn" disabled>Continue with Email</button></div>
 <p class="small" id="authNote">Tick the required consent box to enable sign-in, just like the prototype.</p>
 <div id="authForm" class="hidden"><label>Your name</label><input id="authName" placeholder="e.g. Prince"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:12px" onclick="doSignIn()">Create / open my SKN ID</button><p class="small">Local preview account (used only while Supabase Auth is not connected). With Supabase connected, use Google or Email OTP above instead.</p></div>
-<div id="signedInPanel" class="hidden"><p><b>Signed in as <span id="signedInEmail"></span></b></p><p class="small">Your session is remembered on this device. Go to your profile, sign out, or delete your account below.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="show('profile')">Go to my profile</button><button class="btn btn-ghost" onclick="doSignOut()">Sign out</button><button class="btn btn-ghost" onclick="showDeletePanel()">Delete account</button></div></div>
+<div id="signedInPanel" class="hidden"><p><b>Signed in as <span id="signedInEmail"></span></b></p><p class="small">Your session is remembered on this device. Go to your profile, sign out, or delete your account below.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="show('profile')">Go to my profile</button><button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="showDeletePanel()">Delete account</button></div></div>
 <div id="otpSection" class="hidden"><label>Email for OTP</label><input id="otpEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:10px" onclick="sendOtp()">Send OTP code</button><div id="otpStep" class="hidden"><label>Enter the 8-digit code sent to your email</label><input id="otpCode" inputmode="numeric" placeholder="12345678"><button class="btn btn-dark" style="margin-top:10px" onclick="verifyOtp()">Verify and sign in</button></div><p class="small" id="otpMsg"></p></div>
-<div id="deletePanel" class="hidden" style="border:2px solid #c00;border-radius:16px;padding:14px;margin-top:14px"><b>Delete my account — verification required</b><p class="small">This archives your profile and login history to the deleted_accounts table, then deletes your profile, login history and all local SKN data, and signs you out. Type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div>
 </div></div>
 <div class="darkcard"><h2>What is a SKN ID?</h2><p>One evolving profile built from skin type, sensitivities, goals, values and environment — powering smarter recommendations and reports, instead of generic, one-size-fits-all advice.</p><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><span class="chip">Skin type</span><span class="chip">Sensitivities</span><span class="chip">Goals</span><span class="chip">Values</span><span class="chip">Environment</span></div></div></div></section></div>
 
@@ -139,6 +140,8 @@ body.dark .bar{background:#222 !important;border-color:#d7f651}
 <form onsubmit="event.preventDefault();this.reset();document.getElementById('cMsg').textContent='Thanks — saved locally in this preview. Connect Supabase to save messages on a server.'"><label>Your name</label><input required><label>Your email</label><input required type="email"><label>Your message</label><textarea required></textarea><button class="btn btn-dark" style="margin-top:10px">Send message</button><p class="small" id="cMsg"></p></form></div></div></section></div>
 
 </main>
+<div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
+<div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
 <footer class="wrap" style="border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut)"><p><b style="color:#111">SKN ID</b> · Universal skin identity for the modern age · Working clone built from the public Base44 prototype. Data in this clone saves in your browser (localStorage) until Supabase is connected. Report guidance is general skincare information, not medical advice.</p></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -197,7 +200,7 @@ async function initAuth(){
   if(supaClient){
     const session=await getSupaSession();
     if(session){
-      user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+      user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
       const remote=await loadProfileFromSupabase(session);
       if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
       show('profile'); return;
@@ -211,7 +214,7 @@ if(supaClient){
     if(event==='SIGNED_IN' && session){
       await recordLogin(session.user.app_metadata?.provider||'email', session);
       if(!user || user.supabase_id!==session.user.id){
-        user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+        user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
         const remote=await loadProfileFromSupabase(session);
         if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
         show('profile');
@@ -233,7 +236,7 @@ async function verifyOtp(){
   const {data,error}=await supaClient.auth.verifyOtp({email,token,type:'email'});
   if(error){$('otpMsg').textContent='Verification failed: '+error.message;return}
   const session=data.session; if(!session){$('otpMsg').textContent='No session returned. Try sending a new code.';return}
-  user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+  user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
   const remote=await loadProfileFromSupabase(session);
   if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
   show('profile');
@@ -242,9 +245,12 @@ async function doSignOut(){
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
   localStorage.removeItem('skn_clone_user'); user=null; $('authBtn').textContent='Sign in'; show('landing');
 }
-function showDeletePanel(){ $('deletePanel').classList.remove('hidden'); $('delMsg').textContent=''; }
-function hideDeletePanel(){ $('deletePanel').classList.add('hidden'); }
-function goToDelete(){ show('landing'); showDeletePanel(); }
+function showDeletePanel(){ $('deleteModal').classList.remove('hidden'); $('delMsg').textContent=''; }
+function hideDeletePanel(){ $('deleteModal').classList.add('hidden'); }
+function goToDelete(){ showDeletePanel(); }
+function showSignoutPopup(){ $('signoutModal').classList.remove('hidden'); }
+function hideSignoutModal(){ $('signoutModal').classList.add('hidden'); }
+function confirmSignOut(){ hideSignoutModal(); doSignOut(); }
 async function confirmDeleteAccount(){
   const email=$('delEmail').value.trim(), conf=$('delConfirm').value.trim();
   if(!user || !user.email){ $('delMsg').textContent='You are not signed in.'; return; }
@@ -307,7 +313,14 @@ function renderProfile(){
   <div class="bigcode">${code}</div>
   <p>${user.name||''} · ${user.email||''} · Updated ${profile.updated||''}</p>
   <p class="small" style="color:#e8e8e8">Profile complete: ${pct}% (${done} of 5 sections)</p><div class="bar"><i style="width:${pct}%"></i></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="copyCode(this)">Copy SKN ID</button><button class="btn btn-ghost" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('report')">View SKN Report</button><button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
+  <div class="card" style="margin-top:18px"><b>Account details</b>
+  <p style="margin:8px 0 0"><b>Name:</b> ${user.name||''}</p>
+  <p style="margin:4px 0"><b>Login email:</b> ${user.email||''}</p>
+  <p style="margin:4px 0"><b>Date updated:</b> ${profile.updated||''}</p>
+  <p style="margin:4px 0"><b>SKN ID:</b> ${code}</p>
+  ${user.provider?`<p style="margin:4px 0"><b>Signed in with:</b> ${user.provider}</p>`:''}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-dark" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
   <div class="grid2" style="margin-top:18px">
   <div class="card"><p class="small" style="margin:0">SKIN TYPE</p><p class="stat">${profile.skin_type||'—'}</p><p class="small">The starting point for everything else in your profile.</p></div>
   <div class="card"><p class="small" style="margin:0">ENVIRONMENT</p><p class="stat" style="font-size:24px">${profile.environment||'—'}</p><p class="small">Where your skin lives day to day.</p></div>
@@ -350,10 +363,10 @@ function renderReport(){ $('reportBody').innerHTML=reportText(); }
 function downloadReport(){
  const t=$('reportBody').innerText; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'})); a.download='SKN-Report.txt'; a.click();
 }
-function signOutOrIn(){ if(user){doSignOut()} else show('landing'); }
+function signOutOrIn(){ if(user){show('profile')} else show('landing'); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
- user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='Sign out';
+ user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='My profile';
  show('profile');
 }
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
@@ -381,5 +394,5 @@ function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
   applyTheme(saved ? saved==='dark' : prefersDark);
 })();
 
-if(user){$('authBtn').textContent='Sign out'; show('profile')} else {renderOnb();}
+if(user){$('authBtn').textContent='My profile'; show('profile')} else {renderOnb();}
 </script></body></html>

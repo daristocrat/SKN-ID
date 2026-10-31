@@ -25,18 +25,22 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   via Google OAuth or Email OTP (8-digit code, 1 hour validity),
   every sign-in is recorded in login_history, and a returning
   user with a saved session goes straight to their profile.
-  The sign-in page also has Sign out and Delete account: delete
+  Once signed in, the header Sign in button becomes My profile,
+  and the My profile tab is now labelled Dashboard (same
+  profile page content). The profile page has an Account details
+  card (name, login email, date updated, SKN ID, sign-in
+  provider) plus Sign out and Delete account. Sign out and
+  Delete both open a confirm popup first; Delete then also
   requires typing your exact email and DELETE, archives your
   profile and login history to deleted_accounts, deletes your
   skn_profiles and login_history rows and all local data, then
-  signs you out. Until the Supabase publishable key is set, the
-  site falls back to a local preview account and the Google/OTP
-  buttons explain that setup is pending. Google provider is not
-  yet enabled in Supabase (no Client ID/Secret on file), so
-  Google login needs that configuration first; Email provider
-  is enabled. Note: deleting the Supabase Auth login record
-  itself needs a server-side (service-role) step, which is not
-  in browser code.
+  signs you out. Prince reported completing Google provider
+  setup in Supabase on 2026-10-31 (Part 2 of the guide);
+  verification of that provider switch is still to be
+  confirmed in the dashboard.
+  Note: deleting the Supabase Auth login record itself needs
+  a server-side (service-role) step, which is not in browser
+  code.
 - SKN Report: generated from the profile, downloadable as .txt.
 - Removed 2026-10-31 at Prince's request: Yumi, Scanner and
   Community, and later the Dashboard tab. They are no longer in
