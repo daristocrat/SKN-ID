@@ -148,11 +148,11 @@ const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let user=load('skn_clone_user',null), profile=load('skn_clone_profile',null);
 // Supabase wiring — project created 2026-10-30, West EU, status Healthy.
 // Project URL (not a secret): https://blyfnptcpbsqjfvlxyzh.supabase.co
-// Set window.SKN_SUPABASE_ANON_KEY in hosting env / a separate config file
-// (never paste it in chat) to start writing to Supabase. Until then, data
-// saves locally in this browser as before.
+// Publishable key embedded 2026-10-31 at the user's explicit authorisation
+// (publishable keys are designed for browser use; the service_role key
+// must never appear here). window.SKN_SUPABASE_ANON_KEY, if set, overrides it.
 const SUPABASE_URL='https://blyfnptcpbsqjfvlxyzh.supabase.co';
-const SUPABASE_ANON_KEY=(typeof window!=='undefined'&&window.SKN_SUPABASE_ANON_KEY)||'';
+const SUPABASE_ANON_KEY=(typeof window!=='undefined'&&window.SKN_SUPABASE_ANON_KEY)||'sb_publishable_fGeiSy1ps4z2hUmJv-v5UQ_nDdbSBE0';
 async function supaInsert(table,row){
   if(!SUPABASE_ANON_KEY) return false;
   try{ const r=await fetch(SUPABASE_URL+'/rest/v1/'+table,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)}); return r.ok; }catch(e){ return false; }
