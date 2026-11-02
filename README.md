@@ -129,3 +129,27 @@ only the anon key.
 GitHub Pages is on for daristocrat/SKN-ID (main branch, root):
 https://daristocrat.github.io/SKN-ID/ — every push to main
 redeploys it automatically. Static site, no build command needed.
+
+- Figma header, as it is (2026-11-02, second Figma check):
+  Figma has NO conventional gradient on buttons, cards, lime
+  band, tabs or avatar — everything is flat near-black
+  #0A0B0A, dark card #171A17 and flat lime #C8FF38, except
+  one very faint top-right olive glow (radial, peaking
+  around #1B2012 / #191E11, fading into #0A0B0A). This
+  build copies that glow, the flat card colour, and the
+  Figma dashboard header exactly: logo left, five tabs
+  centred (Home / My Skin / Recommendations / My Routine
+  / Account), lime avatar circle right with the real
+  user's initials. Active tab is a dark pill #2A2E2A with
+  cream text, NOT lime; inactive tabs are plain muted
+  text, no pill, no underline. There is deliberately NO
+  Report or About tab in the header, as in Figma — Report
+  is reached from My Skin, Home, Account and the footer,
+  About from the footer and Account. Signed-out header
+  is Figma landing style: Sign in (plain text) + Get
+  started (lime pill), no tabs. Figma's Sign in is only
+  a demo entry with no form, so here Sign in / Get
+  started / Discover your skin all open the REAL login
+  (Google OAuth + Email OTP, consent-gated) on the
+  landing sign-in card, and a successful sign-in lands
+  on Home with the five Figma tabs and the lime avatar.
