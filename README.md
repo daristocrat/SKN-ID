@@ -13,6 +13,20 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   environment. Selected options turn lime (fixed 2026-10-31:
   multi-select options previously never showed as selected).
   Clicking "Create skin profile" redirects to your profile page.
+- Design (from 2026-11-02, Figma site https://skn-id.figma.site/):
+  near-black (#0B0D0A) pages, electric lime (#C8F542) accent,
+  off-white (#F2EFE8) text, muted grey secondary text, flat
+  dark cards with 1px hairline borders and 24px corners, pill
+  buttons (lime primary, outlined secondary), huge uppercase
+  display headings with lime highlights, and an eyebrow label
+  style. Landing hero: “Know your skin. Own your routine.”,
+  Indian skin / weather / real life intro, 3-minute / private
+  / no-diagnosis assurances, arch-shaped serum image with a
+  “94% routine match” badge and a “Your Skin ID” preview
+  card, a 3-step How it works section, and a lime Why band
+  (“Why this? Not that.”). Default theme is this Figma dark
+  look; the About Appearance switch still toggles to a light
+  variant of the same design, and a saved choice is remembered.
 - Dashboard tab: the only place for your SKN ID and skin
   profile — SKN ID card, completion bar, and detail cards
   for skin type, environment, sensitivities, goals, values
