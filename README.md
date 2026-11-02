@@ -13,20 +13,44 @@ Base44 prototype. Open `index.html` in a browser — no build step.
   environment. Selected options turn lime (fixed 2026-10-31:
   multi-select options previously never showed as selected).
   Clicking "Create skin profile" redirects to your profile page.
-- Design (from 2026-11-02, Figma site https://skn-id.figma.site/):
-  near-black (#0B0D0A) pages, electric lime (#C8F542) accent,
-  off-white (#F2EFE8) text, muted grey secondary text, flat
-  dark cards with 1px hairline borders and 24px corners, pill
-  buttons (lime primary, outlined secondary), huge uppercase
-  display headings with lime highlights, and an eyebrow label
-  style. Landing hero: “Know your skin. Own your routine.”,
-  Indian skin / weather / real life intro, 3-minute / private
-  / no-diagnosis assurances, arch-shaped serum image with a
-  “94% routine match” badge and a “Your Skin ID” preview
-  card, a 3-step How it works section, and a lime Why band
-  (“Why this? Not that.”). Default theme is this Figma dark
-  look; the About Appearance switch still toggles to a light
-  variant of the same design, and a saved choice is remembered.
+- Design (from 2026-11-02, Figma site https://skn-id.figma.site/,
+  all views studied 2026-11-02): the Figma site is one
+  single-page app, not separate pages — landing, a 5-step
+  quiz, and dashboard views Home / My Skin / Recommendations
+  / My Routine / Account, all on one URL, with no real
+  sign-in, no persistence (reload resets it), and several
+  placeholder buttons. This build copies that structure and
+  design in its own code, then adds real functionality:
+  near-black (#0A0B0A) pages, electric lime (#C8FF38)
+  accent, bone (#F0EFE7) text, muted grey-green secondary
+  text, 1440px container, 86–90px header, 96–104px hero
+  heading, flat dark cards, pill buttons, huge uppercase
+  display headings, eyebrow labels, arch hero image
+  (exact Figma Unsplash image) with lime offset shape,
+  “94% routine match” badge and “Your Skin ID” preview
+  card, 3-step How it works, and a lime Why band.
+  Default theme is this Figma dark look; the About
+  Appearance switch still toggles to a light variant of
+  the same design, and a saved choice is remembered.
+  Views: Landing (exact Figma landing, with real sign-in
+  below the hero — Figma's Sign in misleadingly opened
+  the quiz, with no sign-in form at all), Quiz (5 steps
+  mapping to skin type, sensitivities, goals, values,
+  environment, with lime progress, Back / Continue /
+  Save &amp; exit, and See my skin profile), Home (greeting
+  with real today's date, skin-feel pills, profile card,
+  next morning routine, 30-day journey, picked products),
+  My Skin (lime SKIN ID panel, summary, takeaways,
+  report banner with working download), Recommendations
+  (All / AM / PM filters that work, View product modal,
+  Save to routine that actually saves), My Routine
+  (Morning / Evening toggles, check-off that works,
+  add-your-own product, 30-day tracker with working
+  check-in), Account (real signed-in user only — never
+  the Figma demo account — with preferences toggles,
+  Privacy / Support via About, and real Sign out /
+  Delete with confirmation). No demo date, demo user,
+  or demo match scores are copied as real data.
 - Dashboard tab: the only place for your SKN ID and skin
   profile — SKN ID card, completion bar, and detail cards
   for skin type, environment, sensitivities, goals, values

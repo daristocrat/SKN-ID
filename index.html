@@ -3,24 +3,24 @@
 <title>SKN ID</title>
 <meta name="description" content="SKN ID — skincare, figured out. Personalised skincare guidance made for Indian skin, weather and real life.">
 <style>
-:root{--lime:#C8F542;--r:24px}
+:root{--lime:#C8FF38;--r:24px}
 *{box-sizing:border-box}
-body.dark{--bg:#0B0D0A;--card:#141714;--ink:#F2EFE8;--mut:#9AA09A;--line:rgba(242,239,232,.16);--input:#141714;--chipbg:transparent}
-body:not(.dark){--bg:#F2EFE8;--card:#ffffff;--ink:#0B0D0A;--mut:#55534d;--line:rgba(11,13,10,.16);--input:#ffffff;--chipbg:#ffffff}
+body.dark{--bg:#0A0B0A;--card:#12140F;--ink:#F0EFE7;--mut:#9AA39B;--line:#26281F;--input:#12140F;--chipbg:transparent}
+body:not(.dark){--bg:#F0EFE7;--card:#ffffff;--ink:#0A0B0A;--mut:#55534d;--line:rgba(10,11,10,.16);--input:#ffffff;--chipbg:#ffffff}
 html{color-scheme:light dark}
 body{margin:0;font-family:Inter,Archivo,Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:17px}
 body.dark{color-scheme:dark}
 body:not(.dark){color-scheme:light}
 a{color:var(--ink)}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;flex-wrap:wrap}
+.wrap{max-width:1440px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);min-height:88px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0;gap:12px;flex-wrap:wrap}
 .logo{display:flex;gap:6px;align-items:center;font-weight:900;font-size:20px;text-decoration:none;cursor:pointer;color:var(--ink);letter-spacing:.02em}
 .logo .dot{color:var(--lime)}
 .tabs{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:4px 2px;max-width:100%}
 .tab{border:1px solid var(--line);background:transparent;border-radius:999px;padding:9px 15px;cursor:pointer;font-weight:700;color:var(--ink);white-space:nowrap}
 .tab.on{background:var(--lime);color:#0B0D0A;border-color:var(--lime)}
-.btn{border:1px solid var(--line);border-radius:999px;padding:13px 21px;font-weight:800;cursor:pointer;box-shadow:none}
+.btn{border:1px solid var(--line);border-radius:999px;padding:14px 30px;min-height:50px;font-weight:800;cursor:pointer;box-shadow:none}
 .btn-dark{background:var(--lime);color:#0B0D0A;border-color:var(--lime)}
 .btn-lime{background:var(--lime);color:#0B0D0A;border-color:var(--lime)}
 body:not(.dark) .btn-dark{background:#0B0D0A;color:#F2EFE8;border-color:#0B0D0A}
@@ -28,11 +28,11 @@ body:not(.dark) .btn-dark{background:#0B0D0A;color:#F2EFE8;border-color:#0B0D0A}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:none;color:var(--ink)}
 .card b,.card h2,.card h3{color:var(--ink)}
-section{padding:40px 0}
+section{padding:60px 0}
 .eyebrow{font-size:13px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--lime)}
-h1{font-size:clamp(52px,7vw,88px);line-height:.95;letter-spacing:-.01em;margin:18px 0;color:var(--ink);text-transform:uppercase;font-weight:900}
+h1{font-size:clamp(64px,7vw,100px);line-height:.95;letter-spacing:-.02em;margin:18px 0;color:var(--ink);text-transform:uppercase;font-weight:900}
 h1 .lime{color:var(--lime)}
-h2{font-size:clamp(32px,4.5vw,56px);letter-spacing:-.01em;line-height:1.0;margin:0 0 10px;color:var(--ink);text-transform:uppercase;font-weight:900}
+h2{font-size:clamp(36px,4.5vw,72px);letter-spacing:-.01em;line-height:1.0;margin:0 0 10px;color:var(--ink);text-transform:uppercase;font-weight:900}
 h2 .lime{color:var(--lime)}
 .sub{color:var(--mut);font-size:18px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -61,23 +61,23 @@ body:not(.dark) .idcard p{color:#9AA09A}
 .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:start}
 @media(max-width:820px){.hero-grid{grid-template-columns:1fr}}
 .hero-visual-wrap{position:relative;padding:16px 0 40px 20px}
-.hero-arch-back{position:absolute;right:0;bottom:10px;width:78%;height:78%;background:var(--lime);border-radius:999px 999px 24px 24px;opacity:.9}
-.hero-arch{position:relative;width:100%;height:520px;object-fit:cover;border-radius:999px 999px 24px 24px;border:1px solid var(--line);display:block}
+.hero-arch-back{position:absolute;right:0;bottom:10px;width:78%;height:78%;background:var(--lime);border-radius:270px 270px 24px 24px;opacity:.9;transform:rotate(2deg)}
+.hero-arch{position:relative;width:100%;height:560px;object-fit:cover;border-radius:270px 270px 24px 24px;border:1px solid var(--line);display:block}
 @media(max-width:820px){.hero-arch{height:380px}}
-.preview-card{position:absolute;left:0;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;max-width:260px}
+.preview-card{position:absolute;left:0;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:22px;max-width:240px}
 .preview-card b{font-size:22px}
-.badge-match{position:absolute;top:28px;right:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px}
+.badge-match{position:absolute;top:28px;right:8px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 14px;font-weight:800;font-size:14px}
 .badge-match span{color:var(--lime)}
 body:not(.dark) .badge-match span{color:#5a7a00}
 .assurances{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:15px;color:var(--mut)}
 .assurances span:before{content:"✓ ";color:var(--lime);font-weight:900}
 body:not(.dark) .assurances span:before{color:#5a7a00}
-.step-num{font-size:44px;font-weight:900;color:var(--lime);line-height:1}
+.step-num{font-size:30px;font-weight:900;color:var(--lime);line-height:1}
 body:not(.dark) .step-num{color:#5a7a00}
-.why-band{background:var(--lime);color:#0B0D0A;border-radius:24px;padding:32px}
-.why-band h2,.why-band p,.why-band b{color:#0B0D0A}
+.why-band{background:var(--lime);color:#0A0B0A;border-radius:30px;padding:56px 48px}
+.why-band h2,.why-band p,.why-band b{color:#0A0B0A}
 .why-band .sub{color:#1c1f16}
-.why-band .btn-dark{background:#0B0D0A;color:#F2EFE8;border-color:#0B0D0A}
+.why-band .btn-dark{background:#0A0B0A;color:#F0EFE7;border-color:#0A0B0A}
 .why-band .check{margin:8px 0;color:#0B0D0A}
 .why-band .check:before{content:"✓ ";font-weight:900}
 #authForm label{display:inline-block;background:var(--lime);color:#0B0D0A;border-radius:8px;padding:4px 10px;margin-top:12px}
@@ -88,13 +88,47 @@ body:not(.dark) .step-num{color:#5a7a00}
 .bigcode{font-size:clamp(34px,6vw,52px);letter-spacing:.06em;font-weight:900;margin:8px 0;line-height:1.1}
 .stat{font-size:34px;font-weight:900;margin:0}
 footer{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--mut)}
+
+#view-landing section{padding:110px 0}
+#view-landing section:first-child{padding-top:80px}
+.quiz-card{background:#ffffff;color:#0A0B0A;border-radius:24px;padding:32px;max-width:640px;margin:0 auto}
+.quiz-card h2,.quiz-card p,.quiz-card label,.quiz-card b{color:#0A0B0A}
+.quiz-card .sub{color:#55534d}
+.quiz-progress{height:10px;border:1px solid #26281F;border-radius:999px;background:#F0EFE7;overflow:hidden}
+.quiz-progress>i{display:block;height:100%;background:#C8FF38}
+.quiz-opt{display:inline-block;margin:0 7px 7px 0;padding:11px 16px;border-radius:999px;border:1px solid #0A0B0A;background:#fff;cursor:pointer;color:#0A0B0A;font-weight:600}
+.quiz-opt.sel{background:#C8FF38;border-color:#C8FF38;color:#0A0B0A;font-weight:800}
+.pill-btn{border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;background:transparent;color:var(--ink);font-weight:700}
+.pill-btn.on{background:var(--lime);color:#0A0B0A;border-color:var(--lime)}
+.routine-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.routine-row:first-child{border-top:0}
+.routine-row.done{opacity:.65}
+.routine-row.done .step-name{text-decoration:line-through}
+.tracker-day{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-weight:700}
+.tracker-day.done{background:var(--lime);color:#0A0B0A;border-color:var(--lime)}
+.tracker-day.sel{outline:2px solid var(--lime)}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.toggle-row:first-child{border-top:0}
+.switch{width:52px;height:28px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;position:relative}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--mut)}
+.switch.on{background:var(--lime);border-color:var(--lime)}
+.switch.on:after{left:27px;background:#0A0B0A}
+.danger{color:#ff7a7a !important}
+body:not(.dark) .danger{color:#b00020 !important}
+.lime-panel{background:var(--lime);color:#0A0B0A;border-radius:24px;padding:24px}
+.lime-panel *{color:#0A0B0A}
+.lime-panel .sub{color:#1c1f16}
 </style></head><body class="dark">
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')">SKN&nbsp;ID<span class="dot">●</span></a>
 <nav class="tabs" id="appTabs">
-<button class="tab" data-v="dashboard" onclick="show('dashboard')">Dashboard</button>
-<button class="tab" data-v="report" onclick="show('report')">SKN Report</button>
-<button class="tab" data-v="about" onclick="show('about')">About / Contact</button>
-</nav><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Sign in</button></div></header>
+<button class="tab" data-v="home" onclick="show('home')">Home</button>
+<button class="tab" data-v="myskin" onclick="show('myskin')">My Skin</button>
+<button class="tab" data-v="recommendations" onclick="show('recommendations')">Recommendations</button>
+<button class="tab" data-v="routine" onclick="show('routine')">My Routine</button>
+<button class="tab" data-v="profile" onclick="show('profile')">Account</button>
+<button class="tab" data-v="report" onclick="show('report')">Report</button>
+<button class="tab" data-v="about" onclick="show('about')">About</button>
+</nav><button class="btn btn-ghost" id="signInTextBtn" style="border:none" onclick="show('landing')">Sign in</button><button class="btn btn-dark" id="authBtn" onclick="signOutOrIn()">Get started</button></div></header>
 <main class="wrap">
 
 <!-- LANDING / SIGN-IN — Figma design: black + lime, uppercase display type -->
@@ -102,7 +136,7 @@ footer{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--mut)}
 <div class="hero-grid"><div>
 <p class="eyebrow">Skincare, figured out</p>
 <h1>Know your skin. <span class="lime">Own</span> your routine.</h1>
-<p class="sub">Personalised skincare guidance made for Indian skin, weather and real life. No 12-step routines. No guesswork.</p>
+<p class="sub">Personalised skincare guidance made for Indian skin, weather and real life. No 12-step routines. No guesswork.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-lime" onclick="startQuizOrSignin()">Discover your skin →</button><button class="btn btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works ↓</button></div>
 <div class="card" style="margin-top:22px">
 <label><input type="checkbox" id="consent1" style="width:auto"> I agree to receive emails about my SKN ID, including my report, updates and important notifications. (required)</label>
 <label><input type="checkbox" id="consent2" style="width:auto"> Send me updates about how SKN ID is evolving, including new features and early access. (optional)</label>
@@ -116,16 +150,16 @@ footer{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--mut)}
 </div>
 <div class="assurances"><span>Takes 3 minutes</span><span>Private by design</span><span>No diagnosis</span></div>
 </div>
-<div class="hero-visual-wrap"><div class="hero-arch-back"></div><img class="hero-arch" src="https://images.unsplash.com/photo-1777450793530-99a0e7b7fc53?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900" alt="A minimal skincare serum bottle"><div class="badge-match"><span>94%</span> ROUTINE MATCH</div><div class="preview-card"><p class="small" style="margin:0;letter-spacing:.12em;font-weight:800">YOUR SKIN ID</p><b>Combination</b><div style="margin-top:10px"><span class="chip lime">DEHYDRATED</span><span class="chip">REACTIVE</span></div></div></div>
+<div class="hero-visual-wrap"><div class="hero-arch-back"></div><img class="hero-arch" src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1600&auto=format&fit=crop" alt="A minimal skincare serum bottle"><div class="badge-match"><span>94%</span> ROUTINE MATCH</div><div class="preview-card"><p class="small" style="margin:0;letter-spacing:.12em;font-weight:800">YOUR SKIN ID</p><b>Combination</b><div style="margin-top:10px"><span class="chip lime">DEHYDRATED</span><span class="chip">REACTIVE</span></div></div></div>
 </div>
 </section>
-<section><p class="eyebrow">How it works</p><h2>Three steps. Zero confusion.</h2><p class="sub">A clear path from “what does my skin need?” to a routine that fits your day, budget and comfort.</p>
+<section id="how-it-works"><p class="eyebrow">How it works</p><h2>Three steps. Zero confusion.</h2><p class="sub">A clear path from “what does my skin need?” to a routine that fits your day, budget and comfort.</p>
 <div class="grid3" style="margin-top:22px">
 <div class="card"><p class="step-num">01</p><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Tell us about your skin</h3><p class="sub">A short, judgement-free questionnaire about your skin, sensitivities and preferences.</p></div>
 <div class="card"><p class="step-num">02</p><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Understand your profile</h3><p class="sub">See your skin characteristics and practical takeaways in plain language.</p></div>
 <div class="card"><p class="step-num">03</p><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Build a routine that fits</h3><p class="sub">Explore a small set of explained recommendations and track what feels right.</p></div>
 </div></section>
-<section><div class="why-band"><div class="grid2"><div><p style="font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1;text-transform:uppercase;margin:0">Why this?<br>Not that.<br>Recommendations with reasons.</p></div><div><h2>You deserve to know the why.</h2><p class="sub">Every recommendation connects back to what you told us. We flag relevant cautions, show where each product fits and keep the list intentionally small.</p><p class="check">Built around your concerns and preferences</p><p class="check">Prices and products available in India</p><p class="check">Clear guidance, never miracle claims</p><button class="btn btn-dark" style="margin-top:14px" onclick="show('dashboard')">Build my profile →</button></div></div></div></section>
+<section><div class="why-band"><div class="grid2"><div><p style="font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1;text-transform:uppercase;margin:0">Why this?<br>Not that.<br>Recommendations with reasons.</p></div><div><h2>You deserve to know the why.</h2><p class="sub">Every recommendation connects back to what you told us. We flag relevant cautions, show where each product fits and keep the list intentionally small.</p><p class="check">Built around your concerns and preferences</p><p class="check">Prices and products available in India</p><p class="check">Clear guidance, never miracle claims</p><button class="btn btn-dark" style="margin-top:14px" onclick="startQuizOrSignin()">Build my profile →</button></div></div></div></section>
 </div>
 
 <!-- DASHBOARD: same SKN profile overview, but WITHOUT Account details and WITHOUT Sign out/Delete -->
@@ -145,14 +179,32 @@ footer{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--mut)}
 <!-- ABOUT / CONTACT -->
 <div id="view-about" class="hidden"><section><h2>About SKN ID</h2><p class="sub">SKN ID is built by a small, passionate team at the intersection of beauty technology and artificial intelligence. Its mission: give every person a skin identity as unique as they are — an alternative to generic, one-size-fits-all skincare advice, for beginners and experienced users alike.</p>
 <div class="grid2" style="margin-top:16px"><div class="card"><b>Appearance</b><p>Switch the site between light and dark mode. Your choice is remembered on this device.</p><button class="btn btn-lime" id="aboutThemeBtn" onclick="toggleTheme()">Dark mode</button></div>
+<div class="card"><b>Privacy &amp; your data</b><p>Your profile and login history are stored for your account only, under the Supabase rules set for this app. This site gives general cosmetic guidance, not a medical diagnosis — see a dermatologist for persistent concerns. Privacy, Terms and Support questions go to the Contact card on this page.</p></div>
 <div class="card"><b>For shoppers, brands and stores</b><p>When you share your SKN ID, products, brands and stores can understand what works for you — so shopping becomes more personal, online and in store.</p></div>
 <div class="card"><b>Contact</b><p>Email: <a href="mailto:hello@sknid.app">hello@sknid.app</a><br>Instagram: <a href="https://instagram.com/sknid">instagram.com/sknid</a><br>Twitter / X: <a href="https://twitter.com/sknid">twitter.com/sknid</a></p>
 <form onsubmit="event.preventDefault();this.reset();document.getElementById('cMsg').textContent='Thanks — saved locally in this preview. Connect Supabase to save messages on a server.'"><label>Your name</label><input required><label>Your email</label><input required type="email"><label>Your message</label><textarea required></textarea><button class="btn btn-dark" style="margin-top:10px">Send message</button><p class="small" id="cMsg"></p></form></div></div></section></div>
 
+
+<!-- QUIZ — Figma quiz view: centred card, lime progress, Back / Continue / Save & exit -->
+<div id="view-quiz" class="hidden"><section><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><a class="logo" onclick="show('landing')">SKN&nbsp;ID<span class="dot">●</span></a><button class="btn btn-ghost" onclick="quizSaveExit()">Save &amp; exit</button></div><div id="quizBody" style="margin-top:24px"></div></section></div>
+
+<!-- HOME — Figma Dashboard Home -->
+<div id="view-home" class="hidden"><section><div id="homeBody"></div></section></div>
+
+<!-- MY SKIN — Figma profile / report view -->
+<div id="view-myskin" class="hidden"><section><div id="myskinBody"></div></section></div>
+
+<!-- RECOMMENDATIONS -->
+<div id="view-recommendations" class="hidden"><section><div id="recBody"></div></section></div>
+
+<!-- MY ROUTINE -->
+<div id="view-routine" class="hidden"><section><div id="routineBody"></div></section></div>
+
 </main>
 <div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
+<div id="productModal" class="modal hidden"><div class="card"><h2 id="productTitle"></h2><p id="productBody"></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-dark" id="productSaveBtn">Save to routine</button><button class="btn btn-ghost" onclick="$('productModal').classList.add('hidden')">Close</button></div></div></div>
 <div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
-<footer class="wrap"><p><b>SKN ID ●</b> · Skincare guidance that makes sense.</p><p class="small">Privacy · Terms · Support &nbsp;·&nbsp; © 2026 SKN-ID · India</p><p class="small">Report guidance is general skincare information, not medical advice.</p></footer>
+<footer class="wrap"><p><b>SKN ID ●</b> · Skincare guidance that makes sense.</p><p class="small"><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Support</button> &nbsp;·&nbsp; © 2026 SKN-ID · India</p><p class="small">Report guidance is general skincare information, not medical advice.</p></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -253,7 +305,7 @@ async function verifyOtp(){
 }
 async function doSignOut(){
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
-  localStorage.removeItem('skn_clone_user'); user=null; $('authBtn').textContent='Sign in'; show('landing');
+  localStorage.removeItem('skn_clone_user'); user=null; $('authBtn').textContent='Get started'; show('landing');
 }
 function showDeletePanel(){ $('deleteModal').classList.remove('hidden'); $('delMsg').textContent=''; }
 function hideDeletePanel(){ $('deleteModal').classList.add('hidden'); }
@@ -281,7 +333,7 @@ async function confirmDeleteAccount(){
   ['skn_clone_user','skn_clone_profile'].forEach(k=>localStorage.removeItem(k));
   user=null; profile=null; draft={skin_type:'',sensitivities:[],goals:[],values:[],environment:''}; editing=false;
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
-  $('authBtn').textContent='Sign in'; hideDeletePanel(); show('landing');
+  $('authBtn').textContent='Get started'; hideDeletePanel(); show('landing');
   $('authNote').textContent='Your account data has been deleted and archived. To fully remove the Supabase Auth login record, delete the user in Supabase Dashboard > Authentication > Users (server-side step).';
 }
 const FIELDS=[
@@ -305,21 +357,32 @@ function completion(){
 }
 function chips(arr){ return (arr||[]).length ? (arr||[]).map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="small">Not set yet</span>'; }
 function renderAccount(){
-  // My profile is now account-only: no SKN ID card, no profile detail cards.
-  // Those live on Dashboard. Sign out / Delete live only here, in Account details.
   if(!user){ show('landing'); return; }
   const code=profile?.skn_code||sknCode();
+  const prefs=loadLS('skn_prefs',{emails:true, reminders:true});
+  const initials=(user.name||user.email||'S').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
   $('accountDisplay').innerHTML = `
-  <h2>My profile</h2><p class="sub">Your account details. Your SKN ID and skin profile live on Dashboard.</p>
+  <p class="eyebrow">Account</p><h2>My profile</h2>
+  <div class="card" style="margin-top:18px"><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span style="width:56px;height:56px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;font-size:20px">${esc(initials)}</span><div><b style="font-size:22px">${esc(user.name||'')}</b><p class="small" style="margin:0">${esc(user.email||'')}</p></div></div>
+  ${accountEdit?`<div style="margin-top:14px"><label>Display name</label><input id="accountNameEdit" value="${esc(user.name||'')}"><button class="btn btn-dark" style="margin-top:10px" onclick="saveAccountName()">Save name</button></div>`:`<button class="btn btn-ghost" style="margin-top:14px" onclick="accountEdit=true; renderAccount()">Edit details</button>`}
+  </div>
   <div class="card" style="margin-top:18px"><b>Account details</b>
-  <p style="margin:8px 0 0"><b>Name:</b> ${user.name||''}</p>
-  <p style="margin:4px 0"><b>Login email:</b> ${user.email||''}</p>
-  <p style="margin:4px 0"><b>Date updated:</b> ${profile?.updated||''}</p>
+  <p style="margin:8px 0 0"><b>Name:</b> ${esc(user.name||'')}</p>
+  <p style="margin:4px 0"><b>Login email:</b> ${esc(user.email||'')}</p>
+  <p style="margin:4px 0"><b>Date updated:</b> ${esc(profile?.updated||'')}</p>
   <p style="margin:4px 0"><b>SKN ID:</b> ${code}</p>
-  ${user.provider?`<p style="margin:4px 0"><b>Signed in with:</b> ${user.provider}</p>`:''}
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-dark" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goToDelete()">Delete account</button></div></div>
-  ${profile ? '' : '<div class="card" style="margin-top:18px"><p>No SKN profile yet.</p><button class="btn btn-dark" onclick="show(\'dashboard\')">Create skin profile</button></div>'}`;
+  ${user.provider?`<p style="margin:4px 0"><b>Signed in with:</b> ${esc(user.provider)}</p>`:''}
+  </div>
+  <div class="card" style="margin-top:18px"><b>Preferences</b>
+  <div class="toggle-row"><span>Helpful emails</span><button class="switch ${prefs.emails?'on':''}" onclick="togglePref('emails')"></button></div>
+  <div class="toggle-row"><span>Routine reminders</span><button class="switch ${prefs.reminders?'on':''}" onclick="togglePref('reminders')"></button></div></div>
+  <div class="card" style="margin-top:18px"><b>Settings</b>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="show('about')">Privacy &amp; your data</button><button class="btn btn-ghost" onclick="show('about')">Help &amp; support</button></div></div>
+  <div class="card" style="margin-top:18px"><b class="danger">Danger zone</b><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost danger" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost danger" onclick="goToDelete()">Delete account</button></div><p class="small">Sign out leaves the dashboard and returns to the landing page. Delete archives your profile and login history, then deletes your app data, after email + DELETE verification.</p></div>
+  ${profile ? '' : '<div class="card" style="margin-top:18px"><p>No SKN profile yet.</p><button class="btn btn-dark" onclick="startQuiz()">Create skin profile</button></div>'}`;
 }
+function togglePref(k){ const prefs=loadLS('skn_prefs',{emails:true, reminders:true}); prefs[k]=!prefs[k]; save('skn_prefs', prefs); renderAccount(); }
+function saveAccountName(){ const v=$('accountNameEdit').value.trim(); if(!v) return; user.name=v; save('skn_clone_user', user); accountEdit=false; renderAccount(); }
 function renderDashboard(){
   // Dashboard is now the only place for the SKN ID card, profile details,
   // and the create/edit builder. No Account details card here.
@@ -352,25 +415,41 @@ function renderDashboard(){
   </div>`;
   justSaved=false;
 }
-function editProfile(){ editing=true; draft={...profile}; show('dashboard'); }
-function cancelEdit(){ editing=false; draft={...profile}; show('dashboard'); }
+function editProfile(){ editing=true; draft={...profile}; startQuiz(); }
+function cancelEdit(){ editing=false; draft={...profile}; show(profile ? 'home' : 'landing'); }
 function copyCode(btn){
   const code=profile?.skn_code||sknCode();
   const done=()=>{ if(btn){ btn.textContent='Copied!'; setTimeout(()=>{btn.textContent='Copy SKN ID';},2000); } };
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(done); } else done();
 }
+function renderHeader(){
+  const tabs=$('appTabs'), signBtn=$('signInTextBtn');
+  if(tabs) tabs.style.display = user ? 'flex' : 'none';
+  if(signBtn) signBtn.style.display = user ? 'none' : 'inline-block';
+  if($('authBtn')) $('authBtn').textContent = user ? 'My profile' : 'Get started';
+}
 function show(v){
+ // Old Dashboard route now maps to Figma views: Home if profile exists, Quiz if signed in without one, Landing if signed out.
+ if(v==='dashboard'){ v = !user ? 'landing' : (profile ? 'home' : 'quiz'); }
+ renderHeader();
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
- if(v==='landing') renderLandingAuth(); if(v==='dashboard') renderDashboard(); if(v==='profile') renderAccount(); if(v==='report') renderReport();
+ if(v==='landing') renderLandingAuth();
+ if(v==='quiz') renderQuiz();
+ if(v==='home') renderHome();
+ if(v==='myskin') renderMySkin();
+ if(v==='recommendations') renderRecommendations(recFilter);
+ if(v==='routine') renderRoutine();
+ if(v==='profile') renderAccount();
+ if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
  $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
-async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('dashboard'); }
+async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('home'); }
 function reportText(){
  if(!profile) return '<p>Build your profile first, then your report will appear here.</p>';
  const fav=profile.goals.includes('Hydration')?'hyaluronic acid, glycerin, ceramides':profile.goals.includes('Even tone')?'vitamin C, niacinamide, SPF':profile.goals.includes('Clearer skin')?'salicylic acid, niacinamide, gentle cleansing':'ceramides, squalane, gentle cleansing';
@@ -384,6 +463,169 @@ function renderReport(){ $('reportBody').innerHTML=reportText(); }
 function downloadReport(){
  const t=$('reportBody').innerText; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'})); a.download='SKN-Report.txt'; a.click();
 }
+
+// ---------- Figma views: state (local, per user device) ----------
+let quizStep=0, recFilter='all', routinePeriod='am', accountEdit=false;
+function loadLS(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v??d; }catch(e){ return d; } }
+function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function startQuizOrSignin(){
+  if(!user){ show('landing'); if($('authNote')) $('authNote').textContent='Sign in first, then Discover your skin starts your quiz.'; window.scrollTo({top:0,behavior:'smooth'}); return; }
+  startQuiz();
+}
+function startQuiz(){
+  if(!user){ show('landing'); return; }
+  if(profile && editing){ draft={...profile}; }
+  else if(profile && !draft.skin_type && !draft.goals?.length){ draft={...profile}; }
+  else if(!profile){ const q=loadLS('skn_quiz_draft',null); draft = q ? {...{skin_type:'',sensitivities:[],goals:[],values:[],environment:''}, ...q} : {skin_type:'',sensitivities:[],goals:[],values:[],environment:''}; }
+  quizStep=0; show('quiz');
+}
+function quizSaveExit(){ save('skn_quiz_draft', draft); show(profile ? 'home' : 'landing'); }
+function quizBack(){ if(quizStep>0){ quizStep--; renderQuiz(); } else { quizSaveExit(); } }
+function quizNext(){
+  const field=FIELDS[quizStep];
+  if(quizStep===0 && !draft.skin_type){ $('quizMsg').textContent='Pick a skin type first.'; return; }
+  if(quizStep<4){ quizStep++; renderQuiz(); return; }
+  saveProfile();
+}
+function quizPick(k,o,multi){
+  if(multi){ draft[k]=draft[k].includes(o) ? draft[k].filter(x=>x!==o) : [...draft[k],o]; }
+  else { draft[k]=o; }
+  save('skn_quiz_draft', draft); renderQuiz();
+}
+function renderQuiz(){
+  if(!user){ show('landing'); return; }
+  const [k,label,opts,multi]=FIELDS[quizStep];
+  const pct=quizStep*25;
+  $('quizBody').innerHTML = `
+  <div class="quiz-card">
+    <p class="small" style="margin:0"><b>SKN ID</b> · Question ${quizStep+1} of 5 · ${pct}%</p>
+    <div class="quiz-progress" style="margin:12px 0"><i style="width:${pct}%"></i></div>
+    <h2 style="text-transform:none;font-size:32px">${label}</h2>
+    <p class="sub">Pick ${multi ? 'every option that fits you' : 'one option'} — selected options turn lime.</p>
+    <div style="margin-top:16px">${opts.map(o=>`<button type="button" class="quiz-opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="quizPick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>
+    <p class="small" id="quizMsg"></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-ghost" style="color:#0A0B0A;border-color:#0A0B0A" onclick="quizBack()">Back</button><button class="btn btn-dark" onclick="quizNext()">${quizStep<4 ? 'Continue →' : 'See my skin profile →'}</button></div>
+    <p class="small">Your answers are saved on this device and, when you finish, to your SKN profile.</p>
+  </div>`;
+}
+function skinFeelToday(){ const s=loadLS('skn_skin_feel',{}); return s[todayKey()]||''; }
+function setSkinFeel(v){ const s=loadLS('skn_skin_feel',{}); s[todayKey()]=v; save('skn_skin_feel', s); renderHome(); renderRoutine(); }
+function getProducts(){
+  const g=profile?.goals||[], s=profile?.sensitivities||[], env=profile?.environment||'';
+  return [
+    {id:'serum', name:'Niacinamide Serum', type:'Serum', match:(g.includes('Even tone')||g.includes('Clearer skin'))?94:89, am:true, pm:true, why:'Fits your even-tone and clearer-skin goals, in a focused, single-active step.', desc:'A lightweight daily serum for tone and clarity.'},
+    {id:'moist', name:'Barrier Moisturiser', type:'Moisturiser', match:(g.includes('Hydration')||g.includes('Barrier repair'))?92:87, am:true, pm:true, why:'Supports hydration and barrier repair, without fragrance if you are sensitive to it.', desc:'A simple daily moisturiser for barrier-first care.'},
+    {id:'spf', name:'Daily Sunscreen SPF', type:'Sunscreen', match:(env==='High sun')?95:90, am:true, pm:false, why:'Daily SPF is the non-negotiable step, especially in high sun.', desc:'Morning sun protection, every day.'}
+  ];
+}
+function savedProducts(){ return loadLS('skn_saved_products',[]); }
+function toggleSaveProduct(id){
+  let s=savedProducts(); s = s.includes(id) ? s.filter(x=>x!==id) : [...s, id]; save('skn_saved_products', s);
+  if($('view-recommendations') && !$('view-recommendations').classList.contains('hidden')) renderRecommendations(recFilter);
+  if($('view-home') && !$('view-home').classList.contains('hidden')) renderHome();
+}
+function viewProduct(id){
+  const pr=getProducts().find(x=>x.id===id); if(!pr) return;
+  $('productTitle').textContent = pr.name + ' · ' + pr.match + '% match';
+  $('productBody').innerHTML = `<p>${esc(pr.desc)}</p><p><b>Why it fits:</b> ${esc(pr.why)}</p><p class="small">Use: ${pr.am?'AM':''}${pr.am&&pr.pm?' / ':''}${pr.pm?'PM':''} · Type: ${esc(pr.type)} · Generated from your profile — no price is shown here, as no store price is on file.</p>`;
+  $('productSaveBtn').onclick=()=>{ toggleSaveProduct(id); viewProduct(id); };
+  $('productSaveBtn').textContent = savedProducts().includes(id) ? 'Saved ✓' : 'Save to routine';
+  $('productModal').classList.remove('hidden');
+}
+function productTiles(){
+  return getProducts().map(pr=>`<div class="card"><b>${esc(pr.name)}</b><p class="small">${esc(pr.type)} · ${pr.match}% match · ${pr.am?'AM':''}${pr.am&&pr.pm?' / ':''}${pr.pm?'PM':''}</p><p>${esc(pr.why)}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="viewProduct('${pr.id}')">View product</button><button class="btn btn-dark" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'Saved ✓':'+ Save to routine'}</button></div></div>`).join('');
+}
+function trackerState(){
+  let st=loadLS('skn_tracker',null);
+  if(!st){ st={start:todayKey(), done:{}, feel:''}; save('skn_tracker', st); }
+  return st;
+}
+function trackerDayNum(){
+  const st=trackerState(); const start=new Date(st.start+'T00:00:00'); const now=new Date(); const d=Math.floor((now-start)/86400000)+1; return Math.max(1, Math.min(30, d));
+}
+function renderHome(){
+  if(!user){ show('landing'); return; }
+  if(!profile){ show('quiz'); return; }
+  const code=profile.skn_code||sknCode(), pct=completion();
+  const today=new Date().toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  const feel=skinFeelToday();
+  const day=trackerDayNum();
+  $('homeBody').innerHTML = `
+  ${justSaved?'<div class="card" style="background:var(--lime);color:#0A0B0A;margin-bottom:18px"><b>✓ Your SKN profile is ready!</b><p style="margin:4px 0 0;color:#0A0B0A">Your unique SKN ID is below. Share it, or edit it any time.</p></div>':''}
+  <p class="small" style="margin:0">${esc(today)}</p><h2>Hi ${esc(user.name||'')}, how does your skin feel today?</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px">${['Comfortable','Dry','Oily','Sensitive'].map(f=>`<button class="pill-btn ${feel===f?'on':''}" onclick="setSkinFeel('${f}')">${f}</button>`).join('')}</div>
+  <div class="grid2">
+    <div class="card"><p class="eyebrow">My skin profile</p><h3 style="text-transform:none;font-size:24px;margin:8px 0">${esc(profile.skin_type||'—')}</h3><p>${chips(profile.sensitivities)} ${chips(profile.goals)}</p><p class="small">SKN ID: ${code} · ${pct}% complete</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-dark" onclick="show('myskin')">View full profile</button><button class="btn btn-ghost" onclick="editProfile()">Edit answers</button></div></div>
+    <div class="card"><p class="eyebrow">Next up — Morning routine</p><p><b>4 steps · about 5 minutes</b></p><p class="small">Cleanser → Serum → Moisturiser → Sunscreen</p><button class="btn btn-dark" onclick="routinePeriod='am'; show('routine')">Open my routine</button></div>
+    <div class="card"><p class="eyebrow">Your 30-day journey</p><p><b>Day ${day} of 30</b></p><div class="bar"><i style="width:${Math.round(day/30*100)}%"></i></div><p class="small" style="margin-top:8px">Days 1–${Math.max(0,day-1)} in your tracker, day ${day} in progress.</p><button class="btn btn-ghost" onclick="show('routine')">View progress</button></div>
+    <div class="card"><p class="eyebrow">Picked for your profile</p><div style="display:grid;gap:12px;margin-top:12px">${getProducts().map(pr=>`<div><b>${esc(pr.name)}</b> <span class="small">${pr.match}% match</span><br><button class="btn btn-ghost" style="padding:8px 14px;min-height:0;margin-top:6px" onclick="viewProduct('${pr.id}')">View product</button></div>`).join('')}</div></div>
+  </div>`;
+  justSaved=false;
+}
+function renderMySkin(){
+  if(!user){ show('landing'); return; }
+  if(!profile){ show('quiz'); return; }
+  const code=profile.skn_code||sknCode();
+  $('myskinBody').innerHTML = `
+  <p class="eyebrow">My Skin</p><h2>Your skin, made clear</h2><p class="sub">Your profile, in plain language — and what to do with it.</p>
+  <div class="grid2" style="margin-top:22px">
+    <div class="lime-panel"><p style="margin:0;letter-spacing:.12em;font-weight:800">SKIN ID</p><p style="font-size:64px;font-weight:900;margin:8px 0;line-height:1">01</p><p style="font-size:24px;font-weight:900;margin:0">${esc(profile.skin_type||'—')}</p><p>${code}</p></div>
+    <div class="card"><b>Profile summary</b><p>Skin type: ${esc(profile.skin_type||'—')} · Environment: ${esc(profile.environment||'—')}</p><p>${chips(profile.sensitivities)} ${chips(profile.goals)} ${chips(profile.values)}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-dark" onclick="show('recommendations')">View recommendations</button><button class="btn btn-ghost" onclick="editProfile()">Edit answers</button></div></div>
+  </div>
+  <h3 style="margin-top:28px">Practical takeaways</h3><div class="grid3">
+    <div class="card"><p class="step-num">01</p><b>Barrier-first care</b><p class="sub">Keep cleansing gentle and moisturise daily, especially if you are sensitive or breakout-prone.</p></div>
+    <div class="card"><p class="step-num">02</p><b>Keep actives focused</b><p class="sub">One goal at a time, for 3–4 weeks, instead of many new products at once.</p></div>
+    <div class="card"><p class="step-num">03</p><b>Daily SPF</b><p class="sub">Sunscreen every morning, whatever your skin type or the weather.</p></div>
+  </div>
+  <div class="card" style="margin-top:18px"><b>Want more detail?</b><p class="sub">Your full SKN Report is generated from this profile.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-lime" onclick="show('report'); downloadReport()">Download detailed report</button><button class="btn btn-ghost" onclick="show('report')">View full report</button></div></div>
+  <p class="small" style="margin-top:16px">General cosmetic guidance, not a medical diagnosis. See a dermatologist for persistent concerns.</p>`;
+}
+function renderRecommendations(filter){
+  recFilter=filter||'all';
+  if(!user){ show('landing'); return; }
+  if(!profile){ show('quiz'); return; }
+  const list=getProducts().filter(pr=> recFilter==='all' || (recFilter==='am' ? pr.am : pr.pm));
+  $('recBody').innerHTML = `
+  <p class="eyebrow">Recommendations</p><h2>Picked for your profile</h2><p class="sub">A small list, with a reason for each one. No miracle claims.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${['all','am','pm'].map(f=>`<button class="pill-btn ${recFilter===f?'on':''}" onclick="renderRecommendations('${f}')">${f==='all'?'All '+getProducts().length:f.toUpperCase()}</button>`).join('')}</div>
+  <div class="grid3">${list.map(pr=>`<div class="card"><b>${esc(pr.name)}</b><p class="small">${esc(pr.type)} · ${pr.match}% match · ${pr.am?'AM':''}${pr.am&&pr.pm?' / ':''}${pr.pm?'PM':''}</p><p>${esc(pr.desc)}</p><p><b>Why it fits:</b> ${esc(pr.why)}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="viewProduct('${pr.id}')">View product</button><button class="btn btn-dark" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'Saved ✓':'+ Save to routine'}</button></div></div>`).join('')}</div>
+  <div class="card" style="margin-top:18px"><b>Introduce new actives slowly</b><p class="sub">Patch-test first, add one product at a time, and stop if irritation persists.</p></div>`;
+}
+function routineSteps(period){
+  const base = period==='am'
+    ? [{n:'Cleanser',d:'1 min'},{n:'Niacinamide Serum',d:'1 min'},{n:'Moisturiser',d:'1 min'},{n:'Sunscreen',d:'2 min'}]
+    : [{n:'Cleanser',d:'1 min'},{n:'Niacinamide Serum',d:'1 min'},{n:'Moisturiser',d:'2 min'}];
+  const custom = loadLS('skn_routine_custom',[]).filter(c=>c.period===period);
+  return [...base, ...custom.map(c=>({n:c.name, d:c.duration||'1 min', custom:true}))];
+}
+function routineDone(){ return loadLS('skn_routine_done',{}); }
+function routineCheck(key){
+  const d=routineDone(); d[key]=!d[key]; save('skn_routine_done', d); renderRoutine();
+}
+function routineAddCustom(){
+  const name=$('customProductName').value.trim(); if(!name) return;
+  const c=loadLS('skn_routine_custom',[]); c.push({name, period:routinePeriod, duration:'1 min'}); save('skn_routine_custom', c); renderRoutine();
+}
+function trackerSave(){
+  const st=trackerState(); const day=trackerDayNum(); st.done[day]=true; st.feel=skinFeelToday(); save('skn_tracker', st); renderRoutine();
+}
+function renderRoutine(){
+  if(!user){ show('landing'); return; }
+  if(!profile){ show('quiz'); return; }
+  const steps=routineSteps(routinePeriod), done=routineDone(), total=routinePeriod==='am'?5:4;
+  const st=trackerState(), day=trackerDayNum();
+  const saved=getProducts().filter(pr=>savedProducts().includes(pr.id));
+  $('routineBody').innerHTML = `
+  <p class="eyebrow">My Routine</p><h2>A routine that fits</h2><p class="sub">Morning and evening, kept small on purpose.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0"><button class="pill-btn ${routinePeriod==='am'?'on':''}" onclick="routinePeriod='am'; renderRoutine()">Morning · about 5 minutes</button><button class="pill-btn ${routinePeriod==='pm'?'on':''}" onclick="routinePeriod='pm'; renderRoutine()">Evening · about 4 minutes</button></div>
+  <div class="card">${steps.map((s,i)=>{ const key=routinePeriod+':'+s.n; const isDone=!!done[key]; return `<div class="routine-row ${isDone?'done':''}"><div><b class="step-name">${i+1}. ${esc(s.n)}</b> <span class="small">${esc(s.d)}</span></div><button class="btn ${isDone?'btn-lime':'btn-ghost'}" style="padding:8px 14px;min-height:0" onclick="routineCheck('${key}')">${isDone?'DONE ✓':'Check off'}</button></div>`; }).join('')}</div>
+  <div class="card" style="margin-top:18px"><b>Caution: retinol and sunlight</b><p class="sub">If you use retinol in the evening, use SPF in the morning and introduce it slowly.</p></div>
+  <div class="card" style="margin-top:18px"><b>Add a product I already use</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><input id="customProductName" placeholder="e.g. My cleanser" style="flex:1;min-width:200px"><button class="btn btn-dark" onclick="routineAddCustom()">Add to ${routinePeriod==='am'?'morning':'evening'} routine</button></div>${saved.length?`<p class="small" style="margin-top:10px">Saved from Recommendations: ${saved.map(x=>esc(x.name)).join(', ')}</p>`:''}</div>
+  <div class="card" style="margin-top:18px"><b>30-day tracker</b><p>Day ${day} of 30</p><div class="bar"><i style="width:${Math.round(day/30*100)}%"></i></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px">${Array.from({length:30},(_,i)=>i+1).map(d=>`<button class="tracker-day ${st.done[d]?'done':''} ${d===day?'sel':''}" onclick="trackerSaveDay(${d})">${d}</button>`).join('')}</div><p class="small" style="margin-top:10px">Skin feel today: ${esc(skinFeelToday()||'Not set yet — pick one on Home.')}</p><button class="btn btn-dark" style="margin-top:8px" onclick="trackerSave()">Save check-in for day ${day}</button></div>`;
+}
+function trackerSaveDay(d){ const st=trackerState(); st.done[d]=!st.done[d]; save('skn_tracker', st); renderRoutine(); }
+
 function signOutOrIn(){ if(user){show('profile')} else show('landing'); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
@@ -415,5 +657,5 @@ function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
   applyTheme(saved ? saved==='dark' : true);
 })();
 
-if(user){$('authBtn').textContent='My profile'; show('dashboard')} else {renderOnb();}
+if(user){$('authBtn').textContent='My profile'; show('home')} else {renderHeader(); renderOnb();}
 </script></body></html>
