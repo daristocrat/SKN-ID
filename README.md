@@ -202,3 +202,33 @@ redeploys it automatically. Static site, no build command needed.
   are the Figma sample data, with the sample warning
   shown, not verified store prices; photos are
   generic stock, not branded packshots.
+
+- Backend + admin panel (2026-11-03): no full rewrite — the
+  backend is Supabase, as before. New tables and RLS in
+  `~/workspace/skn-id-backend/schema.sql` (admins,
+  skn_reports, products, admin_actions, plus admin-read
+  policies on skn_profiles, login_history, waitlist and
+  contact_messages) and a setup guide in
+  `~/workspace/skn-id-backend/README_BACKEND.md`. Run
+  the SQL in Supabase SQL Editor, then insert your
+  admin email, then sign in: Account shows “Open admin
+  dashboard” (admins only; no Admin tab in the Figma
+  header for regular users). Admin dashboard tabs:
+  Overview, Users (view all profiles + login counts),
+  Reports (pick a user, edit, save draft, Publish to
+  push — published reports replace the generated one
+  in that user's Report view), Products (name, brand,
+  category, price, buying_url, image_url, description,
+  why_it_fits, key_ingredients, AM/PM, active, sort
+  order — active products appear in Recommendations
+  and Home, with a Buy link; otherwise the Figma
+  sample products are used), Messages (waitlist +
+  contact), Audit (every admin action), Admins (add
+  another admin by email). Extra features added:
+  draft vs published report workflow, report
+  versioning (new row per save, latest published
+  wins), product soft-deactivate + sort order, CSV
+  export for users/products, and admin audit log.
+  The service-role key is never used in the browser;
+  Auth-user listing/deletion stays as a Phase 2
+  Edge Function, not built here.

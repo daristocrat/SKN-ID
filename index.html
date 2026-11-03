@@ -237,11 +237,12 @@ body:not(.dark) .danger{color:#b00020 !important}
 <!-- MY ROUTINE -->
 <div id="view-routine" class="hidden"><section><div id="routineBody"></div></section></div>
 
+<div id="view-admin" class="hidden"><section><div id="adminBody"></div></section></div>
 </main>
 <div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
 <div id="productModal" class="modal hidden"><div class="card"><h2 id="productTitle"></h2><p id="productBody"></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-dark" id="productSaveBtn">Save to routine</button><button class="btn btn-ghost" onclick="$('productModal').classList.add('hidden')">Close</button></div></div></div>
 <div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
-<footer class="wrap"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Support</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="goReport()">SKN Report</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">About</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">Report guidance is general skincare information, not medical advice.</p></footer>
+<footer class="wrap"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Support</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="goReport()">SKN Report</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">About</button> <button class="btn btn-ghost hidden" id="adminFooterBtn" style="padding:6px 12px;min-height:0" onclick="show('admin')">Admin</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">Report guidance is general skincare information, not medical advice.</p></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -395,6 +396,7 @@ function completion(){
 function chips(arr){ return (arr||[]).length ? (arr||[]).map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="small">Not set yet</span>'; }
 function renderAccount(){
   if(!user){ show('landing'); return; }
+  if(!adminChecked) checkAdmin().then(()=>renderAccount());
   const code=profile?.skn_code||sknCode();
   const prefs=loadLS('skn_prefs',{emails:true, updates:false, weekly:true});
   const initials=userInitials();
@@ -415,7 +417,7 @@ function renderAccount(){
   <div class="toggle-row"><div><b>Password</b><p class="small" style="margin:0">••••••••</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountMsg('Password changes use your sign-in provider — sign out and sign in again with Google or Email OTP.')">Change</button></div>
   <div class="toggle-row"><div><b>Skin quiz</b><p class="small" style="margin:0">${profile ? 'Completed' + (profile.updated ? ' on ' + esc(profile.updated) : '') : 'Not started yet'}</p></div><button class="btn btn-lime" style="padding:8px 14px;min-height:0" onclick="editProfile()">Retake</button></div>
   <p class="small" id="accountMsg"></p>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goReport()">SKN Report</button><button class="btn btn-ghost" onclick="show('about')">Privacy &amp; your data</button><button class="btn btn-ghost" onclick="show('about')">Help &amp; support</button></div></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${isAdmin?'<button class="btn btn-lime" onclick="show(\'admin\')">Open admin dashboard</button>':''}<button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goReport()">SKN Report</button><button class="btn btn-ghost" onclick="show('about')">Privacy &amp; your data</button><button class="btn btn-ghost" onclick="show('about')">Help &amp; support</button></div></div>
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Account</b><p class="sub">Deleting your account removes your profile and routine data. This cannot be undone.</p><button class="btn btn-ghost danger" style="border:none;padding:6px 0" onclick="goToDelete()">Delete account</button><p class="small">Sign out and Delete use the existing confirmation and verification flow — Delete archives your profile and login history first, after email + DELETE verification.</p></div>
   ${profile ? '' : '<div class="card" style="margin-top:18px"><p>No SKN profile yet.</p><button class="btn btn-lime" onclick="startQuiz()">Create skin profile</button></div>'}`;
 }
@@ -423,6 +425,193 @@ function accountMsg(m){ const el=$('accountMsg'); if(el) el.textContent=m; }
 
 function togglePref(k){ const prefs=loadLS('skn_prefs',{emails:true, updates:false, weekly:true}); prefs[k]=!prefs[k]; save('skn_prefs', prefs); renderAccount(); }
 function saveAccountName(){ const v=$('accountNameEdit').value.trim(); if(!v) return; user.name=v; save('skn_clone_user', user); accountEdit=false; renderAccount(); }
+
+// ---------- Admin backend (Supabase tables + RLS, see ~/workspace/skn-id-backend/) ----------
+let isAdmin=false, adminChecked=false, adminData=null, adminTab='overview', adminSearch='', adminReportId=null, adminReportEmail='', adminProductId=null;
+let adminProducts=null, adminProductsLoaded=false;
+async function adminFetch(table, query, session){
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/'+table+'?'+query, {headers: supaHeaders(session)});
+    if(!r.ok) return {ok:false, status:r.status, rows:[]};
+    return {ok:true, status:r.status, rows:await r.json()};
+  }catch(e){ return {ok:false, status:0, rows:[]}; }
+}
+async function adminWrite(table, method, query, row, session){
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/'+table+(query?'?'+query:''), {method, headers:{...supaHeaders(session), Prefer:'return=representation'}, body:JSON.stringify(row)});
+    if(!r.ok) return null;
+    const j=await r.json(); return Array.isArray(j)?j[0]:j;
+  }catch(e){ return null; }
+}
+async function logAdminAction(action, target_type, target_id, detail){
+  try{ const s=await getSupaSession(); if(!s||!isAdmin) return; await adminWrite('admin_actions','POST','',{admin_email:s.user.email, action, target_type, target_id:String(target_id||''), detail:detail||''}, s); }catch(e){}
+}
+async function checkAdmin(){
+  if(adminChecked) return isAdmin;
+  adminChecked=true; isAdmin=false;
+  try{
+    const s=await getSupaSession(); if(!supaClient||!s) return false;
+    const res=await adminFetch('admins','email=eq.'+encodeURIComponent(s.user.email), s);
+    if(res.ok && res.rows.length) isAdmin=true;
+  }catch(e){}
+  const afb=$('adminFooterBtn'); if(afb) afb.classList.toggle('hidden', !isAdmin);
+  const ab=$('adminAccountBtn'); if(ab && isAdmin) ab.innerHTML='<button class="btn btn-lime" onclick="show(\'admin\')">Open admin dashboard</button>';
+  return isAdmin;
+}
+async function loadAdminProducts(){
+  if(adminProductsLoaded) return;
+  adminProductsLoaded=true;
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/products?active=eq.true&order=sort_order.asc', {headers:{apikey:SUPABASE_ANON_KEY, Authorization:'Bearer '+SUPABASE_ANON_KEY}});
+    if(r.ok){ const rows=await r.json(); if(rows && rows.length) adminProducts=rows; }
+  }catch(e){}
+}
+function downloadCSV(filename, rows){
+  const csv=rows.map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=filename; a.click();
+}
+function renderAdmin(){
+  if(!user){ show('landing'); return; }
+  if(!adminChecked) checkAdmin().then(()=>renderAdmin());
+  $('adminBody').innerHTML = `
+  <div class="page-head"><div><p class="eyebrow">Admin</p><h2 class="figma-h2">Admin dashboard.</h2></div><p class="sub" style="text-align:right">View all users, push SKN reports, and manage the product listing. Regular users never see this view.</p></div>
+  <p class="small" id="adminMsg"></p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${['overview','users','reports','products','messages','audit','admins'].map(tab=>`<button class="pill-btn ${adminTab===tab?'on':''}" onclick="adminTab='${tab}'; renderAdminContent()">${tab.charAt(0).toUpperCase()+tab.slice(1)}</button>`).join('')}</div>
+  <div id="adminContent"><p class="small">Loading admin data…</p></div>`;
+  if(isAdmin) loadAdminData(); else if(adminChecked) { const c=$('adminContent'); if(c) c.innerHTML='<div class="card"><b>You are not an admin.</b><p class="sub">Sign in with the email that is in the <code>admins</code> table. If the backend tables have not been created yet, run <code>skn-id-backend/schema.sql</code> in Supabase SQL Editor, then insert your admin email (see <code>skn-id-backend/README_BACKEND.md</code>).</p><p class="small">Local preview accounts cannot be admins — use a real Google / Email OTP sign-in.</p></div>'; }
+}
+async function loadAdminData(){
+  const s=await getSupaSession(); if(!s) return;
+  const [profiles, logins, waitlist, messages, products, reports, actions] = await Promise.all([
+    adminFetch('skn_profiles','select=*&order=created_at.desc&limit=500', s),
+    adminFetch('login_history','select=*&order=logged_in_at.desc&limit=500', s),
+    adminFetch('waitlist','select=*&order=created_at.desc&limit=200', s),
+    adminFetch('contact_messages','select=*&order=created_at.desc&limit=200', s),
+    adminFetch('products','select=*&order=sort_order.asc&limit=500', s),
+    adminFetch('skn_reports','select=*&order=created_at.desc&limit=200', s),
+    adminFetch('admin_actions','select=*&order=created_at.desc&limit=100', s)
+  ]);
+  const missing=[profiles, logins, products, reports].some(x=>!x.ok && x.status===404);
+  adminData={profiles:profiles.rows, logins:logins.rows, waitlist:waitlist.rows, messages:messages.rows, products:products.rows, reports:reports.rows, actions:actions.rows, missing};
+  renderAdminContent();
+}
+function renderAdminContent(){
+  const c=$('adminContent'); if(!c) return;
+  if(!isAdmin){ c.innerHTML='<p class="small">Checking admin status…</p>'; return; }
+  if(!adminData){ c.innerHTML='<p class="small">Loading admin data…</p>'; return; }
+  if(adminData.missing){ c.innerHTML='<div class="card"><b>Admin tables not found.</b><p class="sub">Run <code>skn-id-backend/schema.sql</code> in Supabase Dashboard > SQL Editor, then insert your admin email, then reload this page. See <code>skn-id-backend/README_BACKEND.md</code> for the exact steps.</p></div>'; return; }
+  const d=adminData;
+  if(adminTab==='overview'){
+    const weekAgo=new Date(Date.now()-7*86400000).toISOString();
+    const recentLogins=d.logins.filter(x=>x.logged_in_at && x.logged_in_at>=weekAgo).length;
+    const complete=d.profiles.filter(x=>x.skin_type && x.sensitivities && x.goals && x.values && x.environment).length;
+    c.innerHTML=`<div class="grid3">
+      <div class="card"><p class="eyebrow">Users</p><b style="font-size:32px">${d.profiles.length}</b><p class="small">${complete} with all 5 profile sections</p></div>
+      <div class="card"><p class="eyebrow">Reports published</p><b style="font-size:32px">${d.reports.filter(x=>x.status==='published').length}</b><p class="small">${d.reports.length} report rows total</p></div>
+      <div class="card"><p class="eyebrow">Products active</p><b style="font-size:32px">${d.products.filter(x=>x.active).length}</b><p class="small">${d.products.length} products total</p></div>
+      <div class="card"><p class="eyebrow">Logins, last 7 days</p><b style="font-size:32px">${recentLogins}</b><p class="small">${d.logins.length} login rows total</p></div>
+      <div class="card"><p class="eyebrow">Waitlist</p><b style="font-size:32px">${d.waitlist.length}</b><p class="small">Entries</p></div>
+      <div class="card"><p class="eyebrow">Contact messages</p><b style="font-size:32px">${d.messages.length}</b><p class="small">Messages</p></div>
+    </div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-ghost" onclick="downloadCSV('skn-users.csv', [['email','skin_type','sensitivities','goals','values','environment','created_at'], ...adminData.profiles.map(x=>[x.email,x.skin_type,x.sensitivities,x.goals,x.values,x.environment,x.created_at])])">Export users CSV</button><button class="btn btn-ghost" onclick="downloadCSV('skn-products.csv', [['name','brand','category','price','buying_url','image_url','active','sort_order'], ...adminData.products.map(x=>[x.name,x.brand,x.category,x.price,x.buying_url,x.image_url,x.active,x.sort_order])])">Export products CSV</button></div>`;
+  }
+  if(adminTab==='users'){
+    const list=d.profiles.filter(x=>!adminSearch || (x.email||'').toLowerCase().includes(adminSearch.toLowerCase()) || (x.skin_type||'').toLowerCase().includes(adminSearch.toLowerCase()));
+    const loginCount={}; d.logins.forEach(l=>{ loginCount[l.email]=(loginCount[l.email]||0)+1; });
+    c.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><input id="adminSearchBox" placeholder="Search email or skin type" value="${esc(adminSearch)}" style="flex:1;min-width:220px"><button class="btn btn-lime" onclick="adminSearch=$('adminSearchBox').value.trim(); renderAdminContent()">Filter</button><button class="btn btn-ghost" onclick="adminSearch=''; renderAdminContent()">Clear</button></div>
+    <p class="small">${list.length} users shown (view only — admins do not edit a user's own profile here).</p>
+    <div style="display:grid;gap:12px">${list.map(x=>`<div class="card"><b>${esc(x.email||'—')}</b> <span class="small">${esc(x.created_at||'')}</span><p style="margin:6px 0">Skin: ${esc(x.skin_type||'—')} · Env: ${esc(x.environment||'—')} · Logins: ${loginCount[x.email]||0}</p><p class="small" style="margin:0">Sensitivities: ${esc(x.sensitivities||'—')} · Goals: ${esc(x.goals||'—')} · Values: ${esc(x.values||'—')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" style="padding:8px 14px;min-height:0" onclick="adminReportEmail='${esc(x.email||'')}'; adminTab='reports'; renderAdminContent(); adminLoadReportFor('${esc(x.email||'')}')">Edit report for this user →</button></div></div>`).join('') || '<p class="small">No users yet.</p>'}</div>`;
+  }
+  if(adminTab==='reports'){
+    const emails=[...new Set(d.profiles.map(x=>x.email).filter(Boolean))];
+    c.innerHTML=`<div class="card"><label>Pick a user</label><select id="adminReportSelect" onchange="adminReportEmail=this.value; adminLoadReportFor(this.value)"><option value="">— choose a user —</option>${emails.map(e=>`<option value="${esc(e)}" ${e===adminReportEmail?'selected':''}>${esc(e)}</option>`).join('')}</select><p class="small" id="adminReportMsg">Pick a user to load their latest report, or start a new one.</p><div id="adminReportForm"></div></div>
+    <div class="card" style="margin-top:14px"><b>Recent reports</b>${d.reports.slice(0,20).map(r=>`<p class="small" style="margin:6px 0"><b>${esc(r.status||'')}</b> · ${esc(r.user_email||'')} · ${esc(r.created_at||'')} · ${esc(r.admin_email||'')}</p>`).join('') || '<p class="small">No reports yet.</p>'}</div>`;
+    if(adminReportEmail) setTimeout(()=>adminLoadReportFor(adminReportEmail), 0);
+  }
+  if(adminTab==='products'){
+    c.innerHTML=`<div style="display:grid;gap:12px">${d.products.map(x=>`<div class="card"><b>${esc(x.name||'')}</b> <span class="small">${esc(x.brand||'')} · ${esc(x.category||'')} · ${esc(x.price||'')} · ${x.active?'Active':'Inactive'} · order ${x.sort_order}</span><p class="small" style="margin:6px 0">${esc(x.description||'')}</p><p class="small" style="margin:0">Buy: ${esc(x.buying_url||'—')} · Image: ${esc(x.image_url||'—')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" style="padding:8px 14px;min-height:0" onclick="adminEditProduct('${x.id}')">Edit</button><button class="btn btn-ghost" style="padding:8px 14px;min-height:0" onclick="adminToggleProduct('${x.id}', ${!x.active})">${x.active?'Deactivate':'Activate'}</button></div></div>`).join('') || '<p class="small">No products yet — add one below.</p>'}</div>
+    <div class="card" style="margin-top:14px"><b id="adminProductFormTitle">Add a product</b>
+    <label>Name</label><input id="ap_name" placeholder="e.g. 10% Niacinamide Face Serum">
+    <label>Brand</label><input id="ap_brand" placeholder="e.g. MINIMALIST">
+    <label>Category</label><input id="ap_category" placeholder="e.g. Treatment">
+    <label>Price</label><input id="ap_price" placeholder="e.g. ₹599">
+    <label>Buying URL</label><input id="ap_buying" placeholder="https://… (the real store link)">
+    <label>Image URL</label><input id="ap_image" placeholder="https://… (product photo)">
+    <label>Description</label><textarea id="ap_desc"></textarea>
+    <label>Why it fits</label><textarea id="ap_why"></textarea>
+    <label>Key ingredients (comma-separated)</label><input id="ap_ing" placeholder="e.g. NIACINAMIDE, ZINC PCA">
+    <label>AM / PM</label><select id="ap_ampm"><option value="all">All (AM + PM)</option><option value="am">AM only</option><option value="pm">PM only</option></select>
+    <label>Sort order</label><input id="ap_order" type="number" value="0">
+    <label><input type="checkbox" id="ap_active" checked style="width:auto"> Active (visible to users)</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="adminSaveProduct()">Save product</button><button class="btn btn-ghost" onclick="adminProductId=null; renderAdminContent()">Clear form</button></div><p class="small" id="adminProductMsg"></p></div>`;
+  }
+  if(adminTab==='messages'){
+    c.innerHTML=`<div class="card"><b>Waitlist (${d.waitlist.length})</b>${d.waitlist.map(x=>`<p class="small" style="margin:6px 0">${esc(x.name||'')} · ${esc(x.email||'')} · ${esc(x.created_at||'')}</p>`).join('') || '<p class="small">No waitlist entries.</p>'}</div>
+    <div class="card" style="margin-top:14px"><b>Contact messages (${d.messages.length})</b>${d.messages.map(x=>`<p class="small" style="margin:6px 0"><b>${esc(x.name||'')} · ${esc(x.email||'')}</b><br>${esc(x.message||'')}</p>`).join('') || '<p class="small">No messages.</p>'}</div>`;
+  }
+  if(adminTab==='audit'){
+    c.innerHTML=`<div class="card"><b>Admin actions</b>${d.actions.map(a=>`<p class="small" style="margin:6px 0">${esc(a.created_at||'')} · ${esc(a.admin_email||'')} · ${esc(a.action||'')} · ${esc(a.target_type||'')} ${esc(a.target_id||'')} · ${esc(a.detail||'')}</p>`).join('') || '<p class="small">No admin actions logged yet.</p>'}</div>`;
+  }
+  if(adminTab==='admins'){
+    c.innerHTML=`<div class="card"><b>Admins</b><p class="small">Add another admin by email. They must sign in with that exact email to see this dashboard.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="ap_admin_email" placeholder="admin@example.com" style="flex:1;min-width:220px"><button class="btn btn-lime" onclick="adminAddAdmin()">Add admin</button></div><p class="small" id="adminAdminMsg"></p></div>`;
+  }
+}
+async function adminLoadReportFor(email){
+  adminReportEmail=email; const form=$('adminReportForm'); if(!form) return;
+  const s=await getSupaSession(); if(!s) return;
+  const prof=adminData.profiles.find(x=>x.email===email);
+  const res=await adminFetch('skn_reports','user_email=eq.'+encodeURIComponent(email)+'&order=created_at.desc&limit=1', s);
+  const r=(res.ok && res.rows.length)?res.rows[0]:null; adminReportId=r?r.id:null;
+  const gen=prof?{summary:(prof.skin_type||'')+' skin. Goals: '+(prof.goals||'')+'.', priorities:'Keep the routine simple and consistent for 3–4 weeks.', ingredients_favour:'', ingredients_watch:'', starter_routine:'Morning: gentle cleanser → moisturiser → SPF. Evening: cleanser → goal treatment → moisturiser.', next_check:'Revisit in 4 weeks.'}:{summary:'',priorities:'',ingredients_favour:'',ingredients_watch:'',starter_routine:'',next_check:''};
+  const v=k=>esc((r&&r[k])||gen[k]||'');
+  form.innerHTML=`
+  <label>Title</label><input id="ar_title" value="${esc((r&&r.title)||'Your SKN Report')}">
+  <label>Summary</label><textarea id="ar_summary">${v('summary')}</textarea>
+  <label>Top priorities</label><textarea id="ar_priorities">${v('priorities')}</textarea>
+  <label>Ingredients to favour</label><textarea id="ar_favour">${v('ingredients_favour')}</textarea>
+  <label>Ingredients to watch</label><textarea id="ar_watch">${v('ingredients_watch')}</textarea>
+  <label>Starter routine</label><textarea id="ar_routine">${v('starter_routine')}</textarea>
+  <label>Next check</label><textarea id="ar_next">${v('next_check')}</textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-ghost" onclick="adminSaveReport('draft')">Save draft</button><button class="btn btn-lime" onclick="adminSaveReport('published')">Publish report (push to user)</button></div><p class="small" id="adminReportSaveMsg">${r?('Editing report '+r.id+' ('+r.status+')'): 'New report for this user.'}</p>`;
+}
+async function adminSaveReport(status){
+  const s=await getSupaSession(); if(!s) return;
+  const prof=adminData.profiles.find(x=>x.email===adminReportEmail);
+  const row={user_id:prof?prof.user_id||null:null, user_email:adminReportEmail, title:$('ar_title').value.trim(), summary:$('ar_summary').value.trim(), priorities:$('ar_priorities').value.trim(), ingredients_favour:$('ar_favour').value.trim(), ingredients_watch:$('ar_watch').value.trim(), starter_routine:$('ar_routine').value.trim(), next_check:$('ar_next').value.trim(), status, admin_email:s.user.email, updated_at:new Date().toISOString()};
+  let saved=null;
+  if(adminReportId) saved=await adminWrite('skn_reports','PATCH','id=eq.'+adminReportId, row, s);
+  else saved=await adminWrite('skn_reports','POST','', row, s);
+  const msg=$('adminReportSaveMsg'); if(msg) msg.textContent=saved?('Saved as '+status+'.'): 'Save failed — check that skn_reports exists and you are an admin.';
+  if(saved){ adminReportId=saved.id; await logAdminAction(status==='published'?'publish_report':'save_report_draft','skn_report',saved.id,adminReportEmail); loadAdminData(); }
+}
+function adminEditProduct(id){
+  const x=adminData.products.find(p=>p.id===id); if(!x) return; adminProductId=id;
+  $('ap_name').value=x.name||''; $('ap_brand').value=x.brand||''; $('ap_category').value=x.category||''; $('ap_price').value=x.price||''; $('ap_buying').value=x.buying_url||''; $('ap_image').value=x.image_url||''; $('ap_desc').value=x.description||''; $('ap_why').value=x.why_it_fits||''; $('ap_ing').value=x.key_ingredients||''; $('ap_ampm').value=x.am_pm||'all'; $('ap_order').value=x.sort_order||0; $('ap_active').checked=!!x.active;
+  const t=$('adminProductFormTitle'); if(t) t.textContent='Edit product';
+  document.getElementById('ap_name').scrollIntoView({behavior:'smooth',block:'center'});
+}
+async function adminSaveProduct(){
+  const s=await getSupaSession(); if(!s) return;
+  const row={name:$('ap_name').value.trim(), brand:$('ap_brand').value.trim(), category:$('ap_category').value.trim(), price:$('ap_price').value.trim(), buying_url:$('ap_buying').value.trim(), image_url:$('ap_image').value.trim(), description:$('ap_desc').value.trim(), why_it_fits:$('ap_why').value.trim(), key_ingredients:$('ap_ing').value.trim(), am_pm:$('ap_ampm').value, sort_order:parseInt($('ap_order').value||'0',10), active:$('ap_active').checked, updated_at:new Date().toISOString()};
+  if(!row.name){ const m=$('adminProductMsg'); if(m) m.textContent='Product name is required.'; return; }
+  let saved=null;
+  if(adminProductId) saved=await adminWrite('products','PATCH','id=eq.'+adminProductId, row, s);
+  else saved=await adminWrite('products','POST','', row, s);
+  const m=$('adminProductMsg'); if(m) m.textContent=saved?'Product saved.':'Save failed — check that products exists and you are an admin.';
+  if(saved){ await logAdminAction(adminProductId?'update_product':'create_product','product',saved.id,row.name); adminProductId=null; loadAdminData(); }
+}
+async function adminToggleProduct(id, active){
+  const s=await getSupaSession(); if(!s) return;
+  const saved=await adminWrite('products','PATCH','id=eq.'+id, {active, updated_at:new Date().toISOString()}, s);
+  if(saved){ await logAdminAction(active?'activate_product':'deactivate_product','product',id,''); loadAdminData(); }
+}
+async function adminAddAdmin(){
+  const s=await getSupaSession(); if(!s) return;
+  const email=$('ap_admin_email').value.trim(); if(!email) return;
+  const saved=await adminWrite('admins','POST','',{email}, s);
+  const m=$('adminAdminMsg'); if(m) m.textContent=saved?'Admin added: '+email:'Add failed — that email may already be an admin, or you are not an admin.';
+  if(saved) await logAdminAction('add_admin','admin',email,'');
+}
+
 function renderDashboard(){
   // Dashboard is now the only place for the SKN ID card, profile details,
   // and the create/edit builder. No Account details card here.
@@ -475,6 +664,7 @@ function renderHeader(){
   if(signBtn) signBtn.style.display = user ? 'none' : 'inline-block';
   if(authBtn){ authBtn.style.display = user ? 'none' : 'inline-block'; authBtn.textContent='Get started'; }
   if(avatar){ avatar.classList.toggle('hidden', !user); if(user) avatar.textContent=userInitials(); }
+  const afb=$('adminFooterBtn'); if(afb) afb.classList.toggle('hidden', !isAdmin);
 }
 function show(v){
  // Old Dashboard route now maps to Figma views: Home if profile exists, Quiz if signed in without one, Landing if signed out.
@@ -490,6 +680,7 @@ function show(v){
  if(v==='recommendations') renderRecommendations(recFilter);
  if(v==='routine') renderRoutine();
  if(v==='profile') renderAccount();
+ if(v==='admin') renderAdmin();
  if(v==='report') renderReport();
  window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -507,7 +698,16 @@ function reportText(){
  <b>Starter routine</b><p>Morning: gentle cleanser → moisturiser → SPF. Evening: cleanser → goal treatment → moisturiser.</p>
  <b>Next check</b><p>Revisit this report in 4 weeks, or sooner if your skin, season or environment changes — your SKN ID should evolve with you.</p>`;
 }
-function renderReport(){ $('reportBody').innerHTML=reportText(); }
+async function renderReport(){
+  $('reportBody').innerHTML=reportText();
+  try{
+    const s=await getSupaSession(); if(!s) return;
+    let res=await adminFetch('skn_reports','user_id=eq.'+s.user.id+'&status=eq.published&order=created_at.desc&limit=1', s);
+    if(!res.ok || !res.rows.length) res=await adminFetch('skn_reports','user_email=eq.'+encodeURIComponent(s.user.email)+'&status=eq.published&order=created_at.desc&limit=1', s);
+    const r=(res.ok && res.rows.length)?res.rows[0]:null; if(!r) return;
+    $('reportBody').innerHTML=`<p class="small" style="letter-spacing:.12em;font-weight:800;color:var(--lime)">REPORT PUSHED BY THE SKN ID TEAM · ${esc(r.created_at||'')}</p><b>${esc(r.title||'Your SKN Report')}</b><p>${esc(r.summary||'')}</p><b>Top priorities</b><p>${esc(r.priorities||'')}</p><b>Ingredients to favour</b><p>${esc(r.ingredients_favour||'')}</p><b>Ingredients to watch</b><p>${esc(r.ingredients_watch||'')}</p><b>Starter routine</b><p>${esc(r.starter_routine||'')}</p><b>Next check</b><p>${esc(r.next_check||'')}</p>`;
+  }catch(e){}
+}
 function downloadReport(){
  const t=$('reportBody').innerText; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'})); a.download='SKN-Report.txt'; a.click();
 }
@@ -563,6 +763,9 @@ const FIGMA_IMG_HERO="https://images.unsplash.com/photo-1777450793530-99a0e7b7fc
 const FIGMA_IMG_MOIST="https://images.unsplash.com/photo-1658752293220-4ad4e1b9ff0b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
 const FIGMA_IMG_SPF="https://images.unsplash.com/photo-1586806819282-2c1e3448e3d0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
 function getProducts(){
+  if(adminProducts && adminProducts.length){
+    return adminProducts.map(row=>({id:row.id, brand:(row.brand||'').toUpperCase(), name:row.name, price:row.price||'', type:row.category||'', am:(row.am_pm==='all'||row.am_pm==='am'), pm:(row.am_pm==='all'||row.am_pm==='pm'), img:row.image_url||FIGMA_IMG_HERO, ingredients:(row.key_ingredients||'').split(',').map(x=>x.trim()).filter(Boolean), why:row.why_it_fits||row.description||'', good:row.description||'', buying_url:row.buying_url||''}));
+  }
   const g=profile?.goals||[], env=profile?.environment||'';
   return [
     {id:'serum', brand:'MINIMALIST', name:'10% Niacinamide Face Serum', price:'₹599', type:'Treatment · 30 ml', am:true, pm:true, img:FIGMA_IMG_HERO, ingredients:['NIACINAMIDE','ZINC PCA'], why:(g.includes('Even tone')||g.includes('Clearer skin'))?'Matches your even-tone and clearer-skin goals, in one focused step.':'A focused treatment step for a simple routine.', good:'Patch test first. Start once daily if your skin feels reactive.'},
@@ -580,7 +783,7 @@ function toggleSaveProduct(id){
 function viewProduct(id){
   const pr=getProducts().find(x=>x.id===id); if(!pr) return;
   $('productTitle').textContent = pr.brand + ' — ' + pr.name;
-  $('productBody').innerHTML = `<img src="${pr.img}" alt="${esc(pr.name)}" style="width:100%;height:220px;object-fit:cover;border-radius:16px;margin-bottom:12px"><p><b>${esc(pr.price)}</b> · ${esc(pr.type)} · ${pr.am?'AM':''}${pr.am&&pr.pm?' + ':''}${pr.pm?'PM':''}</p><p class="why-rule"><b>Why it fits your skin:</b> ${esc(pr.why)}</p><p><b>Key ingredients:</b> ${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p class="small">⚠ ${esc(pr.good)}</p><p class="small">Sample recommendation, as in the Figma prototype — product details, claims and prices must be verified before launch. The photo is generic stock, not a branded packshot.</p>`;
+  $('productBody').innerHTML = `<img src="${pr.img}" alt="${esc(pr.name)}" style="width:100%;height:220px;object-fit:cover;border-radius:16px;margin-bottom:12px"><p><b>${esc(pr.price)}</b> · ${esc(pr.type)} · ${pr.am?'AM':''}${pr.am&&pr.pm?' + ':''}${pr.pm?'PM':''}</p>${pr.buying_url?`<p><a class="btn btn-lime" href="${esc(pr.buying_url)}" target="_blank" rel="noopener">Buy this product →</a></p>`:''}<p class="why-rule"><b>Why it fits your skin:</b> ${esc(pr.why)}</p><p><b>Key ingredients:</b> ${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p class="small">⚠ ${esc(pr.good)}</p><p class="small">Sample recommendation, as in the Figma prototype — product details, claims and prices must be verified before launch. The photo is generic stock, not a branded packshot.</p>`;
   $('productSaveBtn').onclick=()=>{ toggleSaveProduct(id); viewProduct(id); };
   $('productSaveBtn').textContent = savedProducts().includes(id) ? 'Saved ✓' : 'Save to routine';
   $('productModal').classList.remove('hidden');
@@ -609,6 +812,7 @@ function weekReset(){ const st=weekTracker(); st.done={}; save('skn_week_tracker
 function routineAllDone(period){ const d=routineDone(); routineSteps(period).forEach(s=>{ d[period+':'+s.n]=true; }); save('skn_routine_done', d); renderHome(); }
 function renderHome(){
   if(!user){ show('landing'); return; }
+  if(supaClient && !adminProductsLoaded) loadAdminProducts().then(()=>{ if(adminProducts) renderHome(); });
   if(!profile){ show('quiz'); return; }
   const first=(user.name||'').trim().split(/\s+/)[0]||'';
   const dateLabel=new Date().toLocaleDateString('en-GB',{weekday:'long', day:'numeric', month:'long', year:'numeric'}).toUpperCase();
@@ -660,6 +864,7 @@ function renderMySkin(){
 
 function renderRecommendations(filter){
   recFilter=filter||'all';
+  if(supaClient && !adminProductsLoaded) loadAdminProducts().then(()=>{ if(adminProducts) renderRecommendations(recFilter); });
   if(!user){ show('landing'); return; }
   if(!profile){ show('quiz'); return; }
   const list=getProducts().filter(pr=> recFilter==='all' || (recFilter==='am' ? pr.am : pr.pm));
