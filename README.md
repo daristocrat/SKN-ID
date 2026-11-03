@@ -153,3 +153,52 @@ redeploys it automatically. Static site, no build command needed.
   (Google OAuth + Email OTP, consent-gated) on the
   landing sign-in card, and a successful sign-in lands
   on Home with the five Figma tabs and the lime avatar.
+
+- Figma page-by-page rebuild (2026-11-03, second Figma audit):
+  Correction: the landing hero image is NOT
+  photo-1620916566398 (that was a mis-identification in
+  the first measurements task). The actual Figma hero is
+  photo-1777450793530-99a0e7b7fc53, and it is reused for
+  Recommendations product 1. Only three distinct images
+  exist in the whole Figma app: that hero/serum photo,
+  photo-1658752293220 (moisturiser card) and
+  photo-1586806819282 (sunscreen card); My Skin, My
+  Routine, Account and Quiz have no photos. This build
+  uses exactly those three URLs, in the same places:
+  hero arch, Recommendations left image panels with
+  01/02/03 badges, and tilted thumbnails on Home.
+  Views rebuilt page by page to the audit: Landing
+  (hero body, brand row, How it works lime-circle
+  icons, Why label + white pill, two-row footer);
+  Quiz (Save & exit text link, Question X of 5, thin
+  progress at (step+1)x20%, giant outline number,
+  two-column layout, dark option cards with radio
+  circles — steps 2–5 headings were not audited, as
+  reaching them requires submitting an answer, so
+  our profile fields are kept there in Figma layout,
+  not invented Figma questions); Home (two-column
+  greeting with real date + right-aligned subtext,
+  routine-today ring card, journey week card, skin-
+  today card, picked-products card with tilted
+  thumbnails, lime daily-tip strip); My Skin (lime
+  panel with giant outline 01 + dark inset panel,
+  How your skin feels 3 cards, What this means 2x2
+  grid, disclaimer); Recommendations (Less, but
+  better heading, sample warning strip, Show: All 3 /
+  AM routine / PM routine filters, wide cards with
+  brand, price, Why it fits lime rule, Key
+  ingredients, Good to know, View + Save buttons);
+  My Routine (Morning 4 steps / 3 min, Evening 3
+  steps / 4 min with Figma step names, lime number
+  circles + circular check, amber caution card,
+  weekly tracker with weekday circles, lime reminder
+  strip); Account (profile card with real initials,
+  skin-profile card, 3 preferences toggles, settings
+  rows, danger-zone card with red Delete text only).
+  Real data only — never the Figma demo name, demo
+  date, demo streak or demo profile — and real
+  sign-in, saving, check-off, check-in, Sign out and
+  Delete stay working on top. Product brands/prices
+  are the Figma sample data, with the sample warning
+  shown, not verified store prices; photos are
+  generic stock, not branded packshots.
