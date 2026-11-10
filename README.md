@@ -232,3 +232,23 @@ redeploys it automatically. Static site, no build command needed.
   The service-role key is never used in the browser;
   Auth-user listing/deletion stays as a Phase 2
   Edge Function, not built here.
+
+- Questionnaire rebuild (2026-11-10, Figma audit 10 Nov — see
+  ~/workspace/goals/skn-id-website/figma-audit-2026-11-10.md): the old
+  5-step quiz is replaced by the Figma questionnaire — 20 questions,
+  "Question X of 20", "Save & continue" / "Finish questions", with
+  single/multi/matrix (Q7)/swatch (Q9, A–J)/free-text city (Q14)
+  questions, auto-saved answers, and sign-in at the end to save the
+  profile (Google/Email OTP, no password form). A profile is derived
+  from the answers (skin type from Q1/Q3, sensitivities from
+  Q6/Q7/Q8/Q13, goals from Q4/Q19, values from Q20, environment from
+  Q14/Q17/Q18). Landing now uses the new Figma copy (hero "Skin care
+  that fits your skin, at last", How it works, Why SKN-ID 5 cards).
+  New: Recommendations products Minimalist ₹579 / CeraVe ₹1,199 /
+  La Roche-Posay ₹1,669 with Sensitive filter; My Skin suggested
+  ingredients (8), profile-at-a-glance table, printable report;
+  My Routine 30-day journey tracker with day notes, routine
+  reminders (08:00 / 21:30), Add a product dialog; Home skin-feel
+  check-in with "✓ Saved"; Account activity (streak / saved products /
+  saved notes), Privacy & data and Help & support dialogs; footer
+  Privacy/Terms/Support dialogs with the Figma text.

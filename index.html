@@ -156,6 +156,18 @@ body:not(.dark) .danger{color:#b00020 !important}
 .quiz-opt.sel .qradio{background:#C8FF38;border-color:#C8FF38}
 .quiz-grid{display:grid;grid-template-columns:220px 1fr;gap:48px;margin-top:32px}
 @media(max-width:820px){.quiz-grid{grid-template-columns:1fr;gap:16px}}
+
+.quiz-swatch{width:48px;height:48px;border-radius:50%;border:2px solid #26281F;cursor:pointer;padding:0}
+.quiz-swatch.sel{outline:3px solid #C8FF38;outline-offset:2px}
+.matrix-row{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:8px;align-items:center;padding:12px 0;border-top:1px solid #26281F}
+.matrix-row .mbtn{padding:8px 6px;border-radius:999px;border:1px solid #26281F;background:#171a17;color:#F0EFE7;cursor:pointer;font-size:13px;font-weight:700}
+.matrix-row .mbtn.sel{background:#C8FF38;color:#0A0B0A;border-color:#C8FF38}
+.journey-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.jday{padding:10px 4px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-size:13px;font-weight:700;text-align:center}
+.jday.all{background:var(--lime);color:#0A0B0A;border-color:var(--lime)}
+.jday.part{border-color:var(--lime);background:#232a12}
+.jday.sel{outline:2px solid var(--lime)}
+.jday.future{opacity:.45}
 </style></head><body class="dark">
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')">SKN&nbsp;ID<span class="dot">●</span></a>
 <nav class="tabs" id="appTabs">
@@ -170,9 +182,9 @@ body:not(.dark) .danger{color:#b00020 !important}
 <!-- LANDING / SIGN-IN — Figma design: black + lime, uppercase display type -->
 <div id="view-landing"><section>
 <div class="hero-grid"><div>
-<p class="eyebrow">Skincare, figured out</p>
-<h1>Know your skin. <span class="lime">Own</span> your routine.</h1>
-<p class="sub">Personalised skincare guidance made for Indian skin, weather and real life. No 12-step routines. No miracle claims. Just what fits your skin, your budget, and your day.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-lime" onclick="startQuizOrSignin()">Discover your skin →</button><button class="btn btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works ↓</button></div>
+<p class="eyebrow">Your skin has an ID — let's find it</p>
+<h1>Skin care that fits your skin, at last</h1>
+<p class="sub">Stop guessing. Take a short quiz, get an honest skin profile, and keep only the steps your skin actually needs.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-lime" onclick="startQuizOrSignin()">Discover your skin →</button><button class="btn btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works ↓</button></div>
 <div class="card" id="signinCard" style="margin-top:22px">
 <label><input type="checkbox" id="consent1" style="width:auto"> I agree to receive emails about my SKN ID, including my report, updates and important notifications. (required)</label>
 <label><input type="checkbox" id="consent2" style="width:auto"> Send me updates about how SKN ID is evolving, including new features and early access. (optional)</label>
@@ -185,18 +197,26 @@ body:not(.dark) .danger{color:#b00020 !important}
 <div id="otpSection" class="hidden"><label>Email for OTP</label><input id="otpEmail" type="email" placeholder="you@example.com"><button class="btn btn-dark" style="margin-top:10px" onclick="sendOtp()">Send OTP code</button><div id="otpStep" class="hidden"><label>Enter the 8-digit code sent to your email</label><input id="otpCode" inputmode="numeric" placeholder="12345678"><button class="btn btn-dark" style="margin-top:10px" onclick="verifyOtp()">Verify and sign in</button></div><p class="small" id="otpMsg"></p></div>
 </div>
 <div class="assurances"><span>Takes 3 minutes</span><span>Private by design</span><span>No diagnosis</span></div>
+<p class="small" style="margin-top:14px">Your answers stay private.</p>
 </div>
 <div class="hero-visual-wrap"><div class="hero-arch-back"></div><img class="hero-arch" src="https://images.unsplash.com/photo-1777450793530-99a0e7b7fc53?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900" alt="A minimal skincare serum bottle"><div class="preview-card"><p class="small" style="margin:0;letter-spacing:.12em;font-weight:800">YOUR SKIN ID</p><b>Combination</b><div style="margin-top:10px"><span class="chip lime">DEHYDRATED</span><span class="chip">REACTIVE</span></div><div style="margin-top:12px"><b style="font-size:24px">94%</b> <span class="small">ROUTINE MATCH</span></div></div></div>
 </div>
 </section>
 <div class="brand-row"><span>MINIMALIST</span><span>RE’EQUIL</span><span>DECONSTRUCT</span><span>DOT &amp; KEY</span><span>THE DERMACO</span></div>
-<section id="how-it-works"><p class="eyebrow">How it works</p><h2>Three steps. Zero confusion.</h2><p class="sub">A clear path from “what does my skin need?” to a routine that fits your day, budget and comfort.</p>
+<section id="how-it-works"><p class="eyebrow">How it works</p><h2>How it works</h2><p class="sub">Tell us what your skin is like now. We will turn your answers into a clear profile and a manageable routine you can follow every day.</p>
 <div class="grid3" style="margin-top:22px">
-<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">01</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Tell us about your skin</h3><p class="sub">A short, judgement-free questionnaire about your skin, sensitivities and preferences.</p></div>
-<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">02</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Understand your profile</h3><p class="sub">See your skin characteristics and practical takeaways in plain language.</p></div>
-<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">03</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Build a routine that fits</h3><p class="sub">Explore a small set of explained recommendations and track what feels right.</p></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">01</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Answer the questionnaire</h3><p class="sub">Your skin, your habits, your triggers. There are no wrong answers.</p></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">02</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Get your skin profile</h3><p class="sub">We summarise your skin type, concerns and sensitivities in plain language.</p></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:start"><p class="step-num">03</p><span class="step-icon">→</span></div><h3 style="text-transform:none;font-size:22px;margin:10px 0 6px">Follow your routine</h3><p class="sub">A short morning and evening routine, with check-ins to track how your skin responds.</p></div>
 </div></section>
-<section><div class="why-band"><div class="grid2"><div><p style="font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1;text-transform:uppercase;margin:0">Why this?<br>Not that.<br>Recommendations with reasons.</p></div><div><p style="margin:0;letter-spacing:.12em;font-weight:800;font-size:13px;color:#0A0B0A">RECOMMENDATIONS WITH REASONS</p><h2>You deserve to know the why.</h2><p class="sub">Every recommendation connects back to what you told us. We flag relevant cautions, show where each product fits and keep the list intentionally small.</p><p class="check">Built around your concerns and preferences</p><p class="check">Prices and products available in India</p><p class="check">Clear guidance, never miracle claims</p><button class="btn" style="margin-top:14px;background:#F0EFE7;color:#0A0B0A;border-color:#F0EFE7" onclick="startQuizOrSignin()">Build my profile →</button></div></div></div></section>
+<section><div class="why-band"><p style="font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1;text-transform:uppercase;margin:0">Why SKN-ID</p><p class="sub" style="margin-top:12px">Skincare fails when it ignores the rest of your life. We look at the whole picture — skin, health, habits and environment — before recommending a single product.</p>
+<div class="grid3" style="margin-top:24px">
+<div class="card" style="background:#171a17;border-color:#26281F"><b style="font-size:20px">Made for Indian skin</b><p class="sub">India's climate, water and lifestyle change how skin behaves. We take them into account.</p></div>
+<div class="card" style="background:#171a17;border-color:#26281F"><b style="font-size:20px">Simple, not endless</b><p class="sub">A short routine you can actually follow — no 10-step shelf.</p></div>
+<div class="card" style="background:#171a17;border-color:#26281F"><b style="font-size:20px">Honest, personalised picks</b><p class="sub">We explain why each product fits your skin type, concerns and budget.</p></div>
+<div class="card" style="background:#171a17;border-color:#26281F"><b style="font-size:20px">Safety first</b><p class="sub">We flag ingredients and combinations to be careful with, including while pregnant.</p></div>
+<div class="card" style="background:#171a17;border-color:#26281F"><b style="font-size:20px">Built around your life</b><p class="sub">Your routine adapts to your habits, your budget and your time — not the other way round.</p></div>
+</div><button class="btn" style="margin-top:24px;background:#F0EFE7;color:#0A0B0A;border-color:#F0EFE7" onclick="startQuizOrSignin()">Build my profile →</button></div></section>
 </div>
 
 <!-- DASHBOARD: same SKN profile overview, but WITHOUT Account details and WITHOUT Sign out/Delete -->
@@ -241,8 +261,9 @@ body:not(.dark) .danger{color:#b00020 !important}
 </main>
 <div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
 <div id="productModal" class="modal hidden"><div class="card"><h2 id="productTitle"></h2><p id="productBody"></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-dark" id="productSaveBtn">Save to routine</button><button class="btn btn-ghost" onclick="$('productModal').classList.add('hidden')">Close</button></div></div></div>
+<div id="genericModal" class="modal hidden"><div class="card"><h2 id="genericTitle"></h2><div id="genericBody"></div><div id="genericFooter" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div></div></div>
 <div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
-<footer class="wrap"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">Support</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="goReport()">SKN Report</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">About</button> <button class="btn btn-ghost hidden" id="adminFooterBtn" style="padding:6px 12px;min-height:0" onclick="show('admin')">Admin</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">Report guidance is general skincare information, not medical advice.</p></footer>
+<footer class="wrap"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showPrivacyDialog()">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showTermsDialog()">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showSupportDialog()">Support</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="goReport()">SKN Report</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('about')">About</button> <button class="btn btn-ghost hidden" id="adminFooterBtn" style="padding:6px 12px;min-height:0" onclick="show('admin')">Admin</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">Report guidance is general skincare information, not medical advice.</p></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -303,7 +324,7 @@ async function initAuth(){
       user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
       const remote=await loadProfileFromSupabase(session);
       if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-      show('dashboard'); return;
+      show('dashboard'); applyPendingQuestionnaireProfile(); return;
     }
     user=null; show('landing'); return;
   }
@@ -317,7 +338,7 @@ if(supaClient){
         user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
         const remote=await loadProfileFromSupabase(session);
         if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-        show('dashboard');
+        show('dashboard'); applyPendingQuestionnaireProfile();
       }
     }
   });
@@ -339,7 +360,7 @@ async function verifyOtp(){
   user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
   const remote=await loadProfileFromSupabase(session);
   if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-  show('dashboard');
+  show('dashboard'); applyPendingQuestionnaireProfile();
 }
 async function doSignOut(){
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
@@ -374,7 +395,7 @@ async function confirmDeleteAccount(){
   $('authBtn').textContent='Get started'; hideDeletePanel(); show('landing');
   $('authNote').textContent='Your account data has been deleted and archived. To fully remove the Supabase Auth login record, delete the user in Supabase Dashboard > Authentication > Users (server-side step).';
 }
-const FIELDS=[
+const LEGACY_FIELDS=[
  ['skin_type','Skin type',['Oily','Dry','Combination','Sensitive','Normal'],false],
  ['sensitivities','Sensitivities (pick any)',['Fragrance-sensitive','Redness-prone','Breakout-prone','Alcohol-sensitive','None'],true],
  ['goals','Goals (pick any)',['Clearer skin','Hydration','Even tone','Barrier repair','Glow'],true],
@@ -410,14 +431,20 @@ function renderAccount(){
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Preferences</b>
   <div class="toggle-row"><div><b>Email reminders</b><p class="small" style="margin:0">Get a gentle nudge for your morning and evening routine.</p></div><button class="switch ${prefs.emails?'on':''}" onclick="togglePref('emails')"></button></div>
   <div class="toggle-row"><div><b>Product updates</b><p class="small" style="margin:0">Hear about new recommendations and guides.</p></div><button class="switch ${prefs.updates?'on':''}" onclick="togglePref('updates')"></button></div>
-  <div class="toggle-row"><div><b>Weekly summary</b><p class="small" style="margin:0">A short recap of your routine and skin notes.</p></div><button class="switch ${prefs.weekly?'on':''}" onclick="togglePref('weekly')"></button></div></div>
+  <div class="toggle-row"><div><b>Weekly summary</b><p class="small" style="margin:0">A short recap of your routine and skin notes.</p></div><button class="switch ${prefs.weekly?'on':''}" onclick="togglePref('weekly')"></button></div>
+  <div class="toggle-row"><div><b>Routine reminders</b><p class="small" style="margin:0">Choose when to receive AM and PM routine reminders.</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="openReminders()">Open reminders</button></div></div>
+  <div class="card" style="margin-top:18px"><b style="font-size:20px">Your activity</b>
+  <div class="toggle-row"><div><b>History</b><p class="small" style="margin:0">Skin profile, questionnaires and reminders.</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('myskin')">View</button></div>
+  <div class="toggle-row"><div><b>Streak</b><p class="small" style="margin:0">See your current streak and 30-day progress.</p></div><b>${journeyStreak()} days</b></div>
+  <div class="toggle-row"><div><b>Saved products</b><p class="small" style="margin:0">View your saved products.</p></div><b>${savedProducts().length} saved</b></div>
+  <div class="toggle-row"><div><b>Saved notes</b><p class="small" style="margin:0">View your notes.</p></div><b>${savedNotesCount()} days</b></div></div>
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Account</b>
   <div class="toggle-row"><div><b>Name</b><p class="small" style="margin:0">${esc(user.name||'')}</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountEdit=true; renderAccount()">Edit</button></div>
   <div class="toggle-row"><div><b>Email</b><p class="small" style="margin:0">${esc(user.email||'')}</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountMsg('Email changes are not available in this app — your sign-in email stays as shown.')">Edit</button></div>
   <div class="toggle-row"><div><b>Password</b><p class="small" style="margin:0">••••••••</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountMsg('Password changes use your sign-in provider — sign out and sign in again with Google or Email OTP.')">Change</button></div>
   <div class="toggle-row"><div><b>Skin quiz</b><p class="small" style="margin:0">${profile ? 'Completed' + (profile.updated ? ' on ' + esc(profile.updated) : '') : 'Not started yet'}</p></div><button class="btn btn-lime" style="padding:8px 14px;min-height:0" onclick="editProfile()">Retake</button></div>
   <p class="small" id="accountMsg"></p>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${isAdmin?'<button class="btn btn-lime" onclick="show(\'admin\')">Open admin dashboard</button>':''}<button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goReport()">SKN Report</button><button class="btn btn-ghost" onclick="show('about')">Privacy &amp; your data</button><button class="btn btn-ghost" onclick="show('about')">Help &amp; support</button></div></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${isAdmin?'<button class="btn btn-lime" onclick="show(\'admin\')">Open admin dashboard</button>':''}<button class="btn btn-ghost" onclick="showSignoutPopup()">Sign out</button><button class="btn btn-ghost" onclick="goReport()">SKN Report</button><button class="btn btn-ghost" onclick="showPrivacyDataDialog()">Privacy &amp; data</button><button class="btn btn-ghost" onclick="showHelpDialog()">Help &amp; support</button></div></div>
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Account</b><p class="sub">Deleting your account removes your profile and routine data. This cannot be undone.</p><button class="btn btn-ghost danger" style="border:none;padding:6px 0" onclick="goToDelete()">Delete account</button><p class="small">Sign out and Delete use the existing confirmation and verification flow — Delete archives your profile and login history first, after email + DELETE verification.</p></div>
   ${profile ? '' : '<div class="card" style="margin-top:18px"><p>No SKN profile yet.</p><button class="btn btn-lime" onclick="startQuiz()">Create skin profile</button></div>'}`;
 }
@@ -644,7 +671,7 @@ function renderDashboard(){
   </div>`;
   justSaved=false;
 }
-function editProfile(){ editing=true; draft={...profile}; startQuiz(); }
+function editProfile(){ editing=true; draft={...profile}; startQuiz(true); }
 function cancelEdit(){ editing=false; draft={...profile}; show(profile ? 'home' : 'landing'); }
 function copyCode(btn){
   const code=profile?.skn_code||sknCode();
@@ -674,7 +701,7 @@ function show(v){
  const el=$('view-'+v); if(el) el.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
  if(v==='landing') renderLandingAuth();
- if(v==='quiz') renderQuiz();
+ if(v==='quiz') renderQuestionnaire();
  if(v==='home') renderHome();
  if(v==='myskin') renderMySkin();
  if(v==='recommendations') renderRecommendations(recFilter);
@@ -685,7 +712,7 @@ function show(v){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderOnb(){
- $('onb').innerHTML=FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
+ $('onb').innerHTML=LEGACY_FIELDS.map(([k,label,opts,multi])=>`<label>${label}</label><div>${opts.map(o=>`<button type="button" class="opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="pick('${k}','${o}',${multi})">${o}</button>`).join('')}</div>`).join('');
 }
 function pick(k,o,multi){ if(multi){draft[k]=draft[k].includes(o)?draft[k].filter(x=>x!==o):[...draft[k],o]} else draft[k]=o; renderOnb(); }
 async function saveProfile(){ if(!draft.skin_type){$('saveMsg').textContent='Pick a skin type first.';return} profile={...draft,skn_code:profile?.skn_code||sknCode(),updated:new Date().toLocaleDateString()}; save('skn_clone_profile',profile); editing=false; justSaved=true; const row={email:user?.email||null,skin_type:draft.skin_type,sensitivities:(draft.sensitivities||[]).join(', '),goals:(draft.goals||[]).join(', '),values:(draft.values||[]).join(', '),environment:draft.environment||null}; let ok=false; const session=await getSupaSession(); if(supaClient && session){ ok=await supaUpsertProfile(session,row); } else { ok=await supaInsert('skn_profiles',row); } if(!ok){ justSaved=false; } show('home'); }
@@ -717,44 +744,156 @@ let quizStep=0, recFilter='all', routinePeriod='am', accountEdit=false;
 function loadLS(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v??d; }catch(e){ return d; } }
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function startQuizOrSignin(){
-  if(!user){ goSignin(); if($('authNote')) $('authNote').textContent='Sign in first, then Discover your skin starts your quiz.'; return; }
-  startQuiz();
+
+// ---------- 20-question questionnaire (Figma audit 2026-11-10) ----------
+// Open WITHOUT sign-in. Answers auto-save on selection; Finish derives the
+// profile, then asks a signed-out user to sign in to save it.
+const QUESTIONNAIRE=[
+ {id:'q1',num:1,title:'How does your skin usually feel a few hours after cleansing?',sub:'Choose the option that matches most days.',type:'single',options:['Comfortable and balanced','Oily in some areas and comfortable in others','Lightly oily all over with a few dry patches','Oily and shiny all over','Dry and tight all over','It changes a lot day to day',"I'm not sure yet"]},
+ {id:'q1c',num:1,continued:true,title:'How does your skin usually feel a few hours after cleansing?',sub:'Select all that apply. This follow-up is optional.',type:'multi',optional:true,options:['My forehead and nose feel oilier','My cheeks feel drier or tighter','My chin or jawline feels different','The skin around my eyes feels different','No, my answer applies to my whole face']},
+ {id:'q2',num:2,title:'Around midday, how do your forehead and cheeks usually feel?',sub:'Select one',type:'single',options:['Both feel oily',"My forehead feels oily, but my cheeks don't","My cheeks feel oily, but my forehead doesn't",'Neither feels oily','It varies',"I'm not sure or need to check"]},
+ {id:'q3',num:3,title:'How do flakes, rough patches or tightness usually appear for you?',sub:'Select one',type:'single',options:["I don't have them",'Occasionally, but small areas','Often, over visible areas','Frequently, over a large area','I have flakes around my nose or brows only','I have patches on my cheeks only','They appear in winter but fade in summer']},
+ {id:'q4',num:4,title:'Which signs of ageing or unevenness bother you most?',sub:'Select one',type:'single',options:['Fine lines and wrinkles','Loss of firmness','Dark spots','Uneven skin tone or dullness','Large, open pores',"I'm worried about lines from sun exposure",'The way my skin heals after a spot','None of these, my skin looks calm and even']},
+ {id:'q5',num:5,title:'How do acne or breakouts usually appear for you?',sub:'Select all that apply.',type:'multi',options:['Pustules','Cystic acne','Blackheads','Whiteheads','Post-acne red or brown marks','Nodules','New breakouts each week','I break out after shaving','Spots appear around my period','Large pores with oil and blackheads','Breakouts on my chest or back','Breakouts on my shoulders','Mild blackheads in my T-zone','I have a few spots a month','I rarely get breakouts','None of these']},
+ {id:'q6',num:6,title:'Which of these have you had in the past?',sub:'Select all that apply.',type:'multi',options:['Eczema','Rosacea','Psoriasis','Seborrheic dermatitis','Medication-related dryness','Sensitivity to sunlight','Keratosis pilaris','Herpes around the lips','Perioral dermatitis','None of these']},
+ {id:'q7',num:7,title:'How often do you feel or notice these things?',sub:'Select one option in each row.',type:'matrix',rows:['Stinging or burning','Tightness','Itching','Redness or flushing','Spots or breakouts','Bumps','Dry, rough or flaky patches','Generally uncomfortable'],cols:['Not at all','A few times','Most days','Constantly']},
+ {id:'q8',num:8,title:'What usually triggers sensitivity or a reaction for you?',sub:'Select one',type:'single',options:["I'm not sensitive",'New products','A product with a strong fragrance','Exfoliating acids or retinol','Hot or cold weather','Hard water exposure','Household chemicals or detergents','Sweating, sweating while exercising or environmental pollution']},
+ {id:'q9',num:9,title:"Which swatch is closest to your skin's natural, inner-arm colour?",sub:'',type:'swatches',swatches:[['A','#F6E0D2'],['B','#F0D3BE'],['C','#E8C39F'],['D','#D9A97E'],['E','#C68E5E'],['F','#A9713F'],['G','#8C5A2E'],['H','#6E4423'],['I','#4E2E17'],['J','#2E1C10']]},
+ {id:'q10',num:10,title:'Does your period affect your skin, or are you pregnant or breastfeeding?',sub:'Select one',type:'single',options:['My skin gets worse around my period','My skin gets better around my period',"My skin doesn't change","I'm pregnant","I'm breastfeeding","I don't have a period",'Prefer not to say']},
+ {id:'q11',num:11,title:'Is there anything that affects how your skin behaves?',sub:'Select all that apply.',type:'multi',options:['It changes around my period',"I'm going through menopause",'Stress and low sleep','Poor gut health','I take prescription medication for my skin','I have acne','Family history of skin conditions','Prefer not to say']},
+ {id:'q12',num:12,title:'Is there anything else that affects how your skin behaves?',sub:'Select all that apply.',type:'multi',options:['I take prescription medication for my skin','I have diabetes','I frequently shave','I have rough or thickened skin','I have slow wound healing','I have gum disease','I have high blood pressure','Constant sweating','Skin infections','A weak immune system','Previous skin cancer','I have vitiligo','Prefer not to say']},
+ {id:'q13',num:13,title:'Is there anything else that affects how your skin behaves?',sub:'Select all that apply.',type:'multi',options:['I take isotretinoin','I take supplements','I use steroids','I have an autoimmune condition','I have hormonal problems',"I don't have a period",'I have sensitive skin','Prefer not to say']},
+ {id:'q14',num:14,title:'Which city or region do you live in?',sub:'Select one',type:'text',placeholder:'For example, Bengaluru'},
+ {id:'q15',num:15,title:"What's your typical routine?",sub:'Select one',type:'single',options:['I have a routine that I follow','I have a few steps, but I keep them simple','I use random products','Traditional or home remedies only','No routine yet',"My routine matches my skin's needs"]},
+ {id:'q16',num:16,title:'How often do you wear sunscreen?',sub:'Select one',type:'single',options:['Every day','Most days','Only when I go outside, on sunny days','Only in summer','Sometimes','Never',"I don't usually go out in the sun","I'm unsure"]},
+ {id:'q17',num:17,title:'How often are you in the sun?',sub:'Select one',type:'single',options:['Every day','Most days','Occasionally','Rarely','Never','I work outdoors','I spend long hours travelling']},
+ {id:'q18',num:18,title:'Is there anything else affecting how your skin looks or behaves?',sub:'Select all that apply.',type:'multi',options:['I use medicated creams like steroids','I use acid peels or exfoliants frequently','Patchy darkening','Melasma','I live in a dry or dusty climate','I have a sensitive scalp','I have dark spots across my body','I have dark spots around my knees and elbows','I use antiperspirants','I use a lot of body lotion','I smoke',"I'm a vegetarian",'Prefer not to say']},
+ {id:'q19',num:19,title:'What would you like to improve first?',sub:'Select one',type:'single',options:['My skin changes','Dry, rough skin','Oily skin','Sensitive, red or irritated skin','Acne and breakouts','Dark spots','Fine lines and wrinkles','Dull skin','Pores','Blackheads','Flaky, congested skin','Sun damage','Pigmentation','Prefer not to say']},
+ {id:'q20',num:20,title:'Finally, how would you like to use this routine?',sub:'Select one',type:'single',options:['Keep it simple and focused','Keep it balanced with a few extras','Include things to try later','I want detailed steps and guidance','Prefer not to say']}
+];
+let qStep=0;
+function questionnaireAnswers(){ return loadLS('skn_questionnaire_answers', {}); }
+function saveQuestionnaireAnswers(a){ save('skn_questionnaire_answers', a); save('skn_quiz_draft', {step:qStep, answers:a}); }
+function startQuizOrSignin(){ startQuiz(false); }
+function startQuiz(edit){
+  if(edit){ qStep=0; }
+  else { const d=loadLS('skn_quiz_draft',null); qStep=(d&&typeof d.step==='number')?Math.min(d.step, QUESTIONNAIRE.length-1):0; }
+  show('quiz');
 }
-function startQuiz(){
-  if(!user){ show('landing'); return; }
-  if(profile && editing){ draft={...profile}; }
-  else if(profile && !draft.skin_type && !draft.goals?.length){ draft={...profile}; }
-  else if(!profile){ const q=loadLS('skn_quiz_draft',null); draft = q ? {...{skin_type:'',sensitivities:[],goals:[],values:[],environment:''}, ...q} : {skin_type:'',sensitivities:[],goals:[],values:[],environment:''}; }
-  quizStep=0; show('quiz');
+function quizSaveExit(){ save('skn_quiz_draft', {step:qStep, answers:questionnaireAnswers()}); show(profile ? 'home' : 'landing'); }
+function quizBack(){ if(qStep>0){ qStep--; renderQuestionnaire(); } else { quizSaveExit(); } }
+function quizPickValue(v){
+  const q=QUESTIONNAIRE[qStep], a=questionnaireAnswers();
+  if(q.type==='multi'){ const arr=a[q.id]||[]; a[q.id]=arr.includes(v)?arr.filter(x=>x!==v):[...arr,v]; }
+  else { a[q.id]=v; }
+  saveQuestionnaireAnswers(a); renderQuestionnaire();
 }
-function quizSaveExit(){ save('skn_quiz_draft', draft); show(profile ? 'home' : 'landing'); }
-function quizBack(){ if(quizStep>0){ quizStep--; renderQuiz(); } else { quizSaveExit(); } }
+function quizMatrixPick(row, col){
+  const a=questionnaireAnswers(); const m={...(a.q7||{})}; m[row]=col; a.q7=m;
+  saveQuestionnaireAnswers(a); renderQuestionnaire();
+}
+function quizTextInput(el){ const a=questionnaireAnswers(); a.q14=el.value; saveQuestionnaireAnswers(a); }
+function questionnaireValid(q){
+  const a=questionnaireAnswers();
+  if(q.type==='single'||q.type==='swatches') return !!a[q.id];
+  if(q.type==='multi') return q.optional ? true : (a[q.id]||[]).length>0;
+  if(q.type==='matrix') return Object.keys(a.q7||{}).length>0;
+  return true;
+}
 function quizNext(){
-  const field=FIELDS[quizStep];
-  if(quizStep===0 && !draft.skin_type){ $('quizMsg').textContent='Pick a skin type first.'; return; }
-  if(quizStep<4){ quizStep++; renderQuiz(); return; }
-  saveProfile();
+  const q=QUESTIONNAIRE[qStep];
+  if(!questionnaireValid(q)){ const m=$('quizMsg'); if(m) m.textContent='Pick an option to continue.'; return; }
+  if(qStep<QUESTIONNAIRE.length-1){ qStep++; renderQuestionnaire(); return; }
+  finishQuestionnaire();
 }
-function quizPick(k,o,multi){
-  if(multi){ draft[k]=draft[k].includes(o) ? draft[k].filter(x=>x!==o) : [...draft[k],o]; }
-  else { draft[k]=o; }
-  save('skn_quiz_draft', draft); renderQuiz();
-}
-function renderQuiz(){
-  if(!user){ show('landing'); return; }
-  const [k,label,opts,multi]=FIELDS[quizStep];
+function renderQuiz(){ renderQuestionnaire(); }
+function renderQuestionnaire(){
+  const q=QUESTIONNAIRE[qStep], a=questionnaireAnswers();
+  const pct=Math.round(q.num/20*100);
+  let optsHtml='';
+  if(q.type==='single'||q.type==='multi'){
+    optsHtml=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">${q.options.map(o=>{ const sel=q.type==='multi'?(a[q.id]||[]).includes(o):a[q.id]===o; return `<button type="button" class="quiz-opt ${sel?'sel':''}" data-v="${esc(o)}" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>${esc(o)}</button>`; }).join('')}</div>`;
+  } else if(q.type==='swatches'){
+    optsHtml=`<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;align-items:center">${q.swatches.map(([lab,hex])=>`<span style="text-align:center"><button type="button" class="quiz-swatch ${a.q9===lab?'sel':''}" style="background:${hex}" title="Swatch ${lab}" data-v="${lab}" onclick="quizPickValue(this.getAttribute('data-v'))" aria-label="Swatch ${lab}"></button><br><span class="small">${lab}</span></span>`).join('')}</div><div style="margin-top:16px"><button type="button" class="quiz-opt ${a.q9==="I'm not sure"?'sel':''}" data-v="I'm not sure" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>I'm not sure</button></div>`;
+  } else if(q.type==='matrix'){
+    const m=a.q7||{};
+    optsHtml=`<div style="margin-top:20px"><div class="matrix-row" style="border-top:none;font-weight:800"><span></span>${q.cols.map(c=>`<span style="text-align:center;font-size:13px">${esc(c)}</span>`).join('')}</div>${q.rows.map(r=>`<div class="matrix-row"><span>${esc(r)}</span>${q.cols.map(c=>`<button type="button" class="mbtn ${m[r]===c?'sel':''}" data-r="${esc(r)}" data-c="${esc(c)}" onclick="quizMatrixPick(this.getAttribute('data-r'), this.getAttribute('data-c'))">${esc(c)}</button>`).join('')}</div>`).join('')}</div>`;
+  } else if(q.type==='text'){
+    optsHtml=`<div style="margin-top:20px"><label>City or region <span class="small">Optional</span></label><input id="quizTextInput" placeholder="${esc(q.placeholder||'')}" value="${esc(a.q14||'')}" oninput="quizTextInput(this)"></div>`;
+  }
   $('quizBody').innerHTML = `
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><button style="background:none;border:none;color:#F0EFE7;cursor:pointer;font-weight:700;border-bottom:1px solid #9AA39B;padding:0 0 2px" onclick="quizSaveExit()">Save &amp; exit</button><span class="small">Question ${quizStep+1} of 5</span></div>
-  <div class="quiz-progress" style="margin:14px 0"><i style="width:${(quizStep+1)*20}%"></i></div>
-  <div class="quiz-grid">
-    <div><p class="outline-num">0${quizStep+1}</p><p class="small">Your answers are private and used only to personalise your SKN-ID experience.</p></div>
-    <div><p class="eyebrow">${esc(label.toUpperCase())}</p><h2 class="figma-h2" style="font-size:clamp(36px,4vw,60px)">${esc(label.toUpperCase())}</h2><p class="sub">Pick ${multi ? 'every option that fits you' : 'one option'} — selected options turn lime.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">${opts.map(o=>`<button type="button" class="quiz-opt ${multi ? (draft[k].includes(o) ? 'sel' : '') : (draft[k]===o ? 'sel' : '')}" onclick="quizPick('${k}','${o}',${multi})"><span class="qradio"></span>${o}</button>`).join('')}</div>
-    <p class="small" id="quizMsg"></p>
-    <div style="display:flex;justify-content:space-between;margin-top:24px"><button class="btn btn-ghost" onclick="quizBack()">Back</button><button class="btn btn-lime" onclick="quizNext()">${quizStep<4 ? 'Continue →' : 'See my skin profile →'}</button></div>
-    <p class="small">Your answers are saved on this device and, when you finish, to your SKN profile.</p></div>
-  </div>`;
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><button class="btn btn-ghost" style="padding:8px 16px;min-height:0" ${qStep===0?'disabled':''} onclick="quizBack()">← Back</button><span class="logo">SKN&nbsp;ID<span class="dot">●</span></span><button style="background:none;border:none;color:#F0EFE7;cursor:pointer;font-weight:700;border-bottom:1px solid #9AA39B;padding:0 0 2px" onclick="quizSaveExit()">Save &amp; exit</button></div>
+  <p class="small" style="margin-top:18px">Question ${q.num} of 20</p>
+  <div class="quiz-progress" style="margin:10px 0"><i style="width:${pct}%"></i></div>
+  <h2 class="figma-h2" style="font-size:clamp(32px,4vw,56px)">${esc(q.title)}${q.continued?' Continued':''}</h2>
+  ${q.sub?`<p class="sub">${esc(q.sub)}</p>`:''}
+  ${optsHtml}
+  <p class="small" id="quizMsg"></p>
+  <div style="display:flex;justify-content:space-between;margin-top:24px"><span></span><button class="btn btn-lime" onclick="quizNext()">${qStep<QUESTIONNAIRE.length-1?'Save & continue →':'Finish questions →'}</button></div>
+  <p class="small">Your answers are saved on this device as you go.</p>`;
+}
+function deriveProfileFromAnswers(answers){
+  const a=answers||{};
+  const q1=a.q1||'';
+  let skin='normal';
+  if(q1==='Comfortable and balanced') skin='normal';
+  else if(q1==='Oily in some areas and comfortable in others') skin='combination';
+  else if(q1==='Lightly oily all over with a few dry patches') skin='combination';
+  else if(q1==='Oily and shiny all over') skin='oily';
+  else if(q1==='Dry and tight all over') skin='dry';
+  else if(q1==='It changes a lot day to day') skin='combination';
+  else skin='normal';
+  if(a.q3==='Frequently, over a large area' && q1!=='Oily and shiny all over') skin='dry';
+  const sensSet=new Set();
+  (a.q6||[]).forEach(x=>{ if(x!=='None of these') sensSet.add(x); });
+  const q7=a.q7||{};
+  Object.keys(q7).forEach(r=>{ if(q7[r]==='Most days'||q7[r]==='Constantly') sensSet.add(r); });
+  if(a.q8 && a.q8!=="I'm not sensitive") sensSet.add(a.q8);
+  if((a.q13||[]).includes('I have sensitive skin')) sensSet.add('Sensitive skin');
+  const goalsSet=new Set();
+  if(a.q19 && a.q19!=='Prefer not to say') goalsSet.add(a.q19);
+  if(a.q4 && a.q4!=='None of these, my skin looks calm and even' && a.q4!=='Prefer not to say') goalsSet.add(a.q4);
+  const values=(a.q20 && a.q20!=='Prefer not to say')?[a.q20]:[];
+  const envParts=[];
+  envParts.push(a.q14 && String(a.q14).trim() ? String(a.q14).trim() : 'India');
+  if(a.q17) envParts.push('Sun exposure: '+a.q17);
+  const climate=(a.q18||[]).filter(x=>/climate|dry|dusty/i.test(x));
+  climate.forEach(x=>envParts.push(x));
+  return {skin_type:skin, sensitivities:[...sensSet], goals:[...goalsSet], values, environment:envParts.join(' · ')};
+}
+async function persistDerivedProfile(p){
+  profile={...p, skn_code:profile?.skn_code||sknCode(), updated:new Date().toLocaleDateString()};
+  save('skn_clone_profile', profile);
+  draft={...profile};
+  const row={email:user?.email||null, skin_type:profile.skin_type, sensitivities:(profile.sensitivities||[]).join(', '), goals:(profile.goals||[]).join(', '), values:(profile.values||[]).join(', '), environment:profile.environment||null};
+  try{
+    const session=await getSupaSession();
+    if(supaClient && session) await supaUpsertProfile(session, row);
+    else await supaInsert('skn_profiles', row);
+  }catch(e){}
+}
+async function applyPendingQuestionnaireProfile(){
+  const p=loadLS('skn_questionnaire_pending_profile', null);
+  if(!p || !user) return false;
+  localStorage.removeItem('skn_questionnaire_pending_profile');
+  await persistDerivedProfile(p);
+  show('home');
+  return true;
+}
+async function finishQuestionnaire(){
+  const answers=questionnaireAnswers();
+  const derived=deriveProfileFromAnswers(answers);
+  save('skn_questionnaire_answers', answers);
+  save('skn_quiz_draft', {step:0, answers});
+  if(user){
+    await persistDerivedProfile(derived);
+    show('myskin');
+  } else {
+    save('skn_questionnaire_pending_profile', derived);
+    show('landing');
+    if($('authNote')) $('authNote').textContent='Sign in to save your profile — your questionnaire answers are saved on this device.';
+    const el=$('signinCard'); if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),50);
+  }
 }
 
 function skinFeelToday(){ const s=loadLS('skn_skin_feel',{}); return s[todayKey()]||''; }
@@ -764,13 +903,12 @@ const FIGMA_IMG_MOIST="https://images.unsplash.com/photo-1658752293220-4ad4e1b9f
 const FIGMA_IMG_SPF="https://images.unsplash.com/photo-1586806819282-2c1e3448e3d0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
 function getProducts(){
   if(adminProducts && adminProducts.length){
-    return adminProducts.map(row=>({id:row.id, brand:(row.brand||'').toUpperCase(), name:row.name, price:row.price||'', type:row.category||'', am:(row.am_pm==='all'||row.am_pm==='am'), pm:(row.am_pm==='all'||row.am_pm==='pm'), img:row.image_url||FIGMA_IMG_HERO, ingredients:(row.key_ingredients||'').split(',').map(x=>x.trim()).filter(Boolean), why:row.why_it_fits||row.description||'', good:row.description||'', buying_url:row.buying_url||''}));
+    return adminProducts.map(row=>({id:row.id, brand:(row.brand||'').toUpperCase(), name:row.name, price:row.price||'', type:row.category||'', am:(row.am_pm==='all'||row.am_pm==='am'), pm:(row.am_pm==='all'||row.am_pm==='pm'), sensitiveFriendly:true, img:row.image_url||FIGMA_IMG_HERO, ingredients:(row.key_ingredients||'').split(',').map(x=>x.trim()).filter(Boolean), why:row.why_it_fits||row.description||'', good:row.description||'', buying_url:row.buying_url||''}));
   }
-  const g=profile?.goals||[], env=profile?.environment||'';
   return [
-    {id:'serum', brand:'MINIMALIST', name:'10% Niacinamide Face Serum', price:'₹599', type:'Treatment · 30 ml', am:true, pm:true, img:FIGMA_IMG_HERO, ingredients:['NIACINAMIDE','ZINC PCA'], why:(g.includes('Even tone')||g.includes('Clearer skin'))?'Matches your even-tone and clearer-skin goals, in one focused step.':'A focused treatment step for a simple routine.', good:'Patch test first. Start once daily if your skin feels reactive.'},
-    {id:'moist', brand:"RE'EQUIL", name:'Oil Free Moisturiser', price:'₹395', type:'Moisturiser · 50 g', am:true, pm:true, img:FIGMA_IMG_MOIST, ingredients:['CERAMIDES','HYALURONIC ACID'], why:(g.includes('Hydration')||g.includes('Barrier repair'))?'Supports hydration and barrier repair, in a light, oil-free finish.':'A light daily moisturiser for barrier-first care.', good:'Apply to slightly damp skin.'},
-    {id:'spf', brand:'DECONSTRUCT', name:'Lightweight Gel Sunscreen SPF 55+', price:'₹499', type:'Sun care · 50 g', am:true, pm:false, img:FIGMA_IMG_SPF, ingredients:['SPF 55+','LIGHTWEIGHT GEL'], why:(env==='High sun')?'Daily SPF is essential in high sun — and the step to never skip.':'Daily SPF, every morning, even indoors.', good:'Apply generously as the last AM step.'}
+    {id:'serum', brand:'MINIMALIST', name:'Niacinamide Serum', price:'₹579', type:'Treatment · 30 ml', am:true, pm:true, sensitiveFriendly:true, img:FIGMA_IMG_HERO, ingredients:['NIACINAMIDE'], why:'Niacinamide supports your skin tone and helps your barrier stay steady. It is easy to start with and usually feels gentle.', whyBullets:['Use daily — AM and PM','Suitable for combination skin','Suitable if you are sensitive to most products','Helps reduce visible pores and uneven tone','Helps with product layering','Fragrance-free'], useText:'Use 2–3 drops after cleansing — let it absorb for 1 minute, then moisturise.', steps:[{label:'Morning',text:'After cleansing, apply before moisturiser.'},{label:'Evening',text:'Apply after cleansing, before moisturiser.'}], good:'Patch test first. Start once daily if your skin feels reactive.'},
+    {id:'moist', brand:'CERAVE', name:'Moisturising Lotion', price:'₹1,199', type:'Moisturiser · 473 ml', am:true, pm:true, sensitiveFriendly:true, img:'https://images.unsplash.com/photo-1658751890679-ada5e8e53471?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=800', ingredients:['CERAMIDES','HYALURONIC ACID'], why:'Ceramides and hyaluronic acid keep your barrier supported without feeling heavy. It is easy to use and fits into both your AM and PM routines.', whyBullets:['Use daily — AM and PM','Works well on combination skin','Gentle for sensitive, dry skin','Helps restore your skin barrier','Fragrance-free'], useText:'Apply a pea-sized amount over your face and neck. Wait a few minutes before sunscreen.', steps:[{label:'Morning',text:'After Niacinamide and before sunscreen.'},{label:'Evening',text:'Wait 1 minute after the serum, then apply before bed.'}], good:'Apply to slightly damp skin.'},
+    {id:'spf', brand:'LA ROCHE-POSAY', name:'Anthelios UVMune 400 Invisible SPF 50+', price:'₹1,669', type:'Sun care · 50 ml', am:true, pm:false, sensitiveFriendly:true, img:'https://images.unsplash.com/photo-1586806828012-032f518d2192?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=800', ingredients:['SPF 50+','INVISIBLE FLUID'], why:'This invisible fluid is one of the best ways to protect your skin from UV and the pigmentation it can cause. It is light enough for daily use.', whyBullets:['Use every morning','Suitable for combination skin','Suitable for sensitive skin','Helps with dark spots and pigmentation','Fast-absorbing with no white cast','Works well under make-up'], useText:'Apply liberally before going outside. Reapply every 2 hours if outside for long periods.', steps:[{label:'Morning',text:'Apply before going outside, after moisturiser.'},{label:'During the day',text:'Reapply every 2 hours if outside, sweating, or after washing your face.'}], good:'Apply generously as the last AM step.'}
   ];
 }
 
@@ -783,7 +921,7 @@ function toggleSaveProduct(id){
 function viewProduct(id){
   const pr=getProducts().find(x=>x.id===id); if(!pr) return;
   $('productTitle').textContent = pr.brand + ' — ' + pr.name;
-  $('productBody').innerHTML = `<img src="${pr.img}" alt="${esc(pr.name)}" style="width:100%;height:220px;object-fit:cover;border-radius:16px;margin-bottom:12px"><p><b>${esc(pr.price)}</b> · ${esc(pr.type)} · ${pr.am?'AM':''}${pr.am&&pr.pm?' + ':''}${pr.pm?'PM':''}</p>${pr.buying_url?`<p><a class="btn btn-lime" href="${esc(pr.buying_url)}" target="_blank" rel="noopener">Buy this product →</a></p>`:''}<p class="why-rule"><b>Why it fits your skin:</b> ${esc(pr.why)}</p><p><b>Key ingredients:</b> ${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p class="small">⚠ ${esc(pr.good)}</p><p class="small">Sample recommendation, as in the Figma prototype — product details, claims and prices must be verified before launch. The photo is generic stock, not a branded packshot.</p>`;
+  $('productBody').innerHTML = `<img src="${pr.img}" alt="${esc(pr.name)}" style="width:100%;height:220px;object-fit:cover;border-radius:16px;margin-bottom:12px"><p><b>${esc(pr.price)}</b> · ${esc(pr.type)} · ${pr.am?'AM':''}${pr.am&&pr.pm?' + ':''}${pr.pm?'PM':''}</p>${pr.buying_url?`<p><a class="btn btn-lime" href="${esc(pr.buying_url)}" target="_blank" rel="noopener">Buy this product →</a></p>`:''}<p class="why-rule"><b>Why it fits your skin:</b> ${esc(pr.why)}</p><p><b>Key ingredients:</b> ${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p>${pr.whyBullets?`<p><b>Why it fits:</b></p><ul>${pr.whyBullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`:''}${pr.useText?`<p><b>Use it in your routine:</b> ${esc(pr.useText)}</p>`:''}${pr.steps?`<p><b>Steps:</b></p><ol>${pr.steps.map(s=>`<li><b>${esc(s.label)} —</b> ${esc(s.text)}</li>`).join('')}</ol>`:''}<p class="small">⚠ ${esc(pr.good)}</p><p class="small">Sample recommendation, as in the Figma prototype — product details, claims and prices must be verified before launch. The photo is generic stock, not a branded packshot.</p>`;
   $('productSaveBtn').onclick=()=>{ toggleSaveProduct(id); viewProduct(id); };
   $('productSaveBtn').textContent = savedProducts().includes(id) ? 'Saved ✓' : 'Save to routine';
   $('productModal').classList.remove('hidden');
@@ -831,8 +969,64 @@ function renderHome(){
     <div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><p class="eyebrow" style="margin:0">Your skin today</p><span class="small">${esc(dateShort)}</span></div><p style="margin-top:16px"><b>${esc(profile.skin_type||'')} · ${esc(sens[0]||'')}</b></p><p class="small">${esc(sens.join(' · ')||'')} ${goals.length?'· '+esc(goals[0]):''}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${[profile.skin_type, sens[0]].filter(Boolean).map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div><button class="btn btn-ghost" style="padding:6px 0;min-height:0;color:var(--lime);margin-top:10px" onclick="show('myskin')">View full profile →</button></div>
   </div>
   <div class="card" style="margin-top:18px"><div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center"><div><p class="eyebrow">Picked for your profile</p><h3 style="text-transform:none;font-size:26px;margin:8px 0">A small set, chosen for you</h3><p class="sub">Based on your skin, budget and a simple routine, here are three products to start with. These are sample recommendations for this prototype.</p><button class="btn btn-lime" style="margin-top:10px" onclick="show('recommendations')">See recommendations →</button></div><div style="display:flex;gap:8px">${getProducts().map((pr,i)=>`<img class="thumb" src="${pr.img}" alt="${esc(pr.name)}" style="transform:rotate(${-6+i*6}deg)">`).join('')}</div></div></div>
+  <div class="card" style="margin-top:18px"><b style="font-size:20px">How does your skin feel today?</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${['Comfortable','Dry','Oily','Sensitive'].map(f=>`<button class="pill-btn ${skinFeelToday()===f?'on':''}" onclick="setSkinFeel('${f}')">${f}</button>`).join('')}${skinFeelToday()?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div>
   ${tipHidden?'':`<div style="margin-top:18px;background:var(--lime);color:#0A0B0A;border-radius:20px;padding:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span style="width:44px;height:44px;border-radius:50%;background:#0A0B0A;color:#F0EFE7;display:grid;place-items:center;font-size:20px">💡</span><div style="flex:1;min-width:220px"><b>Today’s tip</b><p style="margin:0;color:#0A0B0A">Sunscreen is the one step to never skip — even indoors. Reapply if you step out.</p></div><button class="btn" style="background:#F0EFE7;color:#0A0B0A;border-color:#F0EFE7" onclick="save('skn_tip_dismissed', todayKey()); renderHome()">Got it</button></div>`}`;
   justSaved=false;
+}
+
+
+function profileGlanceRows(){
+  const a=loadLS('skn_questionnaire_answers', {});
+  const q7=a.q7||{};
+  const sensRows=Object.keys(q7).filter(r=>q7[r]==='Most days'||q7[r]==='Constantly');
+  const sensitivity=sensRows.length ? sensRows.join(', ') : (a.q8||'—');
+  return [
+    ['Skin type', profile?.skin_type||'—'],
+    ['Oil balance', a.q2||a.q1||'—'],
+    ['Hydration', a.q3||'—'],
+    ['Sensitivity', sensitivity],
+    ['Skin tone', a.q4||'—'],
+    ['Spots', (a.q5||[]).length ? a.q5.join(', ') : '—'],
+    ['Routine', a.q15||'—'],
+    ['Sunscreen', a.q16||'—'],
+    ['Sun exposure', a.q17||'—'],
+    ['Goals', a.q19||(profile?.goals||[]).join(', ')||'—']
+  ];
+}
+function skinNoteText(){
+  const st=profile?.skin_type||'';
+  if(st==='Combination') return 'Your T-zone tends to get oily, and your cheeks can feel dehydrated. Protect your barrier and keep your routine simple.';
+  if(st==='Dry') return 'Your skin often feels tight, especially after cleansing. A gentle, moisturising routine helps support your barrier.';
+  if(st==='Oily') return 'Shine tends to build through the day, especially in the T-zone. A light, consistent routine works better than harsh cleansing.';
+  if(st==='Sensitive') return 'Your skin is prone to redness and irritation. Patch test new products and keep the routine simple.';
+  return 'Your skin is generally comfortable, with occasional changes from weather, stress and routine. Keep the routine simple and consistent.';
+}
+function openDetailedReport(){
+  if(!profile) return;
+  const code=profile.skn_code||sknCode();
+  const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const rows=profileGlanceRows();
+  const concerns=[...(profile.sensitivities||[]), ...(profile.goals||[])];
+  const amSteps=routineSteps('am'), pmSteps=routineSteps('pm');
+  const ol=items=>`<ol>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`;
+  const ul=items=>`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>SKN ID — Detailed skin report</title><style>body{font-family:system-ui,sans-serif;max-width:700px;margin:40px auto;padding:0 20px;color:#111;line-height:1.6}h1{font-size:28px}h2{font-size:18px;margin-top:28px;border-bottom:1px solid #ccc;padding-bottom:4px}table{border-collapse:collapse;width:100%}td{border-bottom:1px solid #ddd;padding:6px 4px;vertical-align:top}td:first-child{font-weight:700;width:180px}</style></head><body>
+  <h1>SKN ID — Your detailed skin report</h1>
+  <p><b>${esc(user?.name||'')}</b> · ${esc(user?.email||'')} · SKN ID: ${code} · Generated ${dateStr}</p>
+  <h2>Skin profile</h2><table>${rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+  <h2>Concerns</h2>${concerns.length?ul(concerns):'<p>—</p>'}
+  <h2>What to avoid</h2>${ul(['Harsh foaming washes','Strong acids daily','Heavy fragrance','Skipping sunscreen'])}
+  <h2>Your current products</h2><p><b>Morning</b></p>${ol(amSteps.map(s=>s.n))}<p><b>Evening</b></p>${ol(pmSteps.map(s=>s.n))}
+  <h2>Next steps</h2>${ol(['Save this report as a PDF or print it.','Follow your AM and PM routine for 4 weeks, checking in with how your skin feels.','Book a dermatologist if a skin condition is unexplained, changes quickly or does not improve in 6–8 weeks.'])}
+  <h2>A note on your skin profile</h2><p>${esc(skinNoteText())}</p>
+  <h2>Your routine</h2><p><b>Morning</b></p>${ol(amSteps.map((s,i)=>(i+1)+'. '+s.n))}<p><b>Evening</b></p>${ol(pmSteps.map((s,i)=>(i+1)+'. '+s.n))}
+  <h2>Questions to ask your dermatologist</h2>${ul(['Is niacinamide at 10% the right strength for me?','Are there any ingredients I should avoid with my skin type, given my period and past breakouts?','How often should I exfoliate?'])}
+  <p><i>This report is educational guidance, not medical advice. If a skin condition is unexplained, change quickly, or does not improve in 6–8 weeks, see a dermatologist. Use the smallest amount of a new product first, and always patch test first.</i></p>
+  <p>SKN-ID — View your profile at https://daristocrat.github.io/SKN-ID/</p>
+  </body></html>`;
+  const w=window.open('', '_blank');
+  if(!w){ alert('Please allow pop-ups to open the printable report.'); return; }
+  w.document.write(html); w.document.close();
 }
 
 function renderMySkin(){
@@ -844,9 +1038,11 @@ function renderMySkin(){
   const desc=descMap[st]||['Your skin, in plain language','Built from your answers, in a gentle, consistent routine.'];
   const sens=(profile.sensitivities||[]);
   const feelBody={Combination:'Oily in the T-zone, dry on the cheeks.',Dry:'Skin often feels tight, especially after cleansing.',Oily:'Shine through the day, especially in the T-zone.',Sensitive:'Prone to redness and irritation — patch test new products.',Normal:'Generally comfortable, with occasional changes.'};
+  const ingredients=[['Niacinamide','Supports barrier … reduces visible redness and uneven tone.'],['Hyaluronic acid','Attracts moisture to the skin without making it oily.'],['Ceramides','Support the skin barrier and reduce moisture loss.'],['Zinc PCA','Helps control oil without drying skin out.'],['Sodium gluconate','A gentle chelator that helps reduce mineral build-up.'],['Allantoin','Soothes redness and flaky skin, and supports healing.'],['Polyglutamic acid','Helps the skin hold moisture and look plump.'],['Azelaic acid','Calms redness and supports a more even tone.']];
+  const glance=profileGlanceRows();
   $('myskinBody').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Your profile</p><h2 class="figma-h2">Your skin,<br>at a glance.</h2><button class="btn btn-ghost" style="margin-top:12px" onclick="editProfile()">Retake quiz</button></div><p class="sub" style="text-align:right">Built from your answers. This is guidance, not a diagnosis — your skin can change with weather, stress and routine.</p></div>
-  <div style="margin-top:24px;background:var(--lime);color:#0A0B0A;border-radius:24px;padding:32px;display:grid;grid-template-columns:1fr 2fr;gap:24px"><div><p class="outline-num-black">01</p><p style="font-size:28px;font-weight:900;text-transform:uppercase;margin:8px 0 0;color:#0A0B0A">${esc(st.toUpperCase())}</p><p style="color:#0A0B0A;margin:0">Your overall skin type</p><p class="small" style="color:#0A0B0A">SKN ID: ${code}</p></div><div class="card" style="background:#171a17;border-color:#26281F"><h3 style="text-transform:none;font-size:28px;margin:0 0 8px">${esc(desc[0])}</h3><p class="sub">${esc(desc[1])}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${[st, ...sens.slice(0,2)].filter(Boolean).map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join('')}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="show('routine')">Understand your routine</button><button class="btn btn-ghost" onclick="editProfile()">Retake quiz</button></div></div></div>
+  <div class="page-head"><div><p class="eyebrow">Your profile</p><h2 class="figma-h2">Your skin,<br>at a glance.</h2><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="editProfile()">Edit answers</button><button class="btn btn-ghost" onclick="editProfile()">Retake quiz</button></div></div><p class="sub" style="text-align:right">Built from your answers. This is guidance, not a diagnosis — your skin can change with weather, stress and routine.</p></div>
+  <div style="margin-top:24px;background:var(--lime);color:#0A0B0A;border-radius:24px;padding:32px;display:grid;grid-template-columns:1fr 2fr;gap:24px"><div><p class="outline-num-black">01</p><p style="font-size:28px;font-weight:900;text-transform:uppercase;margin:8px 0 0;color:#0A0B0A">${esc(st.toUpperCase())}</p><p style="color:#0A0B0A;margin:0">Your overall skin type</p><p class="small" style="color:#0A0B0A">SKN ID: ${code}</p><img src="https://images.unsplash.com/photo-1790574318492-2d2e9873d1d9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900" alt="Skin profile" style="width:100%;border-radius:16px;margin-top:16px;object-fit:cover;height:180px"></div><div class="card" style="background:#171a17;border-color:#26281F"><h3 style="text-transform:none;font-size:28px;margin:0 0 8px">${esc(desc[0])}</h3><p class="sub">${esc(desc[1])}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${[st, ...sens.slice(0,2)].filter(Boolean).map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join('')}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="show('routine')">Understand your routine</button><button class="btn btn-ghost" onclick="editProfile()">Retake quiz</button></div></div></div>
   <h3 style="margin-top:28px;font-size:22px">How your skin feels</h3><div class="grid3">
     <div class="card"><p class="eyebrow">Skin type</p><b style="font-size:20px">${esc(st||'—')}</b><p class="sub">${esc(feelBody[st]||'')}</p></div>
     <div class="card"><p class="eyebrow">Hydration</p><b style="font-size:20px">${(profile.goals||[]).includes('Hydration')?'Dehydrated':'Balanced'}</b><p class="sub">${(profile.goals||[]).includes('Hydration')?'Skin often feels tight, especially after cleansing.':'Moisture levels feel generally comfortable.'}</p></div>
@@ -858,7 +1054,11 @@ function renderMySkin(){
     <div class="card"><b>Protect daily</b><p class="sub">Use SPF every morning — it helps with uneven tone over time.</p></div>
     <div class="card"><b>Introduce slowly</b><p class="sub">Add one new active at a time and patch test first.</p></div>
   </div>
-  <p class="small" style="text-align:center;margin-top:20px">This is general skincare guidance, not medical advice. For persistent concerns, consult a dermatologist.</p>
+  <h3 style="margin-top:28px;font-size:22px">Suggested ingredients</h3><div class="grid3">${ingredients.map(([n,d])=>`<div class="card"><b style="font-size:18px">${esc(n)}</b><p class="sub">${esc(d)}</p></div>`).join('')}</div>
+  <h3 style="margin-top:28px;font-size:22px">Your profile at a glance</h3><div class="card"><table style="width:100%;border-collapse:collapse">${glance.map(([k,v])=>`<tr><td style="padding:8px 4px;border-bottom:1px solid var(--line);font-weight:800;width:180px">${esc(k)}</td><td style="padding:8px 4px;border-bottom:1px solid var(--line)">${esc(v)}</td></tr>`).join('')}</table></div>
+  <h3 style="margin-top:28px;font-size:22px">What to avoid</h3><div class="card"><ul style="margin:0">${['Harsh foaming washes','Strong acids daily','Heavy fragrance','Skipping sunscreen'].map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="card" style="margin-top:28px"><b style="font-size:20px">Get your full printable report</b><p class="sub">Your skin type, concerns and routine are on one page. Save it as a PDF or print it for your dermatologist.</p><button class="btn btn-lime" style="margin-top:10px" onclick="openDetailedReport()">Open detailed report</button></div>
+  <p class="small" style="text-align:center;margin-top:20px">This report is educational guidance, not medical advice. If a skin condition is unexplained, change quickly, or does not improve in 6–8 weeks, see a dermatologist. Use the smallest amount of a new product first, and always patch test first.</p>
   <div style="text-align:center"><button class="btn btn-ghost" onclick="goReport()">View SKN Report →</button></div>`;
 }
 
@@ -867,27 +1067,29 @@ function renderRecommendations(filter){
   if(supaClient && !adminProductsLoaded) loadAdminProducts().then(()=>{ if(adminProducts) renderRecommendations(recFilter); });
   if(!user){ show('landing'); return; }
   if(!profile){ show('quiz'); return; }
-  const list=getProducts().filter(pr=> recFilter==='all' || (recFilter==='am' ? pr.am : pr.pm));
+  const list=getProducts().filter(pr=> recFilter==='all' ? true : recFilter==='am' ? pr.am : recFilter==='pm' ? pr.pm : recFilter==='sensitive' ? pr.sensitiveFriendly!==false : true);
   $('recBody').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Your matches</p><h2 class="figma-h2">Less, but better.</h2></div><p class="sub" style="text-align:right">A short list matched to your profile, budget and preference for a simple routine.</p></div>
+  <div class="page-head"><div><p class="eyebrow">Your matches</p><h2 class="figma-h2">For your skin.</h2></div><p class="sub" style="text-align:right">This is a starting point based on your profile. Patch-test new products, and see a doctor if a skin condition does not improve. Prices and availability vary; we do not sell products.</p></div>
   <div class="olive-strip" style="margin-top:22px"><b>⚠ Sample recommendations for this prototype</b><p class="sub" style="margin:4px 0 0">Product details, claims, links and cautions must be verified by experts before launch.</p></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0"><span class="small">Show:</span>${[['all','All 3'],['am','AM routine'],['pm','PM routine']].map(([f,l])=>`<button class="pill-btn ${recFilter===f?'on':''}" onclick="renderRecommendations('${f}')">${l}</button>`).join('')}</div>
-  <div style="display:grid;gap:32px">${list.map((pr,i)=>`<div class="card rec-card" style="padding:0"><div class="rec-img-wrap"><img class="rec-img" src="${pr.img}" alt="${esc(pr.name)}"><span class="rec-badge">0${i+1}</span></div><div style="padding:36px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="chip lime">${pr.am&&pr.pm?'AM + PM':'AM'}</span><span class="small">${esc(pr.type)}</span></div><p class="eyebrow" style="margin-top:14px">${esc(pr.brand)}</p><h3 style="text-transform:none;font-size:32px;margin:6px 0">${esc(pr.name)}</h3><b>${esc(pr.price)}</b><p class="why-rule" style="margin-top:16px"><span class="small" style="letter-spacing:.12em">WHY IT FITS YOUR SKIN</span><br>${esc(pr.why)}</p><p><span class="small" style="letter-spacing:.12em">KEY INGREDIENTS</span><br>${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p><b>⚠ Good to know:</b> <span class="small">${esc(pr.good)}</span></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="viewProduct('${pr.id}')">View product</button><button class="btn btn-ghost" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'Saved ✓':'＋ Save to routine'}</button></div></div></div>`).join('')}</div>
-  <p class="small" style="text-align:center;margin-top:20px">These are routine steps, not three alternatives. Use the serum, moisturiser and sunscreen in the order shown.</p>`;
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0"><span class="small">Show:</span>${[['all','All 3'],['am','AM routine'],['pm','PM routine'],['sensitive','Sensitive']].map(([f,l])=>`<button class="pill-btn ${recFilter===f?'on':''}" onclick="renderRecommendations('${f}')">${l}</button>`).join('')}</div>
+  <div style="display:grid;gap:32px">${list.map((pr,i)=>`<div class="card rec-card" style="padding:0"><div class="rec-img-wrap"><img class="rec-img" src="${pr.img}" alt="${esc(pr.name)}"><span class="rec-badge">0${i+1}</span></div><div style="padding:36px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="chip lime">${pr.am&&pr.pm?'AM + PM':pr.am?'AM':'PM'}</span><span class="small">${esc(pr.type)}</span></div><p class="eyebrow" style="margin-top:14px">${esc(pr.brand)}</p><h3 style="text-transform:none;font-size:32px;margin:6px 0">${esc(pr.name)}</h3><b>${esc(pr.price)}</b><p class="why-rule" style="margin-top:16px"><span class="small" style="letter-spacing:.12em">WHY IT FITS YOUR SKIN</span><br>${esc(pr.why)}</p>${pr.whyBullets?`<ul>${pr.whyBullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`:''}${pr.useText?`<p><b>Use it in your routine:</b> ${esc(pr.useText)}</p>`:''}${pr.steps?`<p><b>Steps:</b></p><ol>${pr.steps.map(s=>`<li><b>${esc(s.label)} —</b> ${esc(s.text)}</li>`).join('')}</ol>`:''}<p><span class="small" style="letter-spacing:.12em">KEY INGREDIENTS</span><br>${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p><b>⚠ Good to know:</b> <span class="small">${esc(pr.good)}</span></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="viewProduct('${pr.id}')">View product</button><button class="btn btn-ghost" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'✓ Saved to routine':'＋ Save to routine'}</button></div></div></div>`).join('') || '<p class="small">No products match this filter.</p>'}</div>
+  <p class="small" style="text-align:center;margin-top:20px">This routine is based on your answers. Your dermatologist can adapt it to your environment.</p>`;
 }
 
 function routineSteps(period){
-  if(period==='am') return [
+  const base = period==='am' ? [
     {n:'Gentle cleanser', sub:'Use your existing cleanser', tag:'AM'},
     {n:'Minimalist 10% Niacinamide Face Serum', sub:'Apply 2–3 drops, AM + PM', tag:'AM'},
     {n:"Re'equil Oil Free Moisturiser", sub:'Apply to slightly damp skin', tag:'AM'},
     {n:'Deconstruct Lightweight Gel Sunscreen SPF 55+', sub:'Apply generously as the last AM step', tag:'AM'}
-  ];
-  return [
+  ] : [
     {n:'Gentle cleanser', sub:'Use your existing cleanser', tag:'PM'},
     {n:"Re'equil Oil Free Moisturiser", sub:'Apply to slightly damp skin', tag:'PM'},
     {n:'Glycolic acid (1× weekly)', sub:'Use only in the evening, once a week', tag:'PM'}
   ];
+  const customs=loadLS('skn_routine_custom',[]);
+  const extra=customs.filter(c=> period==='am' ? (c.when==='AM and PM'||c.when==='AM only'||c.when==='Occasionally') : (c.when==='AM and PM'||c.when==='PM only')).map(c=>({n:c.name, sub:'Your current product', tag:c.when==='Occasionally'?'Occasionally':period.toUpperCase()}));
+  return [...base, ...extra];
 }
 
 function routineDone(){ return loadLS('skn_routine_done',{}); }
@@ -910,19 +1112,129 @@ function renderRoutine(){
   $('routineBody').innerHTML = `
   <div class="page-head"><div><p class="eyebrow">Your routine</p><h2 class="figma-h2">A routine that<br>fits your day.</h2></div><p class="sub" style="text-align:right">Four steps, morning and evening. Keep it simple, track what feels right, and adjust slowly.</p></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin:18px 0"><button class="pill-btn ${routinePeriod==='am'?'on':''}" onclick="routinePeriod='am'; renderRoutine()">Morning</button><button class="pill-btn ${routinePeriod==='pm'?'on':''}" onclick="routinePeriod='pm'; renderRoutine()">Evening</button></div>
-  <div style="display:flex;justify-content:space-between;gap:8px"><p class="eyebrow">${routinePeriod==='am'?'AM routine':'PM routine'}</p><span class="small">${routinePeriod==='am'?'4 steps · 3 min':'3 steps · 4 min'}</span></div>
+  <div style="display:flex;justify-content:space-between;gap:8px"><p class="eyebrow">${routinePeriod==='am'?'AM routine':'PM routine'}</p><span class="small">${steps.length} steps · ${routinePeriod==='am'?'3 min':'4 min'}</span></div>
   <div class="card">${steps.map((s,i)=>{ const key=routinePeriod+':'+s.n; const isDone=!!done[key]; return `<div class="routine-row"><div style="display:flex;gap:12px;align-items:center"><span style="width:32px;height:32px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;flex-shrink:0">${i+1}</span><div><b class="${isDone?'step-name':''}" style="${isDone?'text-decoration:line-through;opacity:.65':''}">${esc(s.n)}</b><p class="small" style="margin:0">${esc(s.sub)}</p></div><span class="chip lime" style="margin:0">${s.tag}</span></div><button class="step-check ${isDone?'done':''}" onclick="routineCheck(routinePeriod, ${i})">${isDone?'✓':''}</button></div>`; }).join('')}</div>
+  <div style="margin-top:14px"><button class="btn btn-ghost" onclick="openAddProductDialog()">＋ Add a product I already use</button></div>
   <div class="amber-card" style="margin-top:18px"><b>⚠ A note on actives</b><p class="sub" style="margin:4px 0 0">Introduce one active at a time. If your skin feels irritated, pause the newest product and return to basics.</p></div>
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Track your week</b><p class="sub">Check in daily to keep the habit going.</p><div class="bar" style="margin-top:12px"><i style="width:${Math.round(wkDone/7*100)}%"></i></div><p style="margin-top:8px"><b>${wkDone} of 7 days</b></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${['S','M','T','W','T','F','S'].map((d,i)=>`<button class="week-circle ${wk.done[i]?'done':''}" onclick="weekToggleDay(${i})">${d}</button>`).join('')}</div><p class="small" style="margin-top:10px">You’ve checked in ${wkDone} days this week.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-lime" onclick="weekLogToday()">Log today</button><button class="btn btn-ghost" onclick="weekReset()">Reset week</button></div></div>
+  ${journeySectionHTML()}
+  ${remindersSectionHTML()}
   ${reminderHidden?'':`<div style="margin-top:18px;background:var(--lime);color:#0A0B0A;border-radius:20px;padding:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:220px"><b>Reminder</b><p style="margin:0;color:#0A0B0A">Your evening routine starts at 9:00 PM — keep it gentle tonight.</p></div><button class="btn" style="background:#F0EFE7;color:#0A0B0A;border-color:#F0EFE7" onclick="save('skn_reminder_dismissed', todayKey()); renderRoutine()">Got it</button></div>`}`;
 }
 function weekToggleDay(i){ const st=weekTracker(); if(st.done[i]) delete st.done[i]; else st.done[i]=true; save('skn_week_tracker', st); renderRoutine(); }
+
+
+// ---------- 30-day journey, reminders, add-product, dialogs (Figma audit 2026-11-10) ----------
+let qJourneyDay=null, qJourneyDraft=null, qJourneySaved=false;
+function journeyStartDate(){ const now=new Date(); const first=new Date(now.getFullYear(), now.getMonth(), 1); const dow=(first.getDay()+6)%7; const s=new Date(first); s.setDate(first.getDate()-dow); s.setHours(0,0,0,0); return s; }
+function journeyISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function journeyDayDate(n){ const s=journeyStartDate(); const d=new Date(s); d.setDate(s.getDate()+n-1); return d; }
+function journeyDayNumber(){ const now=new Date(); now.setHours(0,0,0,0); const s=journeyStartDate(); return Math.max(1, Math.min(30, Math.floor((now-s)/86400000)+1)); }
+function journeyData(){ return loadLS('skn_journey', {}); }
+function journeyEntryLogged(e){ return !!(e && (e.am||e.pm||e.feel||e.notes)); }
+function journeyStreak(){
+  const data=journeyData(); let streak=0; const d=new Date(); d.setHours(0,0,0,0);
+  if(!journeyEntryLogged(data[journeyISO(d)])) d.setDate(d.getDate()-1);
+  while(journeyEntryLogged(data[journeyISO(d)])){ streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+function savedNotesCount(){ return Object.values(journeyData()).filter(d=>d.notes&&String(d.notes).trim()).length; }
+function journeySelectDay(n){
+  qJourneyDay=n;
+  const iso=journeyISO(journeyDayDate(n));
+  qJourneyDraft={...(journeyData()[iso]||{am:false,pm:false,feel:'',notes:''})};
+  qJourneySaved=false; renderRoutine();
+}
+function journeyToggle(which){ if(!qJourneyDraft) journeySelectDay(journeyDayNumber()); qJourneyDraft[which]=!qJourneyDraft[which]; qJourneySaved=false; renderRoutine(); }
+function journeyFeel(v){ if(!qJourneyDraft) journeySelectDay(journeyDayNumber()); qJourneyDraft.feel=v; qJourneySaved=false; renderRoutine(); }
+function journeySaveDay(){
+  if(!qJourneyDraft) return;
+  const n=qJourneyDay||journeyDayNumber(); const iso=journeyISO(journeyDayDate(n));
+  const data=journeyData(); data[iso]={...qJourneyDraft}; save('skn_journey', data);
+  qJourneySaved=true; renderRoutine();
+}
+function journeySectionHTML(){
+  const now=new Date();
+  const monthLabel=now.toLocaleDateString('en-GB',{month:'long', year:'numeric'});
+  const todayN=journeyDayNumber();
+  const sel=qJourneyDay||todayN;
+  if(!qJourneyDraft){ const iso=journeyISO(journeyDayDate(sel)); qJourneyDraft={...(journeyData()[iso]||{am:false,pm:false,feel:'',notes:''})}; }
+  const data=journeyData();
+  const today0=new Date(); today0.setHours(0,0,0,0);
+  const dayStatus=n=>{ const d=journeyDayDate(n); const iso=journeyISO(d); const e=data[iso]; if(d>today0) return 'future'; if(e&&e.am&&e.pm) return 'all'; if(e&&(e.am||e.pm||e.feel||e.notes)) return 'part'; return ''; };
+  const selDate=journeyDayDate(sel);
+  const selLabel=selDate.toLocaleDateString('en-GB',{weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  const amSteps=routineSteps('am').map(s=>s.n).join(' · ');
+  const pmSteps=routineSteps('pm').map(s=>s.n).join(' · ');
+  const feels=['Comfortable','Dry','Oily','Sensitive','Irritated'];
+  return `<div class="card" style="margin-top:18px" id="journeySection"><p class="eyebrow">Your 30-day journey</p><b style="font-size:20px">YOUR 30-DAY JOURNEY</b><p class="sub">Use the tracker to record consistency and skin comfort. It does not set a deadline for results.</p>
+  <p><b>${esc(monthLabel)}</b> · Day ${todayN} of 30</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="btn btn-lime" onclick="journeySelectDay(journeyDayNumber())">Today</button></div>
+  <div class="journey-grid" style="margin-bottom:8px">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<b style="text-align:center;font-size:13px">${d}</b>`).join('')}</div>
+  <div class="journey-grid">${Array.from({length:30},(_,i)=>{ const n=i+1; const d=journeyDayDate(n); const wd=d.toLocaleDateString('en-GB',{weekday:'short'}); return `<button class="jday ${dayStatus(n)} ${sel===n?'sel':''}" onclick="journeySelectDay(${n})">Day ${n}<br><span style="font-weight:400;font-size:11px">${wd}</span></button>`; }).join('')}</div>
+  <p class="small" style="margin-top:10px"><span class="chip lime">All logged</span> <span class="chip">Partly logged</span> <span class="chip">Upcoming</span></p>
+  <div class="card" style="margin-top:12px"><b>DAY ${sel}</b><p class="small" style="margin:4px 0 0">${esc(selLabel)}${sel===todayN?' · TODAY':''}</p>
+  <div class="toggle-row"><div><b>AM routine</b><p class="small" style="margin:0">${esc(amSteps)}</p></div><button class="btn ${qJourneyDraft.am?'btn-lime':'btn-ghost'}" onclick="journeyToggle('am')">${qJourneyDraft.am?'COMPLETE':'MARK COMPLETE'}</button></div>
+  <div class="toggle-row"><div><b>PM routine</b><p class="small" style="margin:0">${esc(pmSteps)}</p></div><button class="btn ${qJourneyDraft.pm?'btn-lime':'btn-ghost'}" onclick="journeyToggle('pm')">${qJourneyDraft.pm?'COMPLETE':'MARK COMPLETE'}</button></div>
+  <p style="margin-top:12px"><b>How does your skin feel?</b> <span class="small">Optional</span></p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">${feels.map(f=>`<button class="pill-btn ${qJourneyDraft.feel===f?'on':''}" onclick="journeyFeel('${f}')">${f}</button>`).join('')}</div>
+  <label>Notes <span class="small">Optional</span></label><textarea id="journeyNotes" placeholder="Anything you noticed about your skin today?" oninput="qJourneyDraft.notes=this.value; qJourneySaved=false;">${esc(qJourneyDraft.notes||'')}</textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="journeySaveDay()">Save day</button>${qJourneySaved?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div></div>`;
+}
+function reminderSettings(){ return loadLS('skn_reminders', {morning:{on:true,time:'08:00'}, evening:{on:true,time:'21:30'}}); }
+function setReminder(which, on){ const r=reminderSettings(); r[which].on=on; save('skn_reminders', r); renderRoutine(); }
+function setReminderTime(which, val){ const r=reminderSettings(); r[which].time=val; save('skn_reminders', r); }
+function openReminders(){ show('routine'); setTimeout(()=>{ const el=$('routineReminders'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 80); }
+function remindersSectionHTML(){
+  const r=reminderSettings();
+  return `<div class="card" style="margin-top:18px" id="routineReminders"><b style="font-size:20px">Choose when to receive routine reminders</b>
+  <div class="toggle-row"><div><b>Morning</b><p class="small" style="margin:0">AM routine</p></div><div style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.morning.time}" ${r.morning.on?'':'disabled'} style="width:120px" onchange="setReminderTime('morning', this.value)"><button class="switch ${r.morning.on?'on':''}" onclick="setReminder('morning', ${!r.morning.on})" aria-label="Morning reminder"></button></div></div>
+  <div class="toggle-row"><div><b>Evening</b><p class="small" style="margin:0">PM routine</p></div><div style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.evening.time}" ${r.evening.on?'':'disabled'} style="width:120px" onchange="setReminderTime('evening', this.value)"><button class="switch ${r.evening.on?'on':''}" onclick="setReminder('evening', ${!r.evening.on})" aria-label="Evening reminder"></button></div></div></div>`;
+}
+function openAddProductDialog(){
+  openDialog('Add a current product', `
+  <label>Product name</label><input id="addProdName" placeholder="For example, Cetaphil Gentle Cleanser">
+  <label>When do you use it?</label><select id="addProdWhen"><option>AM and PM</option><option>AM only</option><option>PM only</option><option>Occasionally</option></select>
+  <p class="small" id="addProdMsg"></p>`,
+  `<button class="btn btn-ghost" onclick="closeDialog()">Cancel</button><button class="btn btn-lime" onclick="addProductFromDialog()">Add product</button>`);
+}
+function addProductFromDialog(){
+  const name=($('addProdName').value||'').trim();
+  if(!name){ const m=$('addProdMsg'); if(m) m.textContent='Add a product name first.'; return; }
+  const when=$('addProdWhen').value;
+  const c=loadLS('skn_routine_custom',[]);
+  c.push({name, when});
+  save('skn_routine_custom', c);
+  closeDialog(); renderRoutine();
+}
+// ---------- Reusable dialog (footer Privacy/Terms/Support, Privacy & data, Help, Add product) ----------
+function openDialog(title, bodyHtml, footerHtml){
+  $('genericTitle').textContent=title;
+  $('genericBody').innerHTML=bodyHtml;
+  $('genericFooter').innerHTML=footerHtml||'<button class="btn btn-dark" onclick="closeDialog()">Close</button>';
+  $('genericModal').classList.remove('hidden');
+}
+function closeDialog(){ $('genericModal').classList.add('hidden'); }
+function showPrivacyDialog(){ openDialog('Privacy', `<p>SKN-ID uses your answers and routine activity to personalise your recommendations. Your profile is private and is not shared publicly.</p><p><b>Your choices</b></p><ul><li>Edit your answers and preferences</li><li>Turn communications off</li><li>Delete your account from Account settings</li></ul>`, `<button class="btn btn-dark" onclick="closeDialog()">Close</button>`); }
+function showTermsDialog(){ openDialog('Terms', `<p>SKN-ID provides general skin guidance based on your answers. It is not medical advice. If you have a medical skin condition, ask a doctor.</p><p><b>Your choices</b></p><ul><li>Use the guidance as a starting point</li><li>Stop use if a product irritates your skin</li><li>Get advice on whether any ingredient is safe for you</li></ul>`, `<button class="btn btn-dark" onclick="closeDialog()">Done</button>`); }
+function showSupportDialog(){ openDialog('Support', `<p>Need help with the site? Email us a note — include a screenshot if something is going wrong.</p><p><a href="mailto:support@skn-id.in">support@skn-id.in</a></p>`, `<button class="btn btn-dark" onclick="closeDialog()">Close</button>`); }
+function showPrivacyDataDialog(){ openDialog('Privacy & data', `<p>SKN-ID uses your questionnaire answers, routine activity and reminder preferences to personalise your experience.</p><p><b>What you control</b></p><ul><li>Edit your questionnaire answers at any time</li><li>Turn reminders and emails on or off</li><li>Delete your account and stored profile</li></ul><p>Your skin information is private and is not shown publicly.</p>`, `<button class="btn btn-dark" onclick="closeDialog()">Done</button>`); }
+function showHelpDialog(){ openDialog('Help & support', `<p><b>Can I change my skin profile?</b></p><p>Yes. Open My Skin and choose Edit answers.</p><p><b>Can I turn reminders off?</b></p><p>Yes. Use the routine controls on Home or open Account.</p><label>Still need help?</label><textarea id="helpMsgText" placeholder="Tell us what you need help with"></textarea><p class="small" id="helpMsg"></p>`, `<button class="btn btn-ghost" onclick="closeDialog()">Cancel</button><button class="btn btn-lime" onclick="sendHelpMessage()">Send message</button>`); }
+async function sendHelpMessage(){
+  const msg=($('helpMsgText').value||'').trim();
+  const el=$('helpMsg');
+  if(!msg){ if(el) el.textContent='Tell us what you need help with first.'; return; }
+  if(!user){ if(el) el.textContent='Please sign in first to send a message.'; return; }
+  const ok=await supaInsert('contact_messages', {name:user.name||'', email:user.email||'', message:msg});
+  if(el) el.textContent= ok ? 'Thanks — your message has been sent to the team.' : 'Could not send right now. Please try again later.';
+  if(ok) $('helpMsgText').value='';
+}
 
 function signOutOrIn(){ if(user){show('profile')} else goSignin(); }
 function doSignIn(){
  const n=$('authName').value.trim(), e=$('authEmail').value.trim(); if(!n||!e){$('authNote').textContent='Add your name and email to continue.';return}
  user={name:n,email:e,consent:[$('consent1').checked,$('consent2').checked]}; save('skn_clone_user',user); $('authBtn').textContent='My profile';
- show('dashboard');
+ show('dashboard'); applyPendingQuestionnaireProfile();
 }
 $('consent1').addEventListener('change',()=>{const on=$('consent1').checked;$('googleBtn').disabled=!on;$('emailBtn').disabled=!on});
 $('googleBtn').onclick=async ()=>{
