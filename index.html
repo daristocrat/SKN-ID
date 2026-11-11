@@ -311,6 +311,48 @@ async function supaUpsertProfile(session,row){
     const r=await fetch(SUPABASE_URL+'/rest/v1/skn_profiles',{method:'POST',headers:supaHeaders(session),body:JSON.stringify({...row,user_id:session.user.id})}); return r.ok;
   }catch(e){ return false; }
 }
+// Generic PostgREST upsert: POST with Prefer: resolution=merge-duplicates and
+// on_conflict=<unique columns>. Used for questionnaire_responses (on user_id)
+// and daily_progress (on user_id, day). Returns true only when Supabase
+// accepts the row; never throws, so a failed write never breaks the user flow.
+async function supaUpsertRow(table, onConflict, row, session){
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/'+table+'?on_conflict='+encodeURIComponent(onConflict),{method:'POST',headers:{...supaHeaders(session),Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(row)});
+    return r.ok;
+  }catch(e){ return false; }
+}
+// ---------- Questionnaire answers + daily progress sync (admin visibility) ----------
+// localStorage stays the source of truth on the device; these syncs are
+// best-effort and wrapped in try/catch, so Supabase being down (or the new
+// tables not created yet) never interrupts the user's questionnaire or day.
+function todayISODate(d){ const t=d||new Date(); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
+async function syncQuestionnaireToSupabase(){
+  try{
+    if(!user || !user.email) return false;
+    const answers=questionnaireAnswers();
+    if(!answers || !Object.keys(answers).length) return false;
+    const session=await getSupaSession(); if(!supaClient || !session) return false;
+    const s=getProfileStats(answers);
+    return await supaUpsertRow('questionnaire_responses','user_id',{user_id:session.user.id,user_email:user.email,answers,percent_complete:s.percentComplete,required_left:s.remainingRequired,updated_at:new Date().toISOString()},session);
+  }catch(e){ return false; }
+}
+function buildDailyProgressRow(){
+  const am=routineSteps('am'), pm=routineSteps('pm'), done=routineDone();
+  const amDone=am.filter(s=>done['am:'+s.n]).length;
+  const pmDone=pm.filter(s=>done['pm:'+s.n]).length;
+  const iso=todayISODate();
+  const j=(journeyData()[iso]||{});
+  const note=(j.notes&&String(j.notes).trim())?String(j.notes).trim():null;
+  const feel=skinFeelToday()||null;
+  return {day:iso, skin_feel:feel, am_done:amDone, am_total:am.length, pm_done:pmDone, pm_total:pm.length, checkins:feel?1:0, notes:note, updated_at:new Date().toISOString()};
+}
+async function saveDailyProgress(){
+  try{
+    if(!user || !user.email) return false;
+    const session=await getSupaSession(); if(!supaClient || !session) return false;
+    return await supaUpsertRow('daily_progress','user_id,day',{...buildDailyProgressRow(),user_id:session.user.id,user_email:user.email},session);
+  }catch(e){ return false; }
+}
 function renderLandingAuth(){
   const signed=!!user;
   const panel=$('signedInPanel'); if(panel) panel.classList.toggle('hidden', !signed);
@@ -326,7 +368,7 @@ async function initAuth(){
       user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
       const remote=await loadProfileFromSupabase(session);
       if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-      show('dashboard'); applyPendingQuestionnaireProfile(); return;
+      show('dashboard'); applyPendingQuestionnaireProfile(); syncQuestionnaireToSupabase(); return;
     }
     user=null; show('landing'); return;
   }
@@ -340,7 +382,7 @@ if(supaClient){
         user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
         const remote=await loadProfileFromSupabase(session);
         if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-        show('dashboard'); applyPendingQuestionnaireProfile();
+        show('dashboard'); applyPendingQuestionnaireProfile(); syncQuestionnaireToSupabase();
       }
     }
   });
@@ -362,7 +404,7 @@ async function verifyOtp(){
   user=userFromSession(session); save('skn_clone_user',user); $('authBtn').textContent='My profile';
   const remote=await loadProfileFromSupabase(session);
   if(remote){ profile=remote; save('skn_clone_profile',profile); draft={...profile}; }
-  show('dashboard'); applyPendingQuestionnaireProfile();
+  show('dashboard'); applyPendingQuestionnaireProfile(); syncQuestionnaireToSupabase();
 }
 async function doSignOut(){
   if(supaClient){ try{ await supaClient.auth.signOut(); }catch(e){} }
@@ -455,6 +497,8 @@ function saveAccountName(){ const v=$('accountNameEdit').value.trim(); if(!v) re
 
 // ---------- Admin backend (Supabase tables + RLS, see ~/workspace/skn-id-backend/) ----------
 let isAdmin=false, adminChecked=false, adminData=null, adminTab='overview', adminSearch='', adminReportId=null, adminReportEmail='', adminProductId=null;
+const ADMIN_TAB_LABELS={overview:'Overview',users:'Users',questionnaire:'Questionnaire',daily:'Daily progress',reports:'Reports',products:'Products',messages:'Messages',audit:'Audit',admins:'Admins'};
+let adminQrRow=null, adminDailyDate='';
 let adminProducts=null, adminProductsLoaded=false;
 async function adminFetch(table, query, session){
   try{
@@ -503,24 +547,80 @@ function renderAdmin(){
   $('adminBody').innerHTML = `
   <div class="page-head"><div><p class="eyebrow">Admin</p><h2 class="figma-h2">Admin dashboard.</h2></div><p class="sub" style="text-align:right">View all users, push SKN reports, and manage the product listing. Regular users never see this view.</p></div>
   <p class="small" id="adminMsg"></p>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${['overview','users','reports','products','messages','audit','admins'].map(tab=>`<button class="pill-btn ${adminTab===tab?'on':''}" onclick="adminTab='${tab}'; renderAdminContent()">${tab.charAt(0).toUpperCase()+tab.slice(1)}</button>`).join('')}</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${['overview','users','questionnaire','daily','reports','products','messages','audit','admins'].map(tab=>`<button class="pill-btn ${adminTab===tab?'on':''}" onclick="adminTab='${tab}'; adminQrRow=null; renderAdminContent()">${ADMIN_TAB_LABELS[tab]}</button>`).join('')}</div>
   <div id="adminContent"><p class="small">Loading admin data…</p></div>`;
   if(isAdmin) loadAdminData(); else if(adminChecked) { const c=$('adminContent'); if(c) c.innerHTML='<div class="card"><b>You are not an admin.</b><p class="sub">Sign in with the email that is in the <code>admins</code> table. If the backend tables have not been created yet, run <code>skn-id-backend/schema.sql</code> in Supabase SQL Editor, then insert your admin email (see <code>skn-id-backend/README_BACKEND.md</code>).</p><p class="small">Local preview accounts cannot be admins — use a real Google / Email OTP sign-in.</p></div>'; }
 }
 async function loadAdminData(){
   const s=await getSupaSession(); if(!s) return;
-  const [profiles, logins, waitlist, messages, products, reports, actions] = await Promise.all([
+  const [profiles, logins, waitlist, messages, products, reports, actions, qr, dp] = await Promise.all([
     adminFetch('skn_profiles','select=*&order=created_at.desc&limit=500', s),
     adminFetch('login_history','select=*&order=logged_in_at.desc&limit=500', s),
     adminFetch('waitlist','select=*&order=created_at.desc&limit=200', s),
     adminFetch('contact_messages','select=*&order=created_at.desc&limit=200', s),
     adminFetch('products','select=*&order=sort_order.asc&limit=500', s),
     adminFetch('skn_reports','select=*&order=created_at.desc&limit=200', s),
-    adminFetch('admin_actions','select=*&order=created_at.desc&limit=100', s)
+    adminFetch('admin_actions','select=*&order=created_at.desc&limit=100', s),
+    adminFetch('questionnaire_responses','select=*&order=updated_at.desc&limit=500', s),
+    adminFetch('daily_progress','select=*&order=day.desc&limit=500', s)
   ]);
   const missing=[profiles, logins, products, reports].some(x=>!x.ok && x.status===404);
-  adminData={profiles:profiles.rows, logins:logins.rows, waitlist:waitlist.rows, messages:messages.rows, products:products.rows, reports:reports.rows, actions:actions.rows, missing};
+  adminData={profiles:profiles.rows, logins:logins.rows, waitlist:waitlist.rows, messages:messages.rows, products:products.rows, reports:reports.rows, actions:actions.rows, questionnaire:qr.rows, daily:dp.rows, qrOk:qr.ok, dpOk:dp.ok, missing};
   renderAdminContent();
+}
+// ---------- Admin: questionnaire answers + daily progress ----------
+// Turn a stored answers object into plain words for one questionnaire step.
+// single → the chosen option; multi → the chosen options joined with "; ";
+// swatches (Q9) → the chosen letter; matrix (Q7) → each row with its chosen
+// frequency; text (Q14) → the typed text. Unanswered → "—".
+function formatStepAnswer(a, q){
+  a=a||{};
+  if(q.type==='single') return a[q.id]||'—';
+  if(q.type==='multi'){ const v=a[q.id]||[]; return v.length?v.join('; '):'—'; }
+  if(q.type==='swatches') return a[q.id]||'—';
+  if(q.type==='matrix'){ const m=a.q7||{}; return q.rows.map(r=>r+': '+(m[r]||'—')).join('; '); }
+  if(q.type==='text') return (a[q.id]&&String(a[q.id]).trim())?String(a[q.id]):'—';
+  return '—';
+}
+// Every question with its real title, in questionnaire order, with each
+// follow-up shown right under its parent question.
+function questionnaireAnswerEntries(a){
+  const entries=[];
+  QUESTIONNAIRE.forEach(q=>{
+    if(q.continued){ entries.push({title:q.title+' (follow-up to Q'+q.num+')', text:formatStepAnswer(a,q)}); return; }
+    entries.push({title:'Q'+q.num+' — '+q.title, text:formatStepAnswer(a,q)});
+    if(q.id==='q12') entries.push({title:'Which treatment? (follow-up to Q12)', text:(a.q12Other&&String(a.q12Other).trim())?String(a.q12Other):'—'});
+    if(q.id==='q20') entries.push({title:'Anything else you’d like us to know? (follow-up to Q20)', text:(a.q20Note&&String(a.q20Note).trim())?String(a.q20Note):'—'});
+  });
+  return entries;
+}
+function questionnaireCSVHeaders(){
+  return ['email','percent_complete','required_left','updated_at',
+    ...QUESTIONNAIRE.filter(q=>!q.continued).map(q=>'Q'+q.num+' — '+q.title),
+    'Q1 areas (follow-up)','Q4 reaction (follow-up)','Q5 product (follow-up)','Q12 other treatment','Q20 note'];
+}
+function questionnaireCSVRow(x){
+  const a=x.answers||{};
+  const vals=[x.user_email, x.percent_complete, x.required_left, x.updated_at];
+  QUESTIONNAIRE.filter(q=>!q.continued).forEach(q=>vals.push(formatStepAnswer(a,q)));
+  vals.push((a.q1c||[]).join('; ')||'—');
+  vals.push((a.q4c||[]).join('; ')||'—');
+  vals.push((a.q5c||[]).join('; ')||'—');
+  vals.push(a.q12Other||'—');
+  vals.push(a.q20Note||'—');
+  return vals;
+}
+function downloadQuestionnaireCSV(){
+  downloadCSV('skn-questionnaire-responses.csv', [questionnaireCSVHeaders(), ...((adminData.questionnaire)||[]).map(questionnaireCSVRow)]);
+}
+function downloadDailyCSV(){
+  const rows=((adminData.daily)||[]).filter(x=>x.day===adminDailyDate);
+  downloadCSV('skn-daily-progress-'+adminDailyDate+'.csv', [['email','day','skin_feel','am_done','am_total','pm_done','pm_total','checkins','notes','updated_at'], ...rows.map(x=>[x.user_email,x.day,x.skin_feel,x.am_done,x.am_total,x.pm_done,x.pm_total,x.checkins,x.notes,x.updated_at])]);
+}
+function adminShowQuestionnaire(i){ adminQrRow=((adminData.questionnaire)||[])[i]||null; renderAdminContent(); }
+function adminShowNote(i){
+  const x=((adminData.daily)||[])[i]; if(!x) return;
+  openDialog('Note — '+(x.user_email||''), '<p style="white-space:pre-wrap">'+esc(x.notes||'')+'</p><p class="small">'+esc(x.day||'')+'</p>', '<button class="btn btn-dark" onclick="closeDialog()">Close</button>');
 }
 function renderAdminContent(){
   const c=$('adminContent'); if(!c) return;
@@ -532,6 +632,11 @@ function renderAdminContent(){
     const weekAgo=new Date(Date.now()-7*86400000).toISOString();
     const recentLogins=d.logins.filter(x=>x.logged_in_at && x.logged_in_at>=weekAgo).length;
     const complete=d.profiles.filter(x=>x.skin_type && x.sensitivities && x.goals && x.values && x.environment).length;
+    const qr=(d.questionnaire||[]);
+    const dp=(d.daily||[]);
+    const at100=qr.filter(x=>(x.percent_complete||0)>=100).length;
+    const todayISO=todayISODate();
+    const activeToday=new Set(dp.filter(x=>x.day===todayISO).map(x=>x.user_email)).size;
     c.innerHTML=`<div class="grid3">
       <div class="card"><p class="eyebrow">Users</p><b style="font-size:32px">${d.profiles.length}</b><p class="small">${complete} with all 5 profile sections</p></div>
       <div class="card"><p class="eyebrow">Reports published</p><b style="font-size:32px">${d.reports.filter(x=>x.status==='published').length}</b><p class="small">${d.reports.length} report rows total</p></div>
@@ -539,6 +644,9 @@ function renderAdminContent(){
       <div class="card"><p class="eyebrow">Logins, last 7 days</p><b style="font-size:32px">${recentLogins}</b><p class="small">${d.logins.length} login rows total</p></div>
       <div class="card"><p class="eyebrow">Waitlist</p><b style="font-size:32px">${d.waitlist.length}</b><p class="small">Entries</p></div>
       <div class="card"><p class="eyebrow">Contact messages</p><b style="font-size:32px">${d.messages.length}</b><p class="small">Messages</p></div>
+      <div class="card"><p class="eyebrow">Questionnaire responses</p><b style="font-size:32px">${qr.length}</b><p class="small">${at100} at 100% complete</p></div>
+      <div class="card"><p class="eyebrow">Users at 100%</p><b style="font-size:32px">${at100}</b><p class="small">finished all 18 required questions</p></div>
+      <div class="card"><p class="eyebrow">Active today</p><b style="font-size:32px">${activeToday}</b><p class="small">users with a daily-progress row today</p></div>
     </div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-ghost" onclick="downloadCSV('skn-users.csv', [['email','skin_type','sensitivities','goals','values','environment','created_at'], ...adminData.profiles.map(x=>[x.email,x.skin_type,x.sensitivities,x.goals,x.values,x.environment,x.created_at])])">Export users CSV</button><button class="btn btn-ghost" onclick="downloadCSV('skn-products.csv', [['name','brand','category','price','buying_url','image_url','active','sort_order'], ...adminData.products.map(x=>[x.name,x.brand,x.category,x.price,x.buying_url,x.image_url,x.active,x.sort_order])])">Export products CSV</button></div>`;
   }
   if(adminTab==='users'){
@@ -547,6 +655,35 @@ function renderAdminContent(){
     c.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><input id="adminSearchBox" placeholder="Search email or skin type" value="${esc(adminSearch)}" style="flex:1;min-width:220px"><button class="btn btn-lime" onclick="adminSearch=$('adminSearchBox').value.trim(); renderAdminContent()">Filter</button><button class="btn btn-ghost" onclick="adminSearch=''; renderAdminContent()">Clear</button></div>
     <p class="small">${list.length} users shown (view only — admins do not edit a user's own profile here).</p>
     <div style="display:grid;gap:12px">${list.map(x=>`<div class="card"><b>${esc(x.email||'—')}</b> <span class="small">${esc(x.created_at||'')}</span><p style="margin:6px 0">Skin: ${esc(x.skin_type||'—')} · Env: ${esc(x.environment||'—')} · Logins: ${loginCount[x.email]||0}</p><p class="small" style="margin:0">Sensitivities: ${esc(x.sensitivities||'—')} · Goals: ${esc(x.goals||'—')} · Values: ${esc(x.values||'—')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" style="padding:8px 14px;min-height:0" onclick="adminReportEmail='${esc(x.email||'')}'; adminTab='reports'; renderAdminContent(); adminLoadReportFor('${esc(x.email||'')}')">Edit report for this user →</button></div></div>`).join('') || '<p class="small">No users yet.</p>'}</div>`;
+  }
+  if(adminTab==='questionnaire'){
+    if(!adminData.qrOk){
+      c.innerHTML=`<div class="card"><b>Couldn't load questionnaire responses — try again.</b><p class="sub">The questionnaire_responses table may not exist yet — run skn-id-backend/schema-questionnaire-progress.sql in Supabase SQL Editor, then reload this page.</p><button class="btn btn-lime" onclick="loadAdminData()">Try again</button></div>`;
+    } else if(adminQrRow){
+      const a=adminQrRow.answers||{};
+      c.innerHTML=`<button class="btn btn-ghost" onclick="adminQrRow=null; renderAdminContent()">← All responses</button>
+      <div class="card" style="margin-top:12px"><b>${esc(adminQrRow.user_email||'—')}</b><p class="small" style="margin:4px 0">${adminQrRow.percent_complete||0}% complete · ${adminQrRow.required_left==null?'—':adminQrRow.required_left} required questions left · Updated ${esc(adminQrRow.updated_at||'')}</p></div>
+      <div style="display:grid;gap:12px;margin-top:12px">${questionnaireAnswerEntries(a).map(e=>`<div class="card"><b>${esc(e.title)}</b><p style="margin:6px 0 0;white-space:pre-wrap">${esc(e.text)}</p></div>`).join('')}</div>`;
+    } else {
+      const list=[...((adminData.questionnaire)||[])].sort((x,y)=>String(y.updated_at||'').localeCompare(String(x.updated_at||'')));
+      c.innerHTML=`<p class="small">${list.length} questionnaire response${list.length===1?'':'s'} (newest first). Click a user to see every answer.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><button class="btn btn-ghost" onclick="downloadQuestionnaireCSV()">Download CSV</button></div>
+      <div style="display:grid;gap:12px">${list.map((x,i)=>`<div class="card"><b>${esc(x.user_email||'—')}</b> <span class="small">${esc(x.updated_at||'')}</span><p style="margin:6px 0">${x.percent_complete||0}% complete · ${x.required_left==null?'—':x.required_left} required questions left</p><button class="btn btn-ghost" style="padding:8px 14px;min-height:0" onclick="adminShowQuestionnaire(${i})">View answers →</button></div>`).join('') || '<p class="small">No questionnaire responses yet — answers appear here once a signed-in user finishes or saves the questionnaire.</p>'}</div>`;
+    }
+  }
+  if(adminTab==='daily'){
+    if(!adminData.dpOk){
+      c.innerHTML=`<div class="card"><b>Couldn't load daily progress — try again.</b><p class="sub">The daily_progress table may not exist yet — run skn-id-backend/schema-questionnaire-progress.sql in Supabase SQL Editor, then reload this page.</p><button class="btn btn-lime" onclick="loadAdminData()">Try again</button></div>`;
+    } else {
+      if(!adminDailyDate) adminDailyDate=todayISODate();
+      const all=(adminData.daily||[]);
+      const rows=all.filter(x=>x.day===adminDailyDate);
+      const strip=[]; for(let i=6;i>=0;i--){ const dd=new Date(); dd.setDate(dd.getDate()-i); const iso=todayISODate(dd); strip.push({iso, users:new Set(all.filter(x=>x.day===iso).map(x=>x.user_email)).size}); }
+      c.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px"><label style="margin:0">Date</label><input type="date" id="adminDailyDate" value="${adminDailyDate}" style="width:auto" onchange="adminDailyDate=this.value; renderAdminContent()"><button class="btn btn-ghost" onclick="downloadDailyCSV()">Download CSV</button></div>
+      <div class="grid3" style="margin-bottom:14px">${strip.map(s=>`<div class="card"><p class="eyebrow" style="margin:0">${esc(s.iso)}</p><b style="font-size:28px">${s.users}</b><p class="small" style="margin:0">active user${s.users===1?'':'s'}</p></div>`).join('')}</div>
+      <p class="small">${rows.length} user${rows.length===1?'':'s'} with progress on ${esc(adminDailyDate)}.</p>
+      <div style="display:grid;gap:12px">${rows.map(x=>{ const di=all.indexOf(x); const note=String(x.notes||''); return `<div class="card"><b>${esc(x.user_email||'—')}</b><p style="margin:6px 0">Skin feel: <b>${esc(x.skin_feel||'—')}</b> · AM ${x.am_done||0}/${x.am_total||0} · PM ${x.pm_done||0}/${x.pm_total||0} · Check-ins: ${x.checkins||0}</p>${note?`<p class="small" style="margin:0">Note: <span title="${esc(note)}">${esc(note.length>80?note.slice(0,80)+'…':note)}</span> <button class="btn btn-ghost" style="padding:2px 8px;min-height:0" onclick="adminShowNote(${di})">Full note</button></p>`:''}</div>`; }).join('') || '<p class="small">No progress rows for this date yet.</p>'}</div>`;
+    }
   }
   if(adminTab==='reports'){
     const emails=[...new Set(d.profiles.map(x=>x.email).filter(Boolean))];
@@ -804,7 +941,7 @@ function quizContinuationApplies(q){
   if(q.id==='q5c') return (a.q5||[]).includes(Q_UNKNOWN_INGREDIENT);
   return true;
 }
-function quizSaveExit(){ save('skn_quiz_draft', {step:qStep, answers:questionnaireAnswers()}); show(profile ? 'home' : 'landing'); }
+function quizSaveExit(){ save('skn_quiz_draft', {step:qStep, answers:questionnaireAnswers()}); syncQuestionnaireToSupabase(); show(profile ? 'home' : 'landing'); }
 function quizBack(){
   let n=qStep-1;
   while(n>=0 && QUESTIONNAIRE[n].continued && !quizContinuationApplies(QUESTIONNAIRE[n])) n--;
@@ -868,7 +1005,7 @@ function quizNext(){
   if(!questionnaireValid(q)){ const m=$('quizMsg'); if(m) m.textContent='Pick an option to continue.'; return; }
   let n=qStep+1;
   while(n<QUESTIONNAIRE.length && QUESTIONNAIRE[n].continued && !quizContinuationApplies(QUESTIONNAIRE[n])) n++;
-  if(n<QUESTIONNAIRE.length){ qStep=n; renderQuestionnaire(); return; }
+  if(n<QUESTIONNAIRE.length){ qStep=n; renderQuestionnaire(); syncQuestionnaireToSupabase(); return; }
   finishQuestionnaire();
 }
 function renderQuiz(){ renderQuestionnaire(); }
@@ -970,6 +1107,9 @@ async function applyPendingQuestionnaireProfile(){
   if(!p || !user) return false;
   localStorage.removeItem('skn_questionnaire_pending_profile');
   await persistDerivedProfile(p);
+  // A signed-out finisher's full answers were only on this device until now:
+  // sync them too, so the admin can see them, not just the derived profile.
+  await syncQuestionnaireToSupabase();
   show('home');
   return true;
 }
@@ -980,6 +1120,7 @@ async function finishQuestionnaire(){
   save('skn_quiz_draft', {step:0, answers});
   if(user){
     await persistDerivedProfile(derived);
+    await syncQuestionnaireToSupabase();
     show('myskin');
   } else {
     save('skn_questionnaire_pending_profile', derived);
@@ -990,7 +1131,7 @@ async function finishQuestionnaire(){
 }
 
 function skinFeelToday(){ const s=loadLS('skn_skin_feel',{}); return s[todayKey()]||''; }
-function setSkinFeel(v){ const s=loadLS('skn_skin_feel',{}); s[todayKey()]=v; save('skn_skin_feel', s); renderHome(); }
+function setSkinFeel(v){ const s=loadLS('skn_skin_feel',{}); s[todayKey()]=v; save('skn_skin_feel', s); saveDailyProgress(); renderHome(); }
 const FIGMA_IMG_HERO="https://images.unsplash.com/photo-1777450793530-99a0e7b7fc53?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
 const FIGMA_IMG_MOIST="https://images.unsplash.com/photo-1658751890679-ada5e8e53471?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
 const FIGMA_IMG_SPF="https://images.unsplash.com/photo-1586806828012-032f518d2192?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900";
@@ -1040,7 +1181,7 @@ function weekTracker(){
 }
 function weekLogToday(){ const st=weekTracker(); st.done[new Date().getDay()]=true; save('skn_week_tracker', st); renderRoutine(); renderHome(); }
 function weekReset(){ const st=weekTracker(); st.done={}; save('skn_week_tracker', st); renderRoutine(); }
-function routineAllDone(period){ const d=routineDone(); routineSteps(period).forEach(s=>{ d[period+':'+s.n]=true; }); save('skn_routine_done', d); renderHome(); }
+function routineAllDone(period){ const d=routineDone(); routineSteps(period).forEach(s=>{ d[period+':'+s.n]=true; }); save('skn_routine_done', d); saveDailyProgress(); renderHome(); }
 function skinFeelCheckinsThisWeek(){
   const now=new Date(); const dow=(now.getDay()+6)%7; const monday=new Date(now); monday.setDate(now.getDate()-dow); monday.setHours(0,0,0,0);
   const sunday=new Date(monday); sunday.setDate(monday.getDate()+6); sunday.setHours(23,59,59,999);
@@ -1122,7 +1263,7 @@ function routineSteps(period){
 
 function routineDone(){ return loadLS('skn_routine_done',{}); }
 function routineCheck(period, idx){
-  const s=routineSteps(period)[idx]; if(!s) return; const key=period+':'+s.n; const d=routineDone(); d[key]=!d[key]; save('skn_routine_done', d); renderRoutine();
+  const s=routineSteps(period)[idx]; if(!s) return; const key=period+':'+s.n; const d=routineDone(); d[key]=!d[key]; save('skn_routine_done', d); saveDailyProgress(); renderRoutine();
 }
 function trackerSave(){
   const st=trackerState(); const day=trackerDayNum(); st.done[day]=true; st.feel=skinFeelToday(); save('skn_tracker', st); renderRoutine();
@@ -1233,6 +1374,7 @@ function journeySaveDay(){
   if(!qJourneyDraft) return;
   const n=qJourneyDay||journeyDayNumber(); const iso=journeyISO(journeyDayDate(n));
   const data=journeyData(); data[iso]={...qJourneyDraft}; save('skn_journey', data);
+  saveDailyProgress();
   qJourneySaved=true; renderRoutine();
 }
 function journeySectionHTML(){
