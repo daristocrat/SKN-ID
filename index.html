@@ -26,7 +26,6 @@ header .wrap{max-width:min(1380px,calc(100% - 40px))}
 .tab.on{background:#2a2e2a;color:#F0EFE7;font-weight:700}
 .header-actions{display:flex;align-items:center;gap:10px}
 .avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--lime);color:#0A0B0A;border:none;font-weight:900;font-size:14px;cursor:pointer;display:grid;place-items:center}
-@media(max-width:820px){.tabs{gap:20px}.tab{font-size:13px;padding:8px 12px}}
 .btn{border:1px solid var(--line);border-radius:999px;padding:0 20px;min-height:48px;font-weight:800;cursor:pointer;box-shadow:none;font-family:'Manrope',sans-serif}
 .btn-primary{background:var(--lime);color:#0A0B0A;border-color:var(--lime)}
 .btn-primary:hover{background:#dbff7b}
@@ -46,7 +45,6 @@ h2{font-family:'Archivo Black',sans-serif;font-size:clamp(35px,4vw,58px);letter-
 h2 .lime{color:var(--lime)}
 .sub{color:var(--mut);font-size:18px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
 label{font-weight:800;font-size:15px;display:block;margin:12px 0 6px;color:var(--ink)}
 input,select,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:13px;font:inherit;background:var(--input);color:var(--ink)}
 textarea{min-height:100px}
@@ -69,12 +67,9 @@ body:not(.dark) .idcard p{color:#9AA09A}
 .hidden{display:none!important}
 .post{border-top:1px solid var(--line);padding:14px 0}.post:first-child{border-top:0}
 .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:start;min-height:720px}
-@media(max-width:820px){.hero-grid{grid-template-columns:1fr;min-height:0}}
-@media(max-width:640px){header{height:64px}.nav{padding:10px 20px}.hero-grid{grid-template-columns:1fr}.jday{min-height:48px}.quiz-opt-grid{grid-template-columns:1fr 1fr!important}.quiz-grid{grid-template-columns:1fr}}
 .hero-visual-wrap{position:relative;padding:16px 0 40px 20px}
 .hero-arch-back{position:absolute;right:0;bottom:10px;width:78%;height:78%;background:var(--lime);border-radius:270px 270px 24px 24px;opacity:.9;transform:rotate(2deg)}
 .hero-arch{position:relative;width:100%;height:560px;object-fit:cover;border-radius:270px 270px 24px 24px;border:1px solid var(--line);display:block}
-@media(max-width:820px){.hero-arch{height:380px}}
 .preview-card{position:absolute;left:0;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:22px;max-width:240px}
 .preview-card b{font-size:22px}
 .badge-match{position:absolute;top:28px;right:8px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 14px;font-weight:800;font-size:14px}
@@ -100,8 +95,6 @@ body:not(.dark) .step-num{color:#5a7a00}
 .stat{font-size:34px;font-weight:900;margin:0}
 footer{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--mut)}
 
-#view-landing section{padding:110px 0}
-#view-landing section:first-child{padding-top:80px}
 .quiz-card{background:#ffffff;color:#0A0B0A;border-radius:24px;padding:32px;max-width:640px;margin:0 auto}
 .quiz-card h2,.quiz-card p,.quiz-card label,.quiz-card b{color:#0A0B0A}
 .quiz-card .sub{color:#55534d}
@@ -133,15 +126,12 @@ body:not(.dark) .danger{color:#b00020 !important}
 /* Figma page-by-page, 2026-11-03 audit: dashboard content column, page headings, rings, rec cards, quiz */
 #view-home,#view-myskin,#view-recommendations,#view-profile{max-width:1260px;margin:0 auto}
 .page-head{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start}
-@media(max-width:820px){.page-head{grid-template-columns:1fr}}
 .figma-h2{font-family:'Archivo Black',sans-serif;font-size:clamp(35px,4vw,58px);line-height:.98;letter-spacing:-.045em;text-transform:uppercase;font-weight:900;margin:10px 0}
 .ring-wrap{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
 .ring-inner{width:64px;height:64px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-weight:900;color:var(--ink)}
 .outline-num{font-size:180px;line-height:1;font-weight:900;color:transparent;-webkit-text-stroke:1px #9AA39B;margin:0}
 .outline-num-black{font-size:200px;line-height:1;font-weight:900;color:transparent;-webkit-text-stroke:2px #0A0B0A;margin:0}
-@media(max-width:820px){.outline-num{font-size:110px}.outline-num-black{font-size:120px}}
 .rec-card{display:grid;grid-template-columns:460px 1fr;overflow:hidden}
-@media(max-width:820px){.rec-card{grid-template-columns:1fr}}
 .rec-img-wrap{position:relative;min-height:500px}
 .rec-img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
 .rec-badge{position:absolute;top:16px;left:16px;width:44px;height:44px;border-radius:50%;background:#0A0B0A;color:var(--lime);display:grid;place-items:center;font-weight:900;z-index:2}
@@ -163,7 +153,6 @@ body:not(.dark) .danger{color:#b00020 !important}
 .quiz-opt.sel .qradio{background:#C8FF38;border-color:#C8FF38}
 .quiz-grid{display:grid;grid-template-columns:.48fr 1.52fr;gap:56px;margin-top:32px}
 .giant-number{font-family:'Archivo Black',sans-serif;font-size:clamp(80px,10vw,160px);line-height:1;font-weight:900;color:transparent;-webkit-text-stroke:1px #343934;margin:0}
-@media(max-width:820px){.quiz-grid{grid-template-columns:1fr;gap:16px}}
 
 .quiz-swatch{width:48px;height:48px;border-radius:50%;border:2px solid #26281F;cursor:pointer;padding:0}
 .quiz-swatch.sel{outline:3px solid #C8FF38;outline-offset:2px}
@@ -176,6 +165,204 @@ body:not(.dark) .danger{color:#b00020 !important}
 .jday.part{border-color:var(--lime);background:#232a12}
 .jday.sel{outline:2px solid var(--lime)}
 .jday.future{opacity:.45}
+/* Figma Make V28 (19 Nov 2026) — mobile-first responsive layer.
+   Translated from Make src/index.css lines 447-705 to this file's class names.
+   Base rules above stay as the desktop defaults; this layer overrides them on
+   small screens and the min-width queries below restore desktop step by step.
+   Rules marked CONSTRUCTION have no Make equivalent in this file (e.g. the
+   .menu-button/.mobile-nav base styles, the fixed .question-actions bar
+   background) and were built to Make's behaviour, not copied verbatim. */
+body{overflow-x:clip}
+.wrap{max-width:min(1240px,calc(100% - 28px))}
+header{height:72px}
+header .wrap{max-width:calc(100% - 28px)}
+.tabs{display:none}
+.header-actions .btn,.signin{display:none}
+.menu-button{display:block;min-width:44px;min-height:44px;background:transparent;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-size:20px;cursor:pointer;padding:0 12px}
+.mobile-nav{position:fixed;left:14px;right:14px;z-index:120;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px;display:flex;flex-direction:column;top:71px;max-height:calc(100dvh - 84px);overflow-y:auto;box-shadow:0 24px 60px #000b}
+.mobile-nav button{display:block;width:100%;text-align:left;min-height:52px;background:transparent;border:none;color:var(--ink);font:inherit;font-weight:700;padding:12px 16px;border-radius:12px;cursor:pointer}
+.mobile-nav button.on{background:var(--lime);color:#0A0B0A}
+h1{font-size:clamp(40px,13vw,64px)}
+h2,.figma-h2{font-size:clamp(30px,9vw,36px)}
+.hero-grid{min-height:auto;grid-template-columns:1fr;gap:30px}
+#view-landing section:first-child{padding-block:52px 42px}
+#how-it-works{padding-block:76px}
+#view-landing section:last-child{padding-block:70px}
+.hero-grid .sub{margin-block:22px;font-size:15px;line-height:1.65}
+.button-row{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin-top:18px}
+.hero-grid .button-row .btn{width:100%}
+.why-band .btn{width:100%}
+.assurances{display:grid;gap:12px;margin-top:28px}
+.hero-visual-wrap{min-height:390px;margin-top:8px}
+.hero-arch{height:340px}
+.footer-inner{display:grid;grid-template-columns:1fr;gap:20px;align-items:center}
+.footer-inner>span:last-child{display:flex;justify-content:start;flex-wrap:wrap;gap:14px 22px}
+.footer-inner>span:nth-child(2){text-align:left}
+#view-quiz section{padding-block:22px 126px}
+.question-top{gap:16px}
+.quiz-grid{grid-template-columns:1fr;gap:20px;padding-top:24px}
+.question-aside{display:none}
+.question-panel{min-width:0}
+.question-panel .figma-h2{font-size:clamp(22px,6.5vw,27px);line-height:1.18}
+.quiz-opt-grid{grid-template-columns:1fr}
+.quiz-opt{min-height:56px}
+.quiz-opt strong{overflow-wrap:anywhere}
+.quiz-swatch{min-width:0}
+.matrix-row{grid-template-columns:1fr 1fr}
+.matrix-row>span:first-child{grid-column:1/-1}
+.matrix-row .mbtn{min-height:48px}
+.question-actions{position:fixed;right:14px;bottom:max(10px,env(safe-area-inset-bottom));width:calc(100vw - 28px);gap:8px;padding:8px;border-radius:20px;z-index:90;background:var(--card);border:1px solid var(--line);box-shadow:0 8px 30px rgba(0,0,0,.35);display:flex;justify-content:space-between;align-items:center}
+.autosave-note{display:none}
+.question-actions .btn{min-width:0;flex:1 1 0;padding-inline:12px;white-space:normal}
+#signinCard .btn{width:100%}
+main section{padding-block:48px 82px}
+.page-head{display:block;margin-bottom:32px}
+.page-head>p{margin-top:18px}
+.profile-tracker{padding:18px}
+.profile-tracker .btn{width:100%}
+.grid3{grid-template-columns:1fr}
+.grid2{grid-template-columns:1fr}
+#view-home .grid3>.card{padding:20px}
+.routine-feel{align-items:flex-start;flex-direction:column}
+.skin-hero{grid-template-columns:1fr}
+.skin-id-visual{min-height:300px}
+.skin-summary{padding:28px 20px}
+.skin-summary h3{font-size:24px}
+.skin-summary .button-row .btn{width:100%}
+.takeaway-grid{grid-template-columns:1fr}
+#view-myskin .grid3{grid-template-columns:1fr}
+.rec-card{grid-template-columns:1fr}
+.rec-img-wrap{min-height:300px;max-height:380px}
+.product-info{padding:24px 18px}
+.product-info h3{font-size:23px;overflow-wrap:anywhere}
+.product-meta{align-items:flex-start;gap:12px}
+.product-actions{align-items:stretch;flex-direction:column;gap:14px}
+.product-actions .btn{width:100%}
+.routine-tabs{width:100%}
+.routine-tabs .pill-btn{flex:1;justify-content:center;padding-inline:10px}
+.routine-list-card,.calendar-card,.day-detail{padding:18px}
+.routine-row{gap:10px;padding-inline:0}
+.routine-row strong{overflow-wrap:anywhere}
+.amber-card{margin-bottom:28px}
+#journeySection{padding-top:72px}
+.journey-grid{gap:4px}
+.jday{min-width:0;min-height:42px;padding:7px 4px 6px;border-radius:7px}
+.day-save{align-items:stretch;flex-direction:column}
+.day-save .btn{width:100%}
+#routineReminders{display:grid;grid-template-columns:1fr;gap:24px;padding:22px 18px}
+#routineReminders>:first-child{grid-column:auto}
+.reminder-control{min-width:0;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px}
+.reminder-control input{width:78px}
+.account-profile{padding:20px}
+.account-profile p{overflow-wrap:anywhere}
+.account-profile .btn{width:100%}
+.settings-list{padding:20px}
+.modal{align-items:flex-end;padding:12px}
+.modal .card{width:100%;max-height:calc(100dvh - 24px);padding:20px;border-radius:20px 20px 12px 12px}
+.modal-actions{align-items:stretch;flex-direction:column-reverse}
+.modal-actions .btn{width:100%}
+.outline-num{font-size:110px}
+.outline-num-black{font-size:120px}
+@media(min-width:641px){
+.wrap{max-width:min(900px,calc(100% - 40px))}
+header{height:80px}
+header .wrap{max-width:calc(100% - 40px)}
+body:not(.signed-in) .header-actions .btn,body:not(.signed-in) .signin{display:inline-flex}
+.mobile-nav{top:79px}
+h1{font-size:clamp(58px,9vw,78px)}
+h2,.figma-h2{font-size:clamp(38px,6vw,50px)}
+#view-landing section:first-child{padding-top:64px}
+.hero-grid>div:first-child{max-width:720px}
+.hero-grid .button-row .btn,.why-band .btn{width:auto}
+.assurances{display:flex;gap:24px}
+.hero-visual-wrap{min-height:540px}
+.hero-arch{height:460px}
+#how-it-works .card{padding:24px 20px}
+.footer-inner{grid-template-columns:auto 1fr}
+.footer-inner>span:last-child{justify-content:end}
+.footer-inner>span:nth-child(2){grid-column:1/-1}
+#view-quiz section{padding-top:30px}
+.question-panel{max-width:760px;margin-inline:auto}
+.question-panel .figma-h2{font-size:clamp(27px,4vw,34px)}
+.quiz-opt-grid{grid-template-columns:1fr 1fr}
+.question-actions{right:20px;width:min(760px,calc(100vw - 40px));border-radius:999px}
+.question-actions .btn{flex:0 0 auto;padding-inline:20px;white-space:nowrap}
+.autosave-note{display:block}
+#signinCard .btn{width:auto}
+main section{padding-block:62px 100px}
+.page-head{display:flex;justify-content:space-between;align-items:start;gap:24px}
+.page-head>p{margin-top:0}
+.profile-tracker{padding:22px 24px}
+.profile-tracker .btn{width:auto}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid2{grid-template-columns:1fr 1fr}
+#view-home .grid3{grid-template-columns:1fr 1fr}
+#view-myskin .grid3{grid-template-columns:repeat(2,1fr)}
+.takeaway-grid{grid-template-columns:repeat(3,1fr)}
+.skin-id-visual{min-height:380px}
+.skin-summary{padding:38px}
+.skin-summary .button-row .btn{width:auto}
+.rec-img-wrap{min-height:410px;max-height:480px}
+.product-info{padding:32px}
+.product-actions{align-items:center;flex-direction:row}
+.product-actions .btn{width:auto}
+.routine-list-card,.calendar-card,.day-detail{padding:26px}
+.routine-row{gap:14px;padding-inline:8px}
+.matrix-row{grid-template-columns:1.4fr repeat(4,1fr)}
+.matrix-row>span:first-child{grid-column:auto}
+.jday{min-height:56px;padding:9px 8px 7px;border-radius:10px}
+.day-save{align-items:center;flex-direction:row}
+.day-save .btn{width:auto}
+#routineReminders{grid-template-columns:1fr 1fr;padding:25px 28px}
+#routineReminders>:first-child{grid-column:1/-1}
+.reminder-control{gap:12px}
+.reminder-control input{width:88px}
+.account-profile{padding:28px}
+.account-profile .btn{width:auto}
+.settings-list{padding:28px}
+.modal{align-items:center;padding:20px}
+.modal .card{width:min(520px,100%);max-height:min(760px,calc(100dvh - 40px));padding:28px;border-radius:20px}
+.modal-actions{align-items:center;flex-direction:row}
+.modal-actions .btn{width:auto}
+}
+@media(min-width:961px){
+.wrap{max-width:min(1240px,calc(100% - 64px))}
+header{height:86px}
+header .wrap{max-width:min(1380px,calc(100% - 40px))}
+body.signed-in .tabs{display:flex}
+.menu-button{display:none}
+h1{font-size:clamp(64px,6.7vw,96px)}
+h2,.figma-h2{font-size:clamp(42px,4vw,58px)}
+.hero-grid{min-height:720px;grid-template-columns:1.08fr .92fr;gap:40px}
+#view-landing section:first-child{padding-block:55px 80px}
+.hero-visual-wrap{min-height:560px;margin-top:0}
+.hero-arch{height:490px}
+#how-it-works{padding-block:120px}
+.page-head{margin-bottom:55px}
+#view-landing section:last-child{padding-block:100px}
+.footer-inner{grid-template-columns:1fr auto 1fr}
+.footer-inner>span:nth-child(2){grid-column:auto;text-align:center}
+.footer-inner>span:last-child{justify-content:flex-end}
+.quiz-grid{grid-template-columns:.48fr 1.52fr;gap:56px;padding-top:36px}
+.question-aside{display:block}
+.question-panel{margin-inline:0}
+.question-actions{right:max(32px,calc((100vw - 1240px)/2));width:min(700px,calc(100vw - 64px))}
+main section{padding-block:72px 120px}
+#view-home .grid3>.card{padding:28px}
+.routine-feel{align-items:center;flex-direction:row}
+.skin-hero{grid-template-columns:.75fr 1.25fr}
+.rec-card{grid-template-columns:.75fr 1.25fr}
+.skin-id-visual{min-height:auto}
+.skin-summary{padding:50px}
+#view-myskin .grid3{grid-template-columns:repeat(5,1fr)}
+.rec-img-wrap{min-height:500px;max-height:none}
+.product-info{padding:38px}
+.product-info h3{font-size:30px}
+#routineReminders{grid-template-columns:1fr auto auto;gap:40px}
+#routineReminders>:first-child{grid-column:auto}
+.outline-num{font-size:180px}
+.outline-num-black{font-size:200px}
+}
 </style></head><body class="dark">
 <header><div class="wrap nav"><a class="logo" onclick="show('landing')">SKN&nbsp;ID<span class="dot">●</span></a>
 <nav class="tabs" id="appTabs">
@@ -183,15 +370,15 @@ body:not(.dark) .danger{color:#b00020 !important}
 <button class="tab" data-v="myskin" onclick="show('myskin')">My Skin</button>
 <button class="tab" data-v="recommendations" onclick="show('recommendations')">Recommendations</button>
 <button class="tab" data-v="profile" onclick="show('profile')">Account</button>
-</nav><div class="header-actions"><button class="btn btn-ghost" id="signInTextBtn" style="border:none" onclick="goSignin()">Sign in</button><button class="btn btn-lime" id="authBtn" onclick="signOutOrIn()">Get started</button><button class="avatar-btn hidden" id="avatarBtn" onclick="show('profile')" title="Open account">?</button></div></div></header>
+</nav><div class="header-actions"><button class="btn btn-ghost signin" id="signInTextBtn" style="border:none" onclick="goSignin()">Sign in</button><button class="btn btn-lime" id="authBtn" onclick="signOutOrIn()">Get started</button><button class="avatar-btn hidden" id="avatarBtn" onclick="show('profile')" title="Open account">?</button></div><button class="menu-button" id="menuBtn" onclick="toggleMobileNav()" aria-label="Open menu">☰</button></div><nav class="mobile-nav hidden" id="mobileNav" aria-label="Mobile navigation"></nav></header>
 <main class="wrap">
 
 <!-- LANDING / SIGN-IN — Figma design: black + lime, uppercase display type -->
 <div id="view-landing"><section>
 <div class="hero-grid"><div>
 <h1>KNOW YOUR SKIN<br><span class="lime">OWN</span> YOUR ROUTINE</h1>
-<p class="sub">Your skin changes. Your routine should keep up.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-lime" onclick="startQuizOrSignin()">Discover your skin →</button><button class="btn btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works ↓</button></div>
-<div class="card" id="signinCard" style="margin-top:22px">
+<p class="sub">Your skin changes. Your routine should keep up.</p><div class="button-row"><button class="btn btn-lime" onclick="startQuizOrSignin()">Discover your skin →</button><button class="btn btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works ↓</button></div>
+<div class="card" id="signinCard" style="margin-top:48px">
 <label><input type="checkbox" id="consent1" style="width:auto"> I agree to receive emails about my SKN ID, including my report, updates and important notifications. (required)</label>
 <label><input type="checkbox" id="consent2" style="width:auto"> Send me updates about how SKN ID is evolving, including new features and early access. (optional)</label>
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
@@ -261,11 +448,11 @@ body:not(.dark) .danger{color:#b00020 !important}
 
 <div id="view-admin" class="hidden"><section><div id="adminBody"></div></section></div>
 </main>
-<div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
-<div id="productModal" class="modal hidden"><div class="card"><h2 id="productTitle"></h2><p id="productBody"></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-dark" id="productSaveBtn">Save to routine</button><button class="btn btn-ghost" onclick="$('productModal').classList.add('hidden')">Close</button></div></div></div>
-<div id="genericModal" class="modal hidden"><div class="card"><h2 id="genericTitle"></h2><div id="genericBody"></div><div id="genericFooter" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div></div></div>
-<div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
-<footer class="wrap"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showPrivacyDialog()">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showTermsDialog()">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showSupportDialog()">Support</button> <button class="btn btn-ghost hidden" id="adminFooterBtn" style="padding:6px 12px;min-height:0" onclick="show('admin')">Admin</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">SKN-ID provides general cosmetic skincare guidance, not medical diagnosis. See a dermatologist for persistent or concerning symptoms.</p></footer>
+<div id="signoutModal" class="modal hidden"><div class="card"><h2>Sign out?</h2><p>Are you sure you want to sign out of SKN ID?</p><div class="modal-actions" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" onclick="confirmSignOut()">Yes, sign out</button><button class="btn btn-ghost" onclick="hideSignoutModal()">Cancel</button></div></div></div>
+<div id="productModal" class="modal hidden"><div class="card"><h2 id="productTitle"></h2><p id="productBody"></p><div class="modal-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-dark" id="productSaveBtn">Save to routine</button><button class="btn btn-ghost" onclick="$('productModal').classList.add('hidden')">Close</button></div></div></div>
+<div id="genericModal" class="modal hidden"><div class="card"><h2 id="genericTitle"></h2><div id="genericBody"></div><div id="genericFooter" class="modal-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div></div></div>
+<div id="deleteModal" class="modal hidden"><div class="card"><h2>Delete my account?</h2><p>Are you sure? This archives your profile and login history to the deleted accounts table, then deletes your profile, login history and all local SKN data, and signs you out. This cannot be undone from the site.</p><p class="small">Verification required: type your email exactly, and type DELETE, to confirm.</p><label>Your email</label><input id="delEmail" placeholder="you@example.com"><label>Type DELETE</label><input id="delConfirm" placeholder="DELETE"><label>Reason (optional)</label><input id="delReason" placeholder="Optional"><div class="modal-actions" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-dark" style="margin-top:10px" onclick="confirmDeleteAccount()">Permanently delete my account</button><button class="btn btn-ghost" style="margin-top:10px" onclick="hideDeletePanel()">Cancel</button></div><p class="small" id="delMsg"></p><p class="small">Note: your app data is deleted here. Your Supabase Auth login record itself can only be deleted with a server-side (service-role) step — after this, delete the user in Supabase Dashboard &gt; Authentication &gt; Users, or ask for that server step next.</p></div></div>
+<footer class="wrap"><div class="footer-inner"><b>SKN ID ●</b><span class="small">Skincare guidance that makes sense.</span><span><button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showPrivacyDialog()">Privacy</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showTermsDialog()">Terms</button> <button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="showSupportDialog()">Support</button> <button class="btn btn-ghost hidden" id="adminFooterBtn" style="padding:6px 12px;min-height:0" onclick="show('admin')">Admin</button></span></div><p class="small" style="text-align:center;margin-top:16px">© 2026 SKN-ID · India</p><p class="small" style="text-align:center">SKN-ID provides general cosmetic skincare guidance, not medical diagnosis. See a dermatologist for persistent or concerning symptoms.</p></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -469,18 +656,18 @@ function renderAccount(){
   const badge=stats.percentComplete>=100?'PROFILE COMPLETE':stats.percentComplete+'% complete';
   const pills=[profile?.skin_type, ...(profile?.sensitivities||[])].filter(Boolean).slice(0,4);
   $('accountDisplay').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Account</p><h2 class="figma-h2">Account.</h2></div><p class="sub" style="text-align:right">Manage your profile, preferences and account settings.</p></div>
-  <div class="card" style="margin-top:22px"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:start"><div style="display:flex;gap:16px;align-items:center"><span style="width:72px;height:72px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;font-size:24px;flex-shrink:0">${esc(initials)}</span><div><b style="font-size:24px">${esc(user.name||'')}</b><p class="small" style="margin:0">${esc(user.email||'')}</p><p class="small" style="margin:4px 0 0">SKN ID: ${code}</p><p class="small" style="margin:6px 0 0"><span class="chip lime">${esc(badge)}</span></p></div></div><button class="btn btn-lime" onclick="accountEdit=true; renderAccount()">Edit details</button></div>
+  <div class="page-head"><div><p class="eyebrow">Account</p><h2 class="figma-h2">Account.</h2></div><p class="sub">Manage your profile, preferences and account settings.</p></div>
+  <div class="card account-profile" style="margin-top:22px"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:start"><div style="display:flex;gap:16px;align-items:center"><span style="width:72px;height:72px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;font-size:24px;flex-shrink:0">${esc(initials)}</span><div><b style="font-size:24px">${esc(user.name||'')}</b><p class="small" style="margin:0">${esc(user.email||'')}</p><p class="small" style="margin:4px 0 0">SKN ID: ${code}</p><p class="small" style="margin:6px 0 0"><span class="chip lime">${esc(badge)}</span></p></div></div><button class="btn btn-lime" onclick="accountEdit=true; renderAccount()">Edit details</button></div>
   ${accountEdit?`<div style="margin-top:14px"><label>Display name</label><input id="accountNameEdit" value="${esc(user.name||'')}"><button class="btn btn-lime" style="margin-top:10px" onclick="saveAccountName()">Save name</button></div>`:''}
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">${pills.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}<button class="btn btn-ghost" style="padding:6px 12px;min-height:0" onclick="show('myskin')">View full profile →</button></div></div>
-  <div class="card" style="margin-top:18px"><b style="font-size:20px">Preferences</b>
+  <div class="card settings-list" style="margin-top:18px"><b style="font-size:20px">Preferences</b>
   <div class="toggle-row"><div><b>Routine reminders</b><p class="small" style="margin:0">Morning and evening notifications</p></div><button class="switch ${prefs.emails?'on':''}" onclick="togglePref('emails')" aria-label="Routine reminders"></button></div>
   <div class="toggle-row"><div><b>Helpful emails</b><p class="small" style="margin:0">Occasional skincare and product updates</p></div><button class="switch ${prefs.updates?'on':''}" onclick="togglePref('updates')" aria-label="Helpful emails"></button></div></div>
   <div class="card" style="margin-top:18px">
   <div class="toggle-row"><div><b>Privacy &amp; your data</b><p class="small" style="margin:0">See what we store and why</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="showPrivacyDataDialog()">Open</button></div>
   <div class="toggle-row"><div><b>Help &amp; support</b><p class="small" style="margin:0">FAQs or contact our team</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="showHelpDialog()">Open</button></div>
   <div class="toggle-row"><div><b>About SKN-ID</b><p class="small" style="margin:0">Learn about SKN ID and how to contact us</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="show('about')">Open</button></div></div>
-  <div class="card" style="margin-top:18px"><b style="font-size:20px">Account</b>
+  <div class="card settings-list" style="margin-top:18px"><b style="font-size:20px">Account</b>
   <div class="toggle-row"><div><b>Name</b><p class="small" style="margin:0">${esc(user.name||'')}</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountEdit=true; renderAccount()">Edit</button></div>
   <div class="toggle-row"><div><b>Email</b><p class="small" style="margin:0">${esc(user.email||'')}</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountMsg('Email changes are not available in this app — your sign-in email stays as shown.')">Edit</button></div>
   <div class="toggle-row"><div><b>Password</b><p class="small" style="margin:0">••••••••</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="accountMsg('Password changes use your sign-in provider — sign out and sign in again with Google or Email OTP.')">Change</button></div>
@@ -545,7 +732,7 @@ function renderAdmin(){
   if(!user){ show('landing'); return; }
   if(!adminChecked) checkAdmin().then(()=>renderAdmin());
   $('adminBody').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Admin</p><h2 class="figma-h2">Admin dashboard.</h2></div><p class="sub" style="text-align:right">View all users, push SKN reports, and manage the product listing. Regular users never see this view.</p></div>
+  <div class="page-head"><div><p class="eyebrow">Admin</p><h2 class="figma-h2">Admin dashboard.</h2></div><p class="sub">View all users, push SKN reports, and manage the product listing. Regular users never see this view.</p></div>
   <p class="small" id="adminMsg"></p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0">${['overview','users','questionnaire','daily','reports','products','messages','audit','admins'].map(tab=>`<button class="pill-btn ${adminTab===tab?'on':''}" onclick="adminTab='${tab}'; adminQrRow=null; renderAdminContent()">${ADMIN_TAB_LABELS[tab]}</button>`).join('')}</div>
   <div id="adminContent"><p class="small">Loading admin data…</p></div>`;
@@ -822,11 +1009,24 @@ function goSignin(){
   const el=$('signinCard'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function goReport(){ if(user){ show('report'); } else { goSignin(); } }
+let currentView='landing';
+function renderMobileNav(){
+  const n=$('mobileNav'); if(!n) return;
+  const items = user
+    ? [['Home',"show('home')"],['My Skin',"show('myskin')"],['Recommendations',"show('recommendations')"],['Account',"show('profile')"]]
+    : [['Home',"show('landing')"],['Discover your skin','startQuizOrSignin()']];
+  const active = user ? {home:'Home',myskin:'My Skin',recommendations:'Recommendations',profile:'Account'}[currentView] : {landing:'Home',quiz:'Discover your skin'}[currentView];
+  n.innerHTML = items.map(([label,act])=>`<button type="button" class="${label===active?'on':''}" onclick="closeMobileNav();${act}">${label}</button>`).join('');
+}
+function toggleMobileNav(){ renderMobileNav(); const n=$('mobileNav'); if(n) n.classList.toggle('hidden'); }
+function closeMobileNav(){ const n=$('mobileNav'); if(n) n.classList.add('hidden'); }
 function renderHeader(){
-  const tabs=$('appTabs'), signBtn=$('signInTextBtn'), authBtn=$('authBtn'), avatar=$('avatarBtn');
-  if(tabs) tabs.style.display = user ? 'flex' : 'none';
-  if(signBtn) signBtn.style.display = user ? 'none' : 'inline-block';
-  if(authBtn){ authBtn.style.display = user ? 'none' : 'inline-block'; authBtn.textContent='Get started'; }
+  // Visibility is CSS-driven (V28): tabs hidden below 961px, header buttons
+  // hidden below 641px when signed out; body.signed-in gates the desktop tabs.
+  document.body.classList.toggle('signed-in', !!user);
+  renderMobileNav();
+  const authBtn=$('authBtn'), avatar=$('avatarBtn');
+  if(authBtn) authBtn.textContent='Get started';
   if(avatar){ avatar.classList.toggle('hidden', !user); if(user) avatar.textContent=userInitials(); }
   const afb=$('adminFooterBtn'); if(afb) afb.classList.toggle('hidden', !isAdmin);
 }
@@ -836,6 +1036,7 @@ function show(v){
  // My Routine lives inside Home in the Make design: open Home and scroll to it.
  let scrollTarget=null;
  if(v==='routine'){ v='home'; scrollTarget='homeRoutine'; }
+ currentView=v; closeMobileNav();
  if(window.__scrollTarget){ scrollTarget=window.__scrollTarget; window.__scrollTarget=null; }
  renderHeader();
  document.querySelectorAll('[id^="view-"]').forEach(e=>e.classList.add('hidden'));
@@ -1018,9 +1219,9 @@ function renderQuestionnaire(){
   const giant=String(q.num).padStart(2,'0');
   let optsHtml='';
   if(q.type==='single'||q.type==='multi'){
-    optsHtml=`<div class="quiz-opt-grid" style="display:grid;grid-template-columns:1fr;gap:14px;margin-top:20px">${q.options.map(o=>{ const sel=q.type==='multi'?(a[q.id]||[]).includes(o):a[q.id]===o; return `<button type="button" class="quiz-opt ${sel?'sel':''}" data-v="${esc(o)}" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>${esc(o)}</button>`; }).join('')}</div>`;
+    optsHtml=`<div class="quiz-opt-grid" style="display:grid;gap:14px;margin-top:20px">${q.options.map(o=>{ const sel=q.type==='multi'?(a[q.id]||[]).includes(o):a[q.id]===o; return `<button type="button" class="quiz-opt ${sel?'sel':''}" data-v="${esc(o)}" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>${esc(o)}</button>`; }).join('')}</div>`;
   } else if(q.type==='swatches'){
-    optsHtml=`<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px;max-width:420px">${q.swatches.map(([lab,hex])=>`<span style="text-align:center"><button type="button" class="quiz-swatch ${a.q9===lab?'sel':''}" style="background:${hex}" title="Swatch ${lab}" data-v="${lab}" onclick="quizPickValue(this.getAttribute('data-v'))" aria-label="Swatch ${lab}"></button><br><span class="small">${lab}</span></span>`).join('')}</div><div style="margin-top:16px"><button type="button" class="quiz-opt ${a.q9==="I’m not sure"?'sel':''}" data-v="I’m not sure" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>I’m not sure</button></div>`;
+    optsHtml=`<div class="skin-swatches" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:20px;max-width:420px">${q.swatches.map(([lab,hex])=>`<span style="text-align:center"><button type="button" class="quiz-swatch ${a.q9===lab?'sel':''}" style="background:${hex}" title="Swatch ${lab}" data-v="${lab}" onclick="quizPickValue(this.getAttribute('data-v'))" aria-label="Swatch ${lab}"></button><br><span class="small">${lab}</span></span>`).join('')}</div><div style="margin-top:16px"><button type="button" class="quiz-opt ${a.q9==="I’m not sure"?'sel':''}" data-v="I’m not sure" onclick="quizPickValue(this.getAttribute('data-v'))"><span class="qradio"></span>I’m not sure</button></div>`;
   } else if(q.type==='matrix'){
     const m=a.q7||{};
     optsHtml=`<div style="margin-top:20px"><div class="matrix-row" style="border-top:none;font-weight:800"><span></span>${q.cols.map(c=>`<span style="text-align:center;font-size:13px">${esc(c)}</span>`).join('')}</div>${q.rows.map(r=>`<div class="matrix-row"><span>${esc(r)}</span>${q.cols.map(c=>`<button type="button" class="mbtn ${m[r]===c?'sel':''}" data-r="${esc(r)}" data-c="${esc(c)}" onclick="quizMatrixPick(this.getAttribute('data-r'), this.getAttribute('data-c'))">${esc(c)}</button>`).join('')}</div>`).join('')}</div>`;
@@ -1035,20 +1236,20 @@ function renderQuestionnaire(){
     extraHtml=`<div style="margin-top:20px"><label>Anything else you’d like us to know? <span class="small">Optional</span></label><textarea placeholder="" oninput="quizTextInput(this,'q20Note')">${esc(a.q20Note||'')}</textarea></div>`;
   }
   $('quizBody').innerHTML = `
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span class="logo">SKN&nbsp;ID<span class="dot">●</span></span><button style="background:none;border:none;color:#F0EFE7;cursor:pointer;font-weight:700;border-bottom:1px solid #aaafa7;padding:0 0 2px" onclick="quizSaveExit()">Save &amp; exit</button></div>
+  <div class="question-top" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><span class="logo">SKN&nbsp;ID<span class="dot">●</span></span><button style="background:none;border:none;color:#F0EFE7;cursor:pointer;font-weight:700;border-bottom:1px solid #aaafa7;padding:0 0 2px" onclick="quizSaveExit()">Save &amp; exit</button></div>
   <div class="quiz-grid">
-  <div><p class="giant-number">${giant}</p><p class="small" style="margin-top:12px">Your answers are private. Optional questions can be skipped, and "Prefer not to say" counts as an answer.</p></div>
-  <div>
+  <div class="question-aside"><p class="giant-number">${giant}</p><p class="small" style="margin-top:12px">Your answers are private. Optional questions can be skipped, and "Prefer not to say" counts as an answer.</p></div>
+  <div class="question-panel">
   <p class="small" style="margin-top:18px">Question ${q.num} of 20${q.continued?' · continued':''}</p>
   <div class="quiz-progress" style="margin:10px 0"><i style="width:${pct}%"></i></div>
-  <h2 class="figma-h2" style="font-size:clamp(32px,4vw,56px)">${esc(q.title)}</h2>
+  <h2 class="figma-h2">${esc(q.title)}</h2>
   ${q.intro?`<p class="sub">${esc(q.intro)}</p>`:''}
   ${q.helper?`<p class="sub">${esc(q.helper)}</p>`:''}
   ${q.sub?`<p class="sub">${esc(q.sub)}</p>`:''}
   ${optsHtml}
   ${extraHtml}
   <p class="small" id="quizMsg"></p>
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px"><button class="btn btn-ghost" ${qStep===0?'disabled':''} onclick="quizBack()">← Back</button><span class="small">Answers save automatically</span><button class="btn btn-lime" onclick="quizNext()">${qStep<QUESTIONNAIRE.length-1?'Save & continue →':'Finish questions →'}</button></div>
+  <div class="question-actions"><button class="btn btn-ghost" ${qStep===0?'disabled':''} onclick="quizBack()">← Back</button><span class="small autosave-note">Answers save automatically</span><button class="btn btn-lime" onclick="quizNext()">${qStep<QUESTIONNAIRE.length-1?'Save & continue →':'Finish questions →'}</button></div>
   </div></div>`;
 }
 function deriveProfileFromAnswers(answers){
@@ -1218,10 +1419,10 @@ function renderHome(){
   <div class="page-head"><div><p class="eyebrow">${esc(dateLabel)}</p><h2 class="figma-h2">${greet},<br>${esc(first.toUpperCase())}.</h2><p class="sub">Here’s your skin plan for today.</p></div><div><p class="eyebrow">My skin profile</p><p style="font-size:28px;font-weight:900;margin:6px 0">${profileCompletionLine()}</p><button class="btn btn-lime" onclick="editProfile()">Continue my profile →</button></div></div>
   <div class="grid3" style="margin-top:24px">
     <div class="card"><p class="eyebrow" style="margin:0">My routine</p><p style="margin-top:12px"><b>AM — Cleanser · Niacinamide · Moisturiser · SPF</b><br><span class="small">${amDone} of ${amSteps.length} complete</span></p><p><b>PM — Cleanser · Moisturiser</b><br><span class="small">Starts this evening</span></p><p><b>30-day journey</b><br><span class="small">Day ${dayN} of 30</span></p><p style="margin-bottom:0"><b>Skin-feel check-ins</b><br><span class="small">${checkins} check-in${checkins===1?'':'s'} this week</span></p></div>
-    <div class="card"><p class="eyebrow" style="margin:0">My skin profile</p><div style="display:flex;gap:16px;align-items:start;margin-top:12px"><p class="outline-num" style="font-size:64px">01</p><div><b style="font-size:24px">${esc(skinLabel)}</b><p class="small" style="margin:2px 0">${esc(skinDetailLine())}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${tags.length?tags.map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join(''):'<span class="chip lime">UNEVEN TONE</span><span class="chip">CONGESTION</span>'}</div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('myskin')">View full profile</button></div></div>
+    <div class="card profile-tracker"><p class="eyebrow" style="margin:0">My skin profile</p><div style="display:flex;gap:16px;align-items:start;margin-top:12px"><p class="outline-num" style="font-size:64px">01</p><div><b style="font-size:24px">${esc(skinLabel)}</b><p class="small" style="margin:2px 0">${esc(skinDetailLine())}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${tags.length?tags.map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join(''):'<span class="chip lime">UNEVEN TONE</span><span class="chip">CONGESTION</span>'}</div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="editProfile()">Edit profile</button><button class="btn btn-ghost" onclick="show('myskin')">View full profile</button></div></div>
     <div class="card"><p class="eyebrow" style="margin:0">3 products selected for you</p>${getProducts().map(pr=>`<div class="toggle-row"><div><b>${esc(pr.name)}</b><p class="small" style="margin:0">${esc(pr.price)} · ${esc(pr.type)}</p></div><button class="btn btn-ghost" style="padding:6px 12px;min-height:0;color:var(--lime)" onclick="show('recommendations')">View recommendation</button></div>`).join('')}</div>
   </div>
-  <div class="card" style="margin-top:18px"><b style="font-size:20px">How does your skin feel today?</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${['Comfortable','Dry','Oily','Sensitive'].map(f=>`<button class="pill-btn ${skinFeelToday()===f?'on':''}" onclick="setSkinFeel('${f}')">${f}</button>`).join('')}${skinFeelToday()?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div>
+  <div class="card" style="margin-top:18px"><b style="font-size:20px">How does your skin feel today?</b><div class="routine-feel" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${['Comfortable','Dry','Oily','Sensitive'].map(f=>`<button class="pill-btn ${skinFeelToday()===f?'on':''}" onclick="setSkinFeel('${f}')">${f}</button>`).join('')}${skinFeelToday()?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div>
   ${routineSectionHTML()}`;
   justSaved=false;
 }
@@ -1232,10 +1433,10 @@ function routineSectionHTML(){
   const wk=weekTracker(), wkDone=Object.keys(wk.done).length;
   return `
   <div id="homeRoutine" style="margin-top:28px">
-  <div class="page-head"><div><p class="eyebrow">My routine</p><h2 class="figma-h2">My routine.</h2></div><p class="sub" style="text-align:right">Carefully selected for normal + oily skin and easy to follow.</p></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:18px 0"><button class="pill-btn ${routinePeriod==='am'?'on':''}" onclick="routinePeriod='am'; renderHome()">Morning</button><button class="pill-btn ${routinePeriod==='pm'?'on':''}" onclick="routinePeriod='pm'; renderHome()">Evening</button></div>
+  <div class="page-head"><div><p class="eyebrow">My routine</p><h2 class="figma-h2">My routine.</h2></div><p class="sub">Carefully selected for normal + oily skin and easy to follow.</p></div>
+  <div class="routine-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin:18px 0"><button class="pill-btn ${routinePeriod==='am'?'on':''}" onclick="routinePeriod='am'; renderHome()">Morning</button><button class="pill-btn ${routinePeriod==='pm'?'on':''}" onclick="routinePeriod='pm'; renderHome()">Evening</button></div>
   <div style="display:flex;justify-content:space-between;gap:8px"><p class="eyebrow">${routinePeriod==='am'?'MORNING — 4 steps · 5 mins':'EVENING — 2 steps'}</p><span class="small">${steps.length} steps</span></div>
-  <div class="card">${steps.map((s,i)=>{ const key=routinePeriod+':'+s.n; const isDone=!!done[key]; return `<div class="routine-row"><div style="display:flex;gap:12px;align-items:center"><span style="width:32px;height:32px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;flex-shrink:0">${i+1}</span><div><b style="${isDone?'text-decoration:line-through;opacity:.65':''}">${esc(s.n)}</b><p class="small" style="margin:0">${esc(s.sub)}</p></div><span class="chip lime" style="margin:0">${s.tag}</span></div><button class="step-check ${isDone?'done':''}" onclick="routineCheck(routinePeriod, ${i})">${isDone?'✓':''}</button></div>`; }).join('')}</div>
+  <div class="card routine-list-card">${steps.map((s,i)=>{ const key=routinePeriod+':'+s.n; const isDone=!!done[key]; return `<div class="routine-row"><div style="display:flex;gap:12px;align-items:center"><span style="width:32px;height:32px;border-radius:50%;background:var(--lime);color:#0A0B0A;display:grid;place-items:center;font-weight:900;flex-shrink:0">${i+1}</span><div><b style="${isDone?'text-decoration:line-through;opacity:.65':''}">${esc(s.n)}</b><p class="small" style="margin:0">${esc(s.sub)}</p></div><span class="chip lime" style="margin:0">${s.tag}</span></div><button class="step-check ${isDone?'done':''}" onclick="routineCheck(routinePeriod, ${i})">${isDone?'✓':''}</button></div>`; }).join('')}</div>
   <div style="margin-top:14px"><button class="btn btn-ghost" onclick="openAddProductDialog()">＋ Add a product I already use</button></div>
   <div class="amber-card" style="margin-top:18px"><b>Go slowly with glycolic acid</b><p class="sub" style="margin:4px 0 0">Use it once a week, only in the evening. If your skin tingles or gets flaky, skip it and keep things simple.</p></div>
   <div class="card" style="margin-top:18px"><b style="font-size:20px">Track your week</b><p class="sub">Check in daily to keep the habit going.</p><div class="bar" style="margin-top:12px"><i style="width:${Math.round(wkDone/7*100)}%"></i></div><p style="margin-top:8px"><b>${wkDone} of 7 days</b></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${['S','M','T','W','T','F','S'].map((d,i)=>`<button class="week-circle ${wk.done[i]?'done':''}" onclick="weekToggleDay(${i})">${d}</button>`).join('')}</div><p class="small" style="margin-top:10px">You’ve checked in ${wkDone} days this week.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-lime" onclick="weekLogToday()">Log today</button><button class="btn btn-ghost" onclick="weekReset()">Reset week</button></div></div>
@@ -1317,9 +1518,9 @@ function renderMySkin(){
     ['Salicylic acid','Oily areas and blocked pores','Useful as an occasional treatment for oily areas and blackheads when your skin tolerates it.']
   ];
   $('myskinBody').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Your profile</p><h2 class="figma-h2">Your current skin profile.</h2><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="editProfile()">Continue with questions</button><button class="btn btn-ghost" onclick="editProfile()">Edit answers</button></div></div><p class="sub" style="text-align:right">${profileCompletionLine()}. Built from your answers. This is guidance, not a diagnosis — your skin can change with weather, stress and routine.</p></div>
-  <div style="margin-top:24px;background:var(--lime);color:#0A0B0A;border-radius:24px;padding:32px;display:grid;grid-template-columns:1fr 2fr;gap:24px"><div><p class="outline-num-black">01</p><p style="font-size:28px;font-weight:900;text-transform:uppercase;margin:8px 0 0;color:#0A0B0A">${esc(skinLabel)}</p><p style="color:#0A0B0A;margin:0">${esc(skinDetailLine())}</p><p class="small" style="color:#0A0B0A">SKN ID: ${code}</p><img src="https://images.unsplash.com/photo-1790574318492-2d2e9873d1d9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900" alt="Skin profile" style="width:100%;border-radius:16px;margin-top:16px;object-fit:cover;height:180px"></div><div class="card" style="background:#171a17;border-color:#343934"><h3 style="text-transform:none;font-size:28px;margin:0 0 8px">${esc(profileLine)}</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${tagList.map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join('')}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="show('recommendations')">View recommended products</button><button class="btn btn-ghost" onclick="editProfile()">Retake quiz</button></div></div></div>
-  <h3 style="margin-top:28px;font-size:22px">What this means for you</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+  <div class="page-head"><div><p class="eyebrow">Your profile</p><h2 class="figma-h2">Your current skin profile.</h2><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="editProfile()">Continue with questions</button><button class="btn btn-ghost" onclick="editProfile()">Edit answers</button></div></div><p class="sub">${profileCompletionLine()}. Built from your answers. This is guidance, not a diagnosis — your skin can change with weather, stress and routine.</p></div>
+  <div class="skin-hero" style="margin-top:24px;background:var(--lime);color:#0A0B0A;border-radius:24px;padding:32px;display:grid;gap:24px"><div class="skin-id-visual"><p class="outline-num-black">01</p><p style="font-size:28px;font-weight:900;text-transform:uppercase;margin:8px 0 0;color:#0A0B0A">${esc(skinLabel)}</p><p style="color:#0A0B0A;margin:0">${esc(skinDetailLine())}</p><p class="small" style="color:#0A0B0A">SKN ID: ${code}</p><img src="https://images.unsplash.com/photo-1790574318492-2d2e9873d1d9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=900" alt="Skin profile" style="width:100%;border-radius:16px;margin-top:16px;object-fit:cover;height:180px"></div><div class="card skin-summary" style="background:#171a17;border-color:#343934"><h3 style="text-transform:none;margin:0 0 8px">${esc(profileLine)}</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${tagList.map(x=>`<span class="chip lime">${esc(x.toUpperCase())}</span>`).join('')}</div><div class="button-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-lime" onclick="show('recommendations')">View recommended products</button><button class="btn btn-ghost" onclick="editProfile()">Retake quiz</button></div></div></div>
+  <h3 style="margin-top:28px;font-size:22px">What this means for you</h3><div class="takeaway-grid" style="display:grid;gap:20px">
     ${MAKE_TAKEAWAYS.map(([t,d],i)=>`<div class="card"><p class="step-num">0${i+1}</p><b style="font-size:20px">${esc(t)}</b><p class="sub">${esc(d)}</p></div>`).join('')}
   </div>
   <h3 style="margin-top:28px;font-size:22px">Ingredients to look for</h3><p class="sub">These ingredients may support the concerns in your current profile. Introduce one new active at a time and patch test first.</p><div class="grid3">${ingredients.map(([n,s,d])=>`<div class="card"><b style="font-size:18px">${esc(n)}</b><p class="small" style="margin:4px 0">${esc(s)}</p><p class="sub">${esc(d)}</p></div>`).join('')}</div>
@@ -1336,11 +1537,11 @@ function renderRecommendations(filter){
   if(!profile){ show('quiz'); return; }
   const list=getProducts().filter(pr=> recFilter==='all' ? true : recFilter==='am' ? pr.am : recFilter==='pm' ? pr.pm : true);
   $('recBody').innerHTML = `
-  <div class="page-head"><div><p class="eyebrow">Recommendations</p><h2 class="figma-h2">Recommendations.</h2></div><p class="sub" style="text-align:right">Products picked for your skin profile, your sensitivities and your budget.</p></div>
+  <div class="page-head"><div><p class="eyebrow">Recommendations</p><h2 class="figma-h2">Recommendations.</h2></div><p class="sub">Products picked for your skin profile, your sensitivities and your budget.</p></div>
   <div class="olive-strip" style="margin-top:22px"><b>⚠ Sample recommendations for this prototype</b><p class="sub" style="margin:4px 0 0">Product details, claims, links and cautions must be verified by experts before launch.</p></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0"><span class="small">Show:</span>${[['all','All 3'],['am','AM'],['pm','PM']].map(([f,l])=>`<button class="pill-btn ${recFilter===f?'on':''}" onclick="renderRecommendations('${f}')">${l}</button>`).join('')}</div>
   <p class="sub">These are routine steps, not three alternatives. Use the serum, moisturiser and sunscreen in the order shown. If we suggest alternatives, they’ll be clearly labelled “choose one”.</p>
-  <div style="display:grid;gap:32px">${list.map((pr,i)=>`<div class="card rec-card" style="padding:0"><div class="rec-img-wrap"><img class="rec-img" src="${pr.img}" alt="${esc(pr.name)}" onclick="viewProduct('${pr.id}')" style="cursor:pointer"><span class="rec-badge">0${i+1}</span></div><div style="padding:38px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="chip lime">${pr.am&&pr.pm?'AM + PM':pr.am?'AM only':'PM only'}</span><span class="small">${esc(pr.type)}</span></div><p class="eyebrow" style="margin-top:14px">${esc(pr.brand)}</p><h3 style="text-transform:none;font-size:30px;margin:6px 0;cursor:pointer" onclick="viewProduct('${pr.id}')">${esc(pr.name)}</h3><b style="font-size:18px">${esc(pr.price)}</b><p class="why-rule" style="margin-top:16px"><span class="small" style="letter-spacing:.12em">WHY IT FITS</span><br>${esc(pr.why)}</p><p><span class="small" style="letter-spacing:.12em">KEY INGREDIENTS</span><br>${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p><b>⚠ Good to know:</b> <span class="small">${esc(pr.good)}</span></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="${pr.buying_url?`window.open('${esc(pr.buying_url)}','_blank','noopener')`:`viewProduct('${pr.id}')`}">View product</button><button class="btn btn-ghost" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'✓ Saved to your routine':'＋ Save to routine'}</button></div></div></div>`).join('') || '<p class="small">No products match this filter.</p>'}</div>
+  <div style="display:grid;gap:32px">${list.map((pr,i)=>`<div class="card rec-card" style="padding:0"><div class="rec-img-wrap"><img class="rec-img" src="${pr.img}" alt="${esc(pr.name)}" onclick="viewProduct('${pr.id}')" style="cursor:pointer"><span class="rec-badge">0${i+1}</span></div><div class="product-info"><div class="product-meta" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="chip lime">${pr.am&&pr.pm?'AM + PM':pr.am?'AM only':'PM only'}</span><span class="small">${esc(pr.type)}</span></div><p class="eyebrow" style="margin-top:14px">${esc(pr.brand)}</p><h3 style="text-transform:none;margin:6px 0;cursor:pointer" onclick="viewProduct('${pr.id}')">${esc(pr.name)}</h3><b style="font-size:18px">${esc(pr.price)}</b><p class="why-rule" style="margin-top:16px"><span class="small" style="letter-spacing:.12em">WHY IT FITS</span><br>${esc(pr.why)}</p><p><span class="small" style="letter-spacing:.12em">KEY INGREDIENTS</span><br>${pr.ingredients.map(x=>`<span class="chip">${x}</span>`).join('')}</p><p><b>⚠ Good to know:</b> <span class="small">${esc(pr.good)}</span></p><div class="product-actions" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:14px"><button class="btn btn-lime" onclick="${pr.buying_url?`window.open('${esc(pr.buying_url)}','_blank','noopener')`:`viewProduct('${pr.id}')`}">View product</button><button class="btn btn-ghost" onclick="toggleSaveProduct('${pr.id}')">${savedProducts().includes(pr.id)?'✓ Saved to your routine':'＋ Save to routine'}</button></div></div></div>`).join('') || '<p class="small">No products match this filter.</p>'}</div>
   <p class="small" style="text-align:center;margin-top:20px">This routine is based on your answers. Your dermatologist can adapt it to your environment.</p>`;
 }
 
@@ -1391,19 +1592,19 @@ function journeySectionHTML(){
   const amSteps=routineSteps('am').map(s=>s.n).join(' · ');
   const pmSteps=routineSteps('pm').map(s=>s.n).join(' · ');
   const feels=['Comfortable','Dry','Oily','Sensitive','Irritated'];
-  return `<div class="card" style="margin-top:18px" id="journeySection"><p class="eyebrow">Your 30-day journey</p><b style="font-size:20px">YOUR 30-DAY JOURNEY</b><p class="sub">Use the tracker to record consistency and skin comfort. It does not set a deadline for results.</p>
+  return `<div class="card calendar-card" style="margin-top:18px" id="journeySection"><p class="eyebrow">Your 30-day journey</p><b style="font-size:20px">YOUR 30-DAY JOURNEY</b><p class="sub">Use the tracker to record consistency and skin comfort. It does not set a deadline for results.</p>
   <p><b>${esc(monthLabel)}</b> · Day ${todayN} of 30</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="btn btn-lime" onclick="journeySelectDay(journeyDayNumber())">Today</button></div>
   <div class="journey-grid" style="margin-bottom:8px">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<b style="text-align:center;font-size:13px">${d}</b>`).join('')}</div>
   <div class="journey-grid">${Array.from({length:30},(_,i)=>{ const n=i+1; const d=journeyDayDate(n); const wd=d.toLocaleDateString('en-GB',{weekday:'short'}); return `<button class="jday ${dayStatus(n)} ${sel===n?'sel':''}" onclick="journeySelectDay(${n})">Day ${n}<br><span style="font-weight:400;font-size:11px">${wd}</span></button>`; }).join('')}</div>
   <p class="small" style="margin-top:10px"><span class="chip lime">All logged</span> <span class="chip">Partly logged</span> <span class="chip">Upcoming</span></p>
-  <div class="card" style="margin-top:12px"><b>DAY ${sel}</b><p class="small" style="margin:4px 0 0">${esc(selLabel)}${sel===todayN?' · TODAY':''}</p>
+  <div class="card day-detail" style="margin-top:12px"><b>DAY ${sel}</b><p class="small" style="margin:4px 0 0">${esc(selLabel)}${sel===todayN?' · TODAY':''}</p>
   <div class="toggle-row"><div><b>AM routine</b><p class="small" style="margin:0">${esc(amSteps)}</p></div><button class="btn ${qJourneyDraft.am?'btn-lime':'btn-ghost'}" onclick="journeyToggle('am')">${qJourneyDraft.am?'COMPLETE':'MARK COMPLETE'}</button></div>
   <div class="toggle-row"><div><b>PM routine</b><p class="small" style="margin:0">${esc(pmSteps)}</p></div><button class="btn ${qJourneyDraft.pm?'btn-lime':'btn-ghost'}" onclick="journeyToggle('pm')">${qJourneyDraft.pm?'COMPLETE':'MARK COMPLETE'}</button></div>
   <p style="margin-top:12px"><b>How does your skin feel?</b> <span class="small">Optional</span></p>
   <div style="display:flex;gap:8px;flex-wrap:wrap">${feels.map(f=>`<button class="pill-btn ${qJourneyDraft.feel===f?'on':''}" onclick="journeyFeel('${f}')">${f}</button>`).join('')}</div>
   <label>Notes <span class="small">Optional</span></label><textarea id="journeyNotes" placeholder="Anything you noticed about your skin today?" oninput="qJourneyDraft.notes=this.value; qJourneySaved=false;">${esc(qJourneyDraft.notes||'')}</textarea>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="journeySaveDay()">Save day</button>${qJourneySaved?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div></div>`;
+  <div class="day-save" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-lime" onclick="journeySaveDay()">Save day</button>${qJourneySaved?'<span class="small" style="align-self:center">✓ Saved</span>':''}</div></div></div>`;
 }
 function reminderSettings(){ return loadLS('skn_reminders', {morning:{on:true,time:'08:00'}, evening:{on:false,time:'21:30'}}); }
 function setReminder(which, on){ const r=reminderSettings(); r[which].on=on; save('skn_reminders', r); renderRoutine(); }
@@ -1411,9 +1612,9 @@ function setReminderTime(which, val){ const r=reminderSettings(); r[which].time=
 function openReminders(){ window.__scrollTarget='routineReminders'; show('routine'); }
 function remindersSectionHTML(){
   const r=reminderSettings();
-  return `<div class="card" style="margin-top:18px" id="routineReminders"><b style="font-size:20px">Choose when to receive routine reminders</b>
-  <div class="toggle-row"><div><b>Morning</b><p class="small" style="margin:0">AM routine</p></div><div style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.morning.time}" ${r.morning.on?'':'disabled'} style="width:120px" onchange="setReminderTime('morning', this.value)"><button class="switch ${r.morning.on?'on':''}" onclick="setReminder('morning', ${!r.morning.on})" aria-label="Morning reminder"></button></div></div>
-  <div class="toggle-row"><div><b>Evening</b><p class="small" style="margin:0">PM routine</p></div><div style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.evening.time}" ${r.evening.on?'':'disabled'} style="width:120px" onchange="setReminderTime('evening', this.value)"><button class="switch ${r.evening.on?'on':''}" onclick="setReminder('evening', ${!r.evening.on})" aria-label="Evening reminder"></button></div></div></div>`;
+  return `<div class="card reminders" style="margin-top:18px" id="routineReminders"><b style="font-size:20px">Choose when to receive routine reminders</b>
+  <div class="toggle-row"><div><b>Morning</b><p class="small" style="margin:0">AM routine</p></div><div class="reminder-control" style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.morning.time}" ${r.morning.on?'':'disabled'} onchange="setReminderTime('morning', this.value)"><button class="switch ${r.morning.on?'on':''}" onclick="setReminder('morning', ${!r.morning.on})" aria-label="Morning reminder"></button></div></div>
+  <div class="toggle-row"><div><b>Evening</b><p class="small" style="margin:0">PM routine</p></div><div class="reminder-control" style="display:flex;gap:10px;align-items:center"><input type="time" value="${r.evening.time}" ${r.evening.on?'':'disabled'} onchange="setReminderTime('evening', this.value)"><button class="switch ${r.evening.on?'on':''}" onclick="setReminder('evening', ${!r.evening.on})" aria-label="Evening reminder"></button></div></div></div>`;
 }
 function openAddProductDialog(){
   openDialog('Add a current product', `
