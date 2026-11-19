@@ -18,7 +18,7 @@ a{color:var(--ink)}
 .wrap{max-width:min(1240px,calc(100% - 64px));margin:0 auto;padding:0 20px}
 header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--line);height:86px}
 header .wrap{max-width:min(1380px,calc(100% - 40px))}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;gap:12px;flex-wrap:wrap}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px;flex-wrap:wrap;height:100%}
 .logo{display:flex;gap:6px;align-items:center;font-weight:900;font-size:21px;text-decoration:none;cursor:pointer;color:var(--ink);letter-spacing:-1px;font-family:'Archivo Black',sans-serif}
 .logo .dot{color:var(--lime)}
 .tabs{display:flex;flex:1;justify-content:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:4px 2px;max-width:100%}
@@ -26,7 +26,7 @@ header .wrap{max-width:min(1380px,calc(100% - 40px))}
 .tab.on{background:#2a2e2a;color:#F0EFE7;font-weight:700}
 .header-actions{display:flex;align-items:center;gap:10px}
 .avatar-btn{width:40px;height:40px;border-radius:50%;background:var(--lime);color:#0A0B0A;border:none;font-weight:900;font-size:14px;cursor:pointer;display:grid;place-items:center}
-.btn{border:1px solid var(--line);border-radius:999px;padding:0 20px;min-height:48px;font-weight:800;cursor:pointer;box-shadow:none;font-family:'Manrope',sans-serif}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px;padding:0 20px;min-height:48px;font-weight:800;cursor:pointer;box-shadow:none;font-family:'Manrope',sans-serif}
 .btn-primary{background:var(--lime);color:#0A0B0A;border-color:var(--lime)}
 .btn-primary:hover{background:#dbff7b}
 .btn-secondary{background:var(--cream,#F0EFE7);color:#0A0B0A;border-color:var(--cream,#F0EFE7)}
@@ -173,6 +173,7 @@ body:not(.dark) .danger{color:#b00020 !important}
    .menu-button/.mobile-nav base styles, the fixed .question-actions bar
    background) and were built to Make's behaviour, not copied verbatim. */
 body{overflow-x:clip}
+#appearanceCard{display:none}
 .wrap{max-width:min(1240px,calc(100% - 28px))}
 header{height:72px}
 header .wrap{max-width:calc(100% - 28px)}
@@ -265,6 +266,7 @@ main section{padding-block:48px 82px}
 .outline-num-black{font-size:120px}
 @media(min-width:641px){
 .wrap{max-width:min(900px,calc(100% - 40px))}
+#appearanceCard{display:block}
 header{height:80px}
 header .wrap{max-width:calc(100% - 40px)}
 body:not(.signed-in) .header-actions .btn,body:not(.signed-in) .signin{display:inline-flex}
@@ -330,6 +332,9 @@ main section{padding-block:62px 100px}
 header{height:86px}
 header .wrap{max-width:min(1380px,calc(100% - 40px))}
 body.signed-in .tabs{display:flex}
+.nav>*:first-child{flex:1 1 0;min-width:0}
+.header-actions{flex:1 1 0;min-width:0;justify-content:flex-end}
+body.signed-in .tabs{flex:0 0 auto}
 .menu-button{display:none}
 h1{font-size:clamp(64px,6.7vw,96px)}
 h2,.figma-h2{font-size:clamp(42px,4vw,58px)}
@@ -425,7 +430,7 @@ main section{padding-block:72px 120px}
 
 <!-- ABOUT / CONTACT -->
 <div id="view-about" class="hidden"><section><h2>About SKN ID</h2><p class="sub">SKN ID is built by a small, passionate team at the intersection of beauty technology and artificial intelligence. Its mission: give every person a skin identity as unique as they are — an alternative to generic, one-size-fits-all skincare advice, for beginners and experienced users alike.</p>
-<div class="grid2" style="margin-top:16px"><div class="card"><b>Appearance</b><p>Switch the site between light and dark mode. Your choice is remembered on this device.</p><button class="btn btn-lime" id="aboutThemeBtn" onclick="toggleTheme()">Dark mode</button></div>
+<div class="grid2" style="margin-top:16px"><div class="card" id="appearanceCard"><b>Appearance</b><p>Switch the site between light and dark mode. Your choice is remembered on this device.</p><button class="btn btn-lime" id="aboutThemeBtn" onclick="toggleTheme()">Dark mode</button></div>
 <div class="card"><b>Privacy &amp; your data</b><p>Your profile and login history are stored for your account only, under the Supabase rules set for this app. This site gives general cosmetic guidance, not a medical diagnosis — see a dermatologist for persistent concerns. Privacy, Terms and Support questions go to the Contact card on this page.</p></div>
 <div class="card"><b>For shoppers, brands and stores</b><p>When you share your SKN ID, products, brands and stores can understand what works for you — so shopping becomes more personal, online and in store.</p></div>
 <div class="card"><b>Contact</b><p>Email: <a href="mailto:hello@sknid.app">hello@sknid.app</a><br>Instagram: <a href="https://instagram.com/sknid">instagram.com/sknid</a><br>Twitter / X: <a href="https://twitter.com/sknid">twitter.com/sknid</a></p>
@@ -1682,8 +1687,10 @@ function applyTheme(dark){
 function toggleTheme(){ applyTheme(!document.body.classList.contains('dark')); }
 (function(){
   let saved=null; try{ saved=localStorage.getItem('skn_theme'); }catch(e){}
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(saved ? saved==='dark' : true);
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+  // Mobile is always dark: a saved Light choice (e.g. from the About toggle)
+  // must not make the phone view light.
+  applyTheme(isMobile ? true : (saved ? saved==='dark' : true));
 })();
 
 if(user){$('authBtn').textContent='My profile'; show('home')} else {renderHeader(); renderOnb();}
