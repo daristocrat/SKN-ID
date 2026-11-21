@@ -745,7 +745,7 @@ function renderAdmin(){
 }
 async function loadAdminData(){
   const s=await getSupaSession(); if(!s) return;
-  const [profiles, logins, waitlist, messages, products, reports, actions, qr, dp] = await Promise.all([
+  const [profiles, logins, waitlist, messages, products, reports, actions, qr, dp, admins] = await Promise.all([
     adminFetch('skn_profiles','select=*&order=created_at.desc&limit=500', s),
     adminFetch('login_history','select=*&order=logged_in_at.desc&limit=500', s),
     adminFetch('waitlist','select=*&order=created_at.desc&limit=200', s),
@@ -754,10 +754,11 @@ async function loadAdminData(){
     adminFetch('skn_reports','select=*&order=created_at.desc&limit=200', s),
     adminFetch('admin_actions','select=*&order=created_at.desc&limit=100', s),
     adminFetch('questionnaire_responses','select=*&order=updated_at.desc&limit=500', s),
-    adminFetch('daily_progress','select=*&order=day.desc&limit=500', s)
+    adminFetch('daily_progress','select=*&order=day.desc&limit=500', s),
+    adminFetch('admins','select=*&order=created_at.asc&limit=100', s)
   ]);
   const missing=[profiles, logins, products, reports].some(x=>!x.ok && x.status===404);
-  adminData={profiles:profiles.rows, logins:logins.rows, waitlist:waitlist.rows, messages:messages.rows, products:products.rows, reports:reports.rows, actions:actions.rows, questionnaire:qr.rows, daily:dp.rows, qrOk:qr.ok, dpOk:dp.ok, missing};
+  adminData={profiles:profiles.rows, logins:logins.rows, waitlist:waitlist.rows, messages:messages.rows, products:products.rows, reports:reports.rows, actions:actions.rows, questionnaire:qr.rows, daily:dp.rows, qrOk:qr.ok, dpOk:dp.ok, admins:admins.rows, adminsOk:admins.ok, missing};
   renderAdminContent();
 }
 // ---------- Admin: questionnaire answers + daily progress ----------
@@ -908,7 +909,13 @@ function renderAdminContent(){
     c.innerHTML=`<div class="card"><b>Admin actions</b>${d.actions.map(a=>`<p class="small" style="margin:6px 0">${esc(a.created_at||'')} · ${esc(a.admin_email||'')} · ${esc(a.action||'')} · ${esc(a.target_type||'')} ${esc(a.target_id||'')} · ${esc(a.detail||'')}</p>`).join('') || '<p class="small">No admin actions logged yet.</p>'}</div>`;
   }
   if(adminTab==='admins'){
-    c.innerHTML=`<div class="card"><b>Admins</b><p class="small">Add another admin by email. They must sign in with that exact email to see this dashboard.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="ap_admin_email" placeholder="admin@example.com" style="flex:1;min-width:220px"><button class="btn btn-lime" onclick="adminAddAdmin()">Add admin</button></div><p class="small" id="adminAdminMsg"></p></div>`;
+    if(d.adminsOk===false){
+      c.innerHTML=`<div class="card"><b>Couldn't load admins — try again.</b><p class="sub">The admins list could not be read. Check your connection and that you are signed in as an admin.</p><button class="btn btn-lime" onclick="loadAdminData()">Try again</button></div>`;
+    } else {
+      const list=(d.admins)||[];
+      const me=(user&&user.email)||'';
+      c.innerHTML=`<div class="card"><b>Admins (${list.length})</b><p class="small">Everyone who can open this dashboard. An admin signs in with the exact email listed here.</p><div style="display:grid;gap:12px">${list.map(x=>`<div><b>${esc(x.email||'—')}</b>${x.email===me?' <span class="chip lime">YOU</span>':''}<p class="small" style="margin:2px 0">${x.name?esc(x.name)+' · ':''}Added ${esc(x.created_at||'—')}</p></div>`).join('') || '<p class="small">No admins found.</p>'}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-ghost" onclick="loadAdminData()">Refresh list</button></div></div><div class="card" style="margin-top:16px"><b>Add an admin</b><p class="small">Add another admin by email. They must sign in with that exact email to see this dashboard.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="ap_admin_email" placeholder="admin@example.com" style="flex:1;min-width:220px"><button class="btn btn-lime" onclick="adminAddAdmin()">Add admin</button></div><p class="small" id="adminAdminMsg"></p></div>`;
+    }
   }
 }
 async function adminLoadReportFor(email){
@@ -965,7 +972,7 @@ async function adminAddAdmin(){
   const email=$('ap_admin_email').value.trim(); if(!email) return;
   const saved=await adminWrite('admins','POST','',{email}, s);
   const m=$('adminAdminMsg'); if(m) m.textContent=saved?'Admin added: '+email:'Add failed — that email may already be an admin, or you are not an admin.';
-  if(saved) await logAdminAction('add_admin','admin',email,'');
+  if(saved){ await logAdminAction('add_admin','admin',email,''); const inp=$('ap_admin_email'); if(inp) inp.value=''; loadAdminData(); }
 }
 
 function renderDashboard(){
